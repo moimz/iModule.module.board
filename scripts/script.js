@@ -20,6 +20,16 @@ var Board = {
 			var $form = $("#"+id);
 			
 			$form.inits(Board.write.submit);
+		},
+		/**
+		 * 게시물 저장
+		 */
+		submit:function($form) {
+			$form.send(ENV.getProcessUrl("board","savePost"),function(result) {
+				if (result.success == true) {
+					location.href = ENV.getUrl(null,null,"view",result.idx);
+				}
+			});
 		}
 	}
 };

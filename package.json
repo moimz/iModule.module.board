@@ -68,7 +68,7 @@
 					"type":"varchar",
 					"length":20
 				},
-				"post_count":{
+				"post":{
 					"type":"int",
 					"length":11,
 					"default":0
@@ -409,22 +409,22 @@
 					"length":"'NONE','USED','USEDALL','FORCE'",
 					"default":"NONE"
 				},
-				"postlimit":{
+				"post_limit":{
 					"type":"int",
 					"length":2,
 					"default":20
 				},
-				"mentlimit":{
+				"ment_limit":{
 					"type":"int",
 					"length":3,
 					"default":50
 				},
-				"pagetype":{
+				"page_type":{
 					"type":"enum",
 					"length":"'FIXED','CENTER'",
 					"default":"FIXED"
 				},
-				"pagelimit":{
+				"page_limit":{
 					"type":"int",
 					"length":2,
 					"default":10
@@ -469,7 +469,7 @@
 					"length":11,
 					"default":1
 				},
-				"post_count":{
+				"post":{
 					"type":"int",
 					"length":11,
 					"default":0

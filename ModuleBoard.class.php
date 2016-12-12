@@ -631,9 +631,8 @@ class ModuleBoard {
 		$html.= $this->getHeader($bid,$configs);
 		
 		switch ($view) {
-			// board list context
 			case 'list' :
-//				$html.= $this->getListContext($bid,$configs);
+				$html.= $this->getListContext($bid,$configs);
 				break;
 			
 			// post view context
@@ -703,6 +702,112 @@ class ModuleBoard {
 	}
 	
 	/**
+	 * 게시물 목록 컨텍스트를 가져온다.
+	 *
+	 * @param string $bid 게시판 ID
+	 * @param object $configs 사이트맵 관리를 통해 설정된 페이지 컨텍스트 설정
+	 * @return string $html 컨텍스트 HTML
+	 */
+	function getListContext($bid,$configs=null) {
+		if ($this->checkPermission($bid,'list') == false) return $this->getTemplet($configs)->getError('FORBIDDEN');
+		
+		$this->IM->addHeadResource('meta',array('name'=>'robots','content'=>'noidex,follow'));
+		
+		$board = $this->getBoard($bid);
+		
+		$lists = $this->db()->select($this->table->post.' p','p.*')->where('p.bid',$bid);
+		$total = $lists->copy()->count();
+		
+		$idx = Request('idx') ? explode('/',Request('idx')) : array(1);
+		$category = null;
+		if (count($idx) == 2) list($category,$p) = $idx;
+		elseif (count($idx) == 1) list($p) = $idx;
+		
+		if ($this->IM->view == 'view') $idx = $p;
+		else $idx = 0;
+		if ($configs != null && isset($configs->p) == true) $p = $configs->p;
+		
+		$limit = $board->post_limit;
+		$start = ($p - 1) * $limit;
+		
+		$sort = Request('sort') ? Request('sort') : 'idx';
+		$dir = Request('dir') ? Request('dir') : 'asc';
+		$lists = $lists->orderBy($sort,$dir)->limit($start,$limit)->get();
+		
+		$loopnum = $total - ($p - 1) * $limit;
+		for ($i=0, $loop=count($lists);$i<$loop;$i++) {
+			$lists[$i] = $this->getPost($lists[$i]);
+			$lists[$i]->loopnum = $loopnum - $i;
+			$lists[$i]->link = $this->IM->getUrl(null,null,'view',($category == null ? '' : $category.'/').$lists[$i]->idx).$this->IM->getQueryString();
+		}
+		
+		$pagination = $this->getTemplet($configs)->getPagination($p,ceil($total/$limit),$board->page_limit,$this->IM->getUrl(null,null,'list',($category == null ? '' : $category.'/').'{PAGE}'),$board->page_type);
+		
+		$link = new stdClass();
+		$link->list = $this->IM->getUrl(null,null,'list',($category == null ? '' : $category.'/').$p);
+		$link->write = $this->IM->getUrl(null,null,'write',false);
+		
+		$header = PHP_EOL.'<form id="ModuleBoardListForm">'.PHP_EOL;
+		$footer = PHP_EOL.'</form>'.PHP_EOL.'<script>Board.list.init("ModuleBoardListForm");</script>'.PHP_EOL;
+		
+		/**
+		 * 템플릿파일을 호출한다.
+		 */
+		return $this->getTemplet($configs)->getContext('list',get_defined_vars(),$header,$footer);
+	}
+	
+	/**
+	 * 게시물 보기 컨텍스트를 가져온다.
+	 *
+	 * @param string $bid 게시판 ID
+	 * @param object $configs 사이트맵 관리를 통해 설정된 페이지 컨텍스트 설정
+	 * @return string $html 컨텍스트 HTML
+	 */
+	function getViewContext($bid,$configs=null) {
+		if ($this->checkPermission($bid,'view') == false) return $this->getTemplet($configs)->getError('FORBIDDEN');
+		
+		$this->IM->addHeadResource('meta',array('name'=>'robots','content'=>'idx,nofollow'));
+		
+		$board = $this->getBoard($bid);
+		
+		$idx = Request('idx') ? explode('/',Request('idx')) : array(0);
+		$category = null;
+		if (count($idx) == 2) list($category,$idx) = $idx;
+		elseif (count($idx) == 1) list($idx) = $idx;
+		
+		$post = $this->getPost($idx);
+		if ($post == null) return $this->getTemplet($configs)->getError('NOT_FOUND_PAGE');
+		
+		/**
+		 * 현재 게시물이 속한 페이지를 구한다.
+		 */
+		$sort = Request('sort') ? Request('sort') : 'idx';
+		$dir = Request('dir') ? Request('dir') : 'asc';
+		$previous = $this->db()->select($this->table->post.' p','p.*')->where('p.bid',$post->bid)->where('p.'.$sort,$post->{$sort},$dir == 'desc' ? '>=' : '<=');
+		$previous = $previous->count();
+		$p = ceil($previous/$board->post_limit);
+		
+		$configs = $configs == null ? new stdClass() : $configs;
+		$configs->p = $p;
+		
+		$link = new stdClass();
+		$link->list = $this->IM->getUrl(null,null,'list',($category == null ? '' : $category.'/').$p);
+		$link->write = $this->IM->getUrl(null,null,'write',false);
+		
+		$header = PHP_EOL.'<form id="ModuleBoardViewForm">'.PHP_EOL;
+		$header.= '<input type="hidden" name="idx" value="'.$idx.'">'.PHP_EOL;
+		$footer = PHP_EOL.'</form>'.PHP_EOL.'<script>Board.view.init("ModuleBoardViewForm");</script>';
+		$footer.= $this->getListContext($bid,$configs);
+		
+		
+		
+		/**
+		 * 템플릿파일을 호출한다.
+		 */
+		return $this->getTemplet($configs)->getContext('view',get_defined_vars(),$header,$footer);
+	}
+	
+	/**
 	 * 게시물 작성 컨텍스트를 가져온다.
 	 *
 	 * @param string $bid 게시판 ID
@@ -765,6 +870,8 @@ class ModuleBoard {
 		if ($post !== null) $header.= '<input type="hidden" name="idx" value="'.$post->idx.'">'.PHP_EOL;
 		$footer = PHP_EOL.'</form>'.PHP_EOL.'<script>Board.write.init("ModuleBoardWriteForm-'.$bid.'");</script>'.PHP_EOL;
 		
+		$wysiwyg = $this->IM->getModule('wysiwyg')->setRequired(true)->setContent($post == null ? '' : $post->content)->get();
+		
 		/**
 		 * 템플릿파일을 호출한다.
 		 */
@@ -790,6 +897,39 @@ class ModuleBoard {
 	}
 	
 	/**
+	 * 게시물정보를 가져온다.
+	 *
+	 * @param int $idx 게시물고유번호
+	 * @return object $post
+	 */
+	function getPost($idx) {
+		if (is_null($idx) == true) return null;
+		
+		if (is_numeric($idx) == true) {
+			if (isset($this->posts[$idx]) == true) return $this->posts[$idx];
+			else return $this->getPost($this->db()->select($this->table->post)->where('idx',$idx)->getOne());
+		} else {
+			$post = $idx;
+			if (isset($post->is_rendered) === true && $post->is_rendered === true) return $post;
+			
+			if ($post->midx == 0) {
+				$post->nicname = $post->name;
+			} else {
+				$member = $this->IM->getModule('member')->getMember($post->midx);
+				$post->name = $member->name;
+				$post->nickname = $member->nickname;
+			}
+			
+			
+			$post->content = $this->IM->getModule('wysiwyg')->decodeContent($post->content);
+			$post->is_rendered = true;
+			
+			$this->posts[$post->idx] = $post;
+			return $this->posts[$post->idx];
+		}
+	}
+	
+	/**
 	 * 권한을 확인한다.
 	 *
 	 * @param string $bid 게시판 ID
@@ -802,6 +942,38 @@ class ModuleBoard {
 		
 		if (isset($permission->{$type}) == false) return false;
 		return $this->IM->parsePermissionString($permission->{$type});
+	}
+	
+	/**
+	 * 게시판 정보를 업데이트한다.
+	 *
+	 * @param string $bid 게시판 ID
+	 */
+	function updateBoard($bid) {
+		$status = $this->db()->select($this->table->post,'COUNT(*) as total, MAX(reg_date) as latest')->where('bid',$bid)->getOne();
+		$this->db()->update($this->table->board,array('post'=>$status->total,'latest_post'=>($status->latest ? $status->latest : 0)))->where('bid',$bid)->execute();
+	}
+	
+	/**
+	 * 게시물 정보를 업데이트한다.
+	 *
+	 * @param int $idx 게시물고유번호
+	 */
+	function updatePost($idx) {
+		$status = $this->db()->select($this->table->ment,'COUNT(*) as total, MAX(reg_date) as latest')->where('parent',$idx)->where('is_delete','FALSE')->getOne();
+		$this->db()->update($this->table->post,array('ment'=>$status->total,'latest_ment'=>($status->latest ? $status->latest : 0)))->where('idx',$idx)->execute();
+	}
+	
+	/**
+	 * 카테고리 정보를 업데이트한다.
+	 *
+	 * @param int $category 카테고리고유번호
+	 */
+	function updateCategory($category) {
+		if ($category == 0) return;
+		
+		$status = $this->db()->select($this->table->post,'COUNT(*) as total, MAX(reg_date) as latest')->where('category',$category)->getOne();
+		$this->db()->update($this->table->category,array('post'=>$status->total,'latest_post'=>($status->latest ? $status->latest : 0)))->where('idx',$category)->execute();
 	}
 	
 	/**
