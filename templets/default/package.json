@@ -1,8 +1,8 @@
 {
 	"title":{
-		"ko":"기본템플릿"
+		"ko":"게시판 기본 템플릿"
 	},
-	"version":"3.0.0",
+	"version":"1.0.0",
 	"author":{
 		"name":"Arzz",
 		"email":"arzz@arzz.com"
@@ -11,17 +11,5 @@
 	"language":"ko",
 	"styles":[
 		"/styles/style.css"
-	],
-	"configs":{
-		"signup_help":{
-			"title":{
-				"ko":"안내문구"
-			},
-			"help":{
-				"ko":"회원가입 페이지 상단에 나타날 안내문구를 입력하여 주십시오."
-			},
-			"type":"textarea",
-			"default":""
-		}
-	}
+	]
 }

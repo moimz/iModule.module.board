@@ -1,4 +1,15 @@
 {
+	"text":{
+		"name":"작성자",
+		"password":"패스워드",
+		"password_help":"게시물을 수정/삭제하거나 비밀글을 열람하는데 필요합니다.",
+		"email":"이메일",
+		"email_help":"이메일을 입력하시면 게시물에 댓글이 입력될 경우 알림메일을 받을 수 있습니다.",
+		"title":"제목"
+	},
+	"button":{
+		"write":"등록하기"
+	},
 	"admin":{
 		"list":{
 			"title":"게시판관리",
@@ -13,7 +24,7 @@
 				"filenum":"파일수"
 			},
 			"form":{
-				"defaultSetting":"기본설정",
+				"default_setting":"기본설정",
 				"bid":"게시판 ID",
 				"title":"게시판명",
 				"designSetting":"디자인설정",
@@ -22,9 +33,12 @@
 				"mentlimit":"페이지당 댓글",
 				"pagelimit":"페이지링크 수",
 				"pagetype":"페이지링크 형식",
-				"noticeSetting":"공지사항 설정",
-				"categorySetting":"카테고리 사용",
-				"permissionSetting":"권한설정",
+				"attachment_setting":"첨부파일 업로드 사용",
+				"attachment_templet":"첨부파일 템플릿",
+				"attachment_templet_default":"첨부파일모듈 기본설정사용",
+				"notice_setting":"공지사항 설정",
+				"category_setting":"카테고리 사용",
+				"permission_setting":"권한설정",
 				"permission_list":"목록보기",
 				"permission_view":"게시물보기",
 				"permission_post_write":"게시물작성",
@@ -40,7 +54,7 @@
 				"permission_hidename":"익명작성",
 				"permission_ip":"작성자IP보기",
 				"permission_help":"위의 권한 설정과는 별개로 게시물/댓글 작성자는 자신의 게시물 및 댓글을 수정/삭제할 수 있으며, 자신의 비공개 게시물 및 댓글을 확인할 수 있으며, 자신의 게시물에 입력된 비공개 댓글을 확인할 수 있습니다.",
-				"pointSetting":"포인트/경험치 설정",
+				"point_setting":"포인트/경험치 설정",
 				"point":"포인트",
 				"exp":"경험치",
 				"post_write":"게시물작성",

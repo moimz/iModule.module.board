@@ -8,7 +8,7 @@
  * @author Arzz (arzz@arzz.com)
  * @license MIT License
  * @version 3.0.0.161211
- */
+ */     
 class ModuleBoard {
 	/**
 	 * iModule 및 Module 코어클래스
@@ -46,6 +46,11 @@ class ModuleBoard {
 	private $categorys = array();
 	private $posts = array();
 	private $ments = array();
+	
+	/**
+	 * 기본 URL (다른 모듈에서 호출되었을 경우에 사용된다.)
+	 */
+	private $baseUrl = null;
 	
 	/**
 	 * class 선언
@@ -107,6 +112,39 @@ class ModuleBoard {
 	}
 	
 	/**
+	 * URL 을 가져온다.
+	 *
+	 * @param string $view
+	 * @param string $idx
+	 */
+	function getUrl($view=null,$idx=null) {
+		$url = $this->baseUrl ? $this->baseUrl : $this->IM->getUrl(null,null,false);
+		if ($view == null || $view == false) return $url;
+		$url.= '/'.$view;
+		
+		if ($idx == null || $idx == false) return $url;
+		return $url.'/'.$idx;
+	}
+	
+	/**
+	 * view 값을 가져온다.
+	 *
+	 * @param string $view
+	 */
+	function getView() {
+		return $this->IM->getView($this->baseUrl);
+	}
+	
+	/**
+	 * idx 값을 가져온다.
+	 *
+	 * @param string $idx
+	 */
+	function getIdx() {
+		return $this->IM->getIdx($this->baseUrl);
+	}
+	
+	/**
 	 * [코어] 사이트 외부에서 현재 모듈의 API를 호출하였을 경우, API 요청을 처리하기 위한 함수로 API 실행결과를 반환한다.
 	 * 소스코드 관리를 편하게 하기 위해 각 요쳥별로 별도의 PHP 파일로 관리한다.
 	 *
@@ -141,143 +179,7 @@ class ModuleBoard {
 	 * @return string $push 알림메세지
 	 */
 	function getPush($code,$fromcode,$content) {
-		$latest = array_pop($content);
-		$count = count($content);
 		
-		$push = new stdClass();
-		$push->image = null;
-		$push->link = null;
-		if ($count > 0) $push->content = $this->getText('push/'.$code.'s');
-		else $push->content = $this->getText('push/'.$code);
-		
-		if ($code == 'ment') {
-			$ment = $this->getMent($latest->idx);
-			if ($ment == null) {
-				$from = $this->IM->getModule('member')->getMember(0)->nickname;
-				$push->image = $this->IM->getModule('member')->getMember(0)->photo;
-			} else {
-				$from = $ment->name;
-				$push->image = $this->IM->getModule('member')->getMember($ment->midx)->photo;
-			}
-			$post = $this->getPost($fromcode);
-			if ($post == null) {
-				$title = $this->getText('error/notFound');
-				$push->link = null;
-			} else {
-				$title = GetCutString($post->title,15);
-				$page = $this->getPostPage($post->idx);
-				$push->link = $this->IM->getUrl($page->menu,$page->page,'view',$post->idx,false,$page->domain);
-			}
-			$push->content = str_replace(array('{from}','{title}'),array('<b>'.$from.'</b>','<b>'.$title.'</b>'),$push->content);
-		}
-		
-		if ($code == 'replyment') {
-			$ment = $this->getMent($latest->idx);
-			if ($ment == null) {
-				$from = $this->IM->getModule('member')->getMember(0)->nickname;
-				$push->image = $this->IM->getModule('member')->getMember(0)->photo;
-			} else {
-				$from = $ment->name;
-				$push->image = $this->IM->getModule('member')->getMember($ment->midx)->photo;
-			}
-			$post = $this->getPost($fromcode);
-			if ($post == null) {
-				$title = $this->getText('error/notFound');
-				$push->link = null;
-			} else {
-				$title = GetCutString($post->title,15);
-				$page = $this->getPostPage($post->idx);
-				$push->link = $this->IM->getUrl($page->menu,$page->page,'view',$post->idx,false,$page->domain);
-			}
-			$push->content = str_replace(array('{from}','{title}'),array('<b>'.$from.'</b>','<b>'.$title.'</b>'),$push->content);
-		}
-		
-		if ($code == 'post_good' || $code == 'post_bad') {
-			$from = $this->IM->getModule('member')->getMember($latest->from)->nickname;
-			$push->image = $this->IM->getModule('member')->getMember($latest->from)->photo;
-			
-			if ($code == 'post_bad') {
-				$from = '';
-				$push->image = $push->image = $this->IM->getModule('member')->getMember(0)->photo;
-			}
-			
-			$post = $this->getPost($fromcode);
-			if ($post == null) {
-				$title = $this->getText('error/notFound');
-				$push->link = null;
-			} else {
-				$title = GetCutString($post->title,15);
-				$page = $this->getPostPage($post->idx);
-				$push->link = $this->IM->getUrl($page->menu,$page->page,'view',$post->idx,false,$page->domain);
-			}
-			$push->content = str_replace(array('{from}','{title}'),array('<b>'.$from.'</b>','<b>'.$title.'</b>'),$push->content);
-		}
-		
-		if ($code == 'ment_good' || $code == 'ment_bad') {
-			$from = $this->IM->getModule('member')->getMember($latest->from)->nickname;
-			$push->image = $this->IM->getModule('member')->getMember($latest->from)->photo;
-			
-			if ($code == 'ment_bad') {
-				$from = '';
-				$push->image = $push->image = $this->IM->getModule('member')->getMember(0)->photo;
-			}
-			
-			$ment = $this->getMent($fromcode);
-			$post = $ment != null ? $this->getPost($ment->parent) : null;
-			if ($post == null) {
-				$title = $this->getText('error/notFound');
-				$push->link = null;
-			} else {
-				$title = GetCutString($post->title,15);
-				$page = $this->getPostPage($post->idx);
-				$push->link = $this->IM->getUrl($page->menu,$page->page,'view',$post->idx,false,$page->domain);
-			}
-			$push->content = str_replace(array('{from}','{title}'),array('<b>'.$from.'</b>','<b>'.$title.'</b>'),$push->content);
-		}
-		
-		if ($code == 'post_modify') {
-			$from = $latest->from;
-			$push->image = $this->IM->getModule('member')->getMember(0)->photo;
-			
-			$post = $this->getPost($fromcode);
-			if ($post == null) {
-				$title = $this->getText('error/notFound');
-				$push->link = null;
-			} else {
-				$title = GetCutString($post->title,15);
-				$page = $this->getPostPage($post->idx);
-				$push->link = $this->IM->getUrl($page->menu,$page->page,'view',$post->idx,false,$page->domain);
-			}
-			$push->content = str_replace(array('{from}','{title}'),array('<b>'.$from.'</b>','<b>'.$title.'</b>'),$push->content);
-		}
-		
-		if ($code == 'ment_modify') {
-			$from = $latest->from;
-			$push->image = $this->IM->getModule('member')->getMember(0)->photo;
-			
-			$ment = $this->getMent($fromcode);
-			$post = $ment != null ? $this->getPost($ment->parent) : null;
-			
-			if ($post == null) {
-				$title = $this->getText('error/notFound');
-				$push->link = null;
-			} else {
-				$title = GetCutString($post->title,15);
-				$page = $this->getPostPage($post->idx);
-				$push->link = $this->IM->getUrl($page->menu,$page->page,'view',$post->idx,false,$page->domain);
-			}
-			$push->content = str_replace(array('{from}','{title}'),array('<b>'.$from.'</b>','<b>'.$title.'</b>'),$push->content);
-		}
-		
-		if ($code == 'post_delete' || $code == 'ment_delete') {
-			$push->image = $this->IM->getModule('member')->getMember(0)->photo;
-			$push->link = null;
-			$title = GetCutString($latest->title,15);
-			$push->content = str_replace(array('{from}','{title}'),array('<b>'.$from.'</b>','<b>'.$title.'</b>'),$push->content);
-		}
-		
-		$push->content = str_replace('{count}','<b>'.$count.'</b>',$push->content);
-		return $push;
 	}
 	
 	/**
@@ -288,76 +190,7 @@ class ModuleBoard {
 	 * @return string $point 포인트메세지
 	 */
 	function getPoint($code,$content) {
-		$point = new stdClass();
-		$point = $this->getText('point/'.$code);
 		
-		if ($code == 'post') {
-			$post = $this->getPost($content->idx);
-			
-			if ($post != null) {
-				$page = $this->getPostPage($post->idx);
-				$title = '<a href="'.$this->IM->getUrl($page->menu,$page->page,'view',$post->idx,false,$page->domain).'" target="_blank">['.GetCutString($post->title,20).']</a>';
-			} else {
-				$title = '['.$this->getText('error/notFound').']';
-			}
-			
-			$point = str_replace('{title}','<b>'.$title.'</b>',$point);
-		}
-		
-		if ($code == 'post_delete') {
-			$title = GetCutString($content->title,20);
-			
-			$point = str_replace('{title}','<b>'.$title.'</b>',$point);
-		}
-		
-		if ($code == 'post_good' || $code == 'post_bad') {
-			$post = $this->getPost($content->idx);
-			
-			if ($post != null) {
-				$page = $this->getPostPage($post->idx);
-				$title = '<a href="'.$this->IM->getUrl($page->menu,$page->page,'view',$post->idx,false,$page->domain).'" target="_blank">['.GetCutString($post->title,20).']</a>';
-			} else {
-				$title = '['.$this->getText('error/notFound').']';
-			}
-			
-			$point = str_replace('{title}','<b>'.$title.'</b>',$point);
-		}
-		
-		if ($code == 'ment') {
-			$ment = $this->getMent($content->idx);
-			$post = $ment != null ? $this->getPost($ment->parent) : null;
-			
-			if ($post != null) {
-				$page = $this->getPostPage($post->idx);
-				$title = '<a href="'.$this->IM->getUrl($page->menu,$page->page,'view',$post->idx,false,$page->domain).'" target="_blank">['.GetCutString($post->title,20).']</a>';
-			} else {
-				$title = '['.$this->getText('error/notFound').']';
-			}
-			
-			$point = str_replace('{title}','<b>'.$title.'</b>',$point);
-		}
-		
-		if ($code == 'ment_delete') {
-			$title = GetCutString($content->title,20);
-			
-			$point = str_replace('{title}','<b>'.$title.'</b>',$point);
-		}
-		
-		if ($code == 'ment_good' || $code == 'ment_bad') {
-			$ment = $this->getMent($content->idx);
-			$post = $ment != null ? $this->getPost($ment->parent) : null;
-			
-			if ($post != null) {
-				$page = $this->getPostPage($post->idx);
-				$title = '<a href="'.$this->IM->getUrl($page->menu,$page->page,'view',$post->idx,false,$page->domain).'" target="_blank">['.GetCutString($ment->search,20).']</a>';
-			} else {
-				$title = '['.$this->getText('error/notFound').']';
-			}
-			
-			$point = str_replace('{title}','<b>'.$title.'</b>',$point);
-		}
-		
-		return $point;
 	}
 	
 	/**
@@ -562,7 +395,8 @@ class ModuleBoard {
 	 * @return string $title 컨텍스트 제목
 	 */
 	function getContextTitle($context) {
-		return $this->getText('admin/contexts/'.$context);
+		$board = $this->getBoard($context);
+		return $board->title.'('.$board->bid.')';
 	}
 	
 	/**
@@ -619,7 +453,10 @@ class ModuleBoard {
 		
 		$values = new stdClass();
 		
-		$view = $this->IM->view == '' ? 'list' : $this->IM->view;
+		if ($configs != null && isset($configs->baseUrl) == true) $this->baseUrl = $configs->baseUrl;
+		
+		$view = $this->getView() == null ? 'list' : $this->getView();
+		
 		$board = $this->getBoard($bid);
 		if ($board == null) return $this->getTemplet($configs)->getError('NOT_FOUND_PAGE');
 		
@@ -627,7 +464,7 @@ class ModuleBoard {
 		if (isset($configs->templet) == false) $configs->templet = '#';
 		if ($configs->templet == '#') $configs->templet = $board->templet;
 
-		$html = PHP_EOL.'<!-- BOARD MODULE -->'.PHP_EOL.'<div data-role="context" data-type="module" data-module="board" data-bid="'.$bid.'" data-view="'.$view.'">'.PHP_EOL;
+		$html = PHP_EOL.'<!-- BOARD MODULE -->'.PHP_EOL.'<div data-role="context" data-type="module" data-module="board" data-base-url="'.($configs == null || isset($configs->baseUrl) == false ? '' : $configs->baseUrl).'" data-bid="'.$bid.'" data-view="'.$view.'">'.PHP_EOL;
 		$html.= $this->getHeader($bid,$configs);
 		
 		switch ($view) {
@@ -664,8 +501,6 @@ class ModuleBoard {
 	 * @return string $html 컨텍스트 HTML
 	 */
 	function getHeader($bid,$configs=null) {
-		$board = $this->getBoard($bid);
-		
 		/**
 		 * 템플릿파일을 호출한다.
 		 */
@@ -718,12 +553,12 @@ class ModuleBoard {
 		$lists = $this->db()->select($this->table->post.' p','p.*')->where('p.bid',$bid);
 		$total = $lists->copy()->count();
 		
-		$idx = Request('idx') ? explode('/',Request('idx')) : array(1);
+		$idx = $this->getIdx() ? explode('/',$this->getIdx()) : array(1);
 		$category = null;
 		if (count($idx) == 2) list($category,$p) = $idx;
 		elseif (count($idx) == 1) list($p) = $idx;
 		
-		if ($this->IM->view == 'view') $idx = $p;
+		if ($this->getView() == 'view') $idx = $p;
 		else $idx = 0;
 		if ($configs != null && isset($configs->p) == true) $p = $configs->p;
 		
@@ -738,14 +573,14 @@ class ModuleBoard {
 		for ($i=0, $loop=count($lists);$i<$loop;$i++) {
 			$lists[$i] = $this->getPost($lists[$i]);
 			$lists[$i]->loopnum = $loopnum - $i;
-			$lists[$i]->link = $this->IM->getUrl(null,null,'view',($category == null ? '' : $category.'/').$lists[$i]->idx).$this->IM->getQueryString();
+			$lists[$i]->link = $this->getUrl('view',($category == null ? '' : $category.'/').$lists[$i]->idx).$this->IM->getQueryString();
 		}
 		
-		$pagination = $this->getTemplet($configs)->getPagination($p,ceil($total/$limit),$board->page_limit,$this->IM->getUrl(null,null,'list',($category == null ? '' : $category.'/').'{PAGE}'),$board->page_type);
+		$pagination = $this->getTemplet($configs)->getPagination($p,ceil($total/$limit),$board->page_limit,$this->getUrl('list',($category == null ? '' : $category.'/').'{PAGE}'),$board->page_type);
 		
 		$link = new stdClass();
-		$link->list = $this->IM->getUrl(null,null,'list',($category == null ? '' : $category.'/').$p);
-		$link->write = $this->IM->getUrl(null,null,'write',false);
+		$link->list = $this->getUrl('list',($category == null ? '' : $category.'/').$p);
+		$link->write = $this->getUrl('write',false);
 		
 		$header = PHP_EOL.'<form id="ModuleBoardListForm">'.PHP_EOL;
 		$footer = PHP_EOL.'</form>'.PHP_EOL.'<script>Board.list.init("ModuleBoardListForm");</script>'.PHP_EOL;
@@ -769,8 +604,7 @@ class ModuleBoard {
 		$this->IM->addHeadResource('meta',array('name'=>'robots','content'=>'idx,nofollow'));
 		
 		$board = $this->getBoard($bid);
-		
-		$idx = Request('idx') ? explode('/',Request('idx')) : array(0);
+		$idx = $this->getIdx() ? explode('/',$this->getIdx()) : array(0);
 		$category = null;
 		if (count($idx) == 2) list($category,$idx) = $idx;
 		elseif (count($idx) == 1) list($idx) = $idx;
@@ -791,8 +625,8 @@ class ModuleBoard {
 		$configs->p = $p;
 		
 		$link = new stdClass();
-		$link->list = $this->IM->getUrl(null,null,'list',($category == null ? '' : $category.'/').$p);
-		$link->write = $this->IM->getUrl(null,null,'write',false);
+		$link->list = $this->getUrl('list',($category == null ? '' : $category.'/').$p);
+		$link->write = $this->getUrl('write',false);
 		
 		$header = PHP_EOL.'<form id="ModuleBoardViewForm">'.PHP_EOL;
 		$header.= '<input type="hidden" name="idx" value="'.$idx.'">'.PHP_EOL;
@@ -820,7 +654,7 @@ class ModuleBoard {
 		$this->IM->addHeadResource('meta',array('name'=>'robots','content'=>'noidex,nofollow'));
 		
 		$board = $this->getBoard($bid);
-		$idx = Request('idx');
+		$idx = $this->getIdx();
 		
 		/**
 		 * 게시물 수정
@@ -890,6 +724,16 @@ class ModuleBoard {
 		if ($board == null) {
 			$this->boards[$bid] = null;
 		} else {
+			$board->templet_configs = json_decode($board->templet_configs);
+			
+			$attachment = json_decode($board->attachment);
+			unset($board->attachment);
+			$board->use_attachment = $attachment->attachment;
+			if ($board->use_attachment == true) {
+				$board->attachment = new stdClass();
+				$board->attachment->templet = $attachment->templet;
+				$board->attachment->templet_configs = $attachment->templet_configs;
+			}
 			$this->boards[$bid] = $board;
 		}
 		
@@ -900,9 +744,10 @@ class ModuleBoard {
 	 * 게시물정보를 가져온다.
 	 *
 	 * @param int $idx 게시물고유번호
+	 * @param int $is_link 게시물 링크를 구할지 여부 (기본값 : false)
 	 * @return object $post
 	 */
-	function getPost($idx) {
+	function getPost($idx,$is_link=false) {
 		if (is_null($idx) == true) return null;
 		
 		if (is_numeric($idx) == true) {
@@ -918,6 +763,11 @@ class ModuleBoard {
 				$member = $this->IM->getModule('member')->getMember($post->midx);
 				$post->name = $member->name;
 				$post->nickname = $member->nickname;
+			}
+			
+			if ($is_link == true) {
+				$page = $this->IM->getContextUrl('board',$post->bid,array(),array('category'=>0),true);
+				$post->link = $this->IM->getUrl($page->menu,$page->page,'view',$post->idx);
 			}
 			
 			

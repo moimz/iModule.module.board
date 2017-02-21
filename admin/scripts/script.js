@@ -21,7 +21,7 @@ var Board = {
 						new Ext.form.FieldSet({
 							collapsible:true,
 							collapsed:false,
-							title:Board.getText("admin/list/form/defaultSetting"),
+							title:Board.getText("admin/list/form/default_setting"),
 							items:[
 								new Ext.form.TextField({
 									fieldLabel:Board.getText("admin/list/form/bid"),
@@ -41,27 +41,7 @@ var Board = {
 							collapsed:false,
 							title:Board.getText("admin/list/form/designSetting"),
 							items:[
-								new Ext.form.ComboBox({
-									fieldLabel:Board.getText("admin/list/form/templet"),
-									name:"templet",
-									store:new Ext.data.JsonStore({
-										proxy:{
-											type:"ajax",
-											simpleSortMode:true,
-											url:ENV.getProcessUrl("board","@getTemplets"),
-											reader:{type:"json"}
-										},
-										remoteSort:false,
-										sorters:[{property:"templet",direction:"ASC"}],
-										pageSize:0,
-										fields:["display","value"]
-									}),
-									autoLoadOnValue:true,
-									editable:false,
-									displayField:"display",
-									valueField:"value",
-									value:"default"
-								}),
+								Admin.templetField(Board.getText("admin/list/form/templet"),"templet","board",false,ENV.getProcessUrl("board","@getTempletConfigs"),["bid"]),
 								new Ext.form.FieldContainer({
 									layout:"hbox",
 									items:[
@@ -116,7 +96,16 @@ var Board = {
 							]
 						}),
 						new Ext.form.FieldSet({
-							title:Board.getText("admin/list/form/noticeSetting"),
+							title:Board.getText("admin/list/form/attachment_setting"),
+							checkboxName:"use_attachment",
+							checkboxToggle:true,
+							collapsed:false,
+							items:[
+								Admin.templetField(Board.getText("admin/list/form/attachment_templet"),"attachment","attachment",Board.getText("admin/list/form/attachment_templet_default"),ENV.getProcessUrl("board","@getTempletConfigs"),["bid"]),
+							]
+						}),
+						new Ext.form.FieldSet({
+							title:Board.getText("admin/list/form/notice_setting"),
 							collapsible:true,
 							collapsed:true,
 							items:[
@@ -163,7 +152,7 @@ var Board = {
 							]
 						}),
 						new Ext.form.FieldSet({
-							title:Board.getText("admin/list/form/categorySetting"),
+							title:Board.getText("admin/list/form/category_setting"),
 							checkboxName:"use_category",
 							checkboxToggle:true,
 							collapsed:true,
@@ -231,7 +220,7 @@ var Board = {
 							]
 						}),
 						new Ext.form.FieldSet({
-							title:Board.getText("admin/list/form/permissionSetting"),
+							title:Board.getText("admin/list/form/permission_setting"),
 							collapsible:true,
 							collapsed:true,
 							items:[
@@ -256,7 +245,7 @@ var Board = {
 							]
 						}),
 						new Ext.form.FieldSet({
-							title:Board.getText("admin/list/form/pointSetting"),
+							title:Board.getText("admin/list/form/point_setting"),
 							collapsible:true,
 							collapsed:false,
 							items:[

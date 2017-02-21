@@ -1,0 +1,41 @@
+div[data-module=board] ul[data-role=table] > li > span.loopnum {width:60px; text-align:center;}
+div[data-module=board] ul[data-role=table] > li > span.loopnum > i.fa-caret-right {color:#f44336;}
+div[data-module=board] ul[data-role=table] > li > span.title {width:100%;}
+div[data-module=board] ul[data-role=table] > li > span.title > span {max-width:100%; text-overflow:ellipsis; overflow:hidden; white-space:nowrap;}
+div[data-module=board] ul[data-role=table] > li > span.title > span > a {text-decoration:none; color:#333;}
+div[data-module=board] ul[data-role=table] > li > span.title > span > a:hover {color:#0370a6;}
+div[data-module=board] ul[data-role=table] > li > span.name {width:100px; text-align:center;}
+div[data-module=board] ul[data-role=table] > li > span.reg_date {width:100px; text-align:center;}
+div[data-module=board] ul[data-role=table] > li > span.hit {width:60px;}
+div[data-module=board] ul[data-role=table] > li.tbody > span.hit {text-align:right;}
+
+div[data-module=board] article[data-role=post] {padding-bottom:20px; border-bottom:1px solid #e3e4e5;}
+div[data-module=board] article[data-role=post] > header {display:block; margin:0; padding:15px; background:#f4f4f4; border-top:2px solid #222; line-height:1.6; border-bottom:1px solid #e3e4e5; margin-bottom:20px;}
+div[data-module=board] article[data-role=post] > header > h5 {font-size:15px; line-height:1.6; padding:5px 0px 15px 0px; margin:0; border-bottom:1px solid #e3e4e5;}
+div[data-module=board] article[data-role=post] > header > ul {list-style:none; margin-top:15px; font-size:0;}
+div[data-module=board] article[data-role=post] > header > ul > li {font-size:13px; color:#666;}
+div[data-module=board] article[data-role=post] > header > ul > li > b {display:inline-block; width:60px;}
+div[data-module=board] article[data-role=post] > header > ul > li.name {display:block; height:30px; line-height:30px; font-size:13px;}
+div[data-module=board] article[data-role=post] > header > ul > li.date {display:inline-block; width:50%; height:30px; line-height:30px; vertical-align:middle;}
+div[data-module=board] article[data-role=post] > header > ul > li.hit {display:inline-block; width:50%; height:30px; line-height:30px; vertical-align:middle; text-align:right;}
+div[data-module=board] article[data-role=post] > header > ul > li.hit > b {margin-right:10px;}
+
+div[data-module=board] article[data-role=post] div[data-role=wysiwyg-content] {font-size:13px; line-height:1.6;}
+
+div[data-module=board] ul.buttons {list-style:none; padding-bottom:20px; display:table; width:100%; table-layout:fixed;}
+div[data-module=board] ul.buttons > li {display:table-cell; width:100%; vertical-align:middle;}
+div[data-module=board] ul.buttons > li:first-child > div[data-role=button] {text-align:left; padding-left:0px;}
+div[data-module=board] ul.buttons > li:last-child > div[data-role=button] {text-align:right; padding-right:0px;}
+div[data-module=board] ul.buttons > li:last-child > div[data-role=button] > button, div[data-module=board] ul.buttons > li:last-child > div[data-role=button] > a {margin-left:5px; margin-right:0px;}
+
+div[data-module=board] div.searchbar {margin-top:10px; font-size:0;}
+div[data-module=board] div.searchbar > div.search {display:inline-block; width:300px; vertical-align:middle; font-size:0;}
+div[data-module=board] div.searchbar > div.search > div[data-role=input] {width:calc(100% - 45px); vertical-align:middle; display:inline-block; font-size:1rem; margin-right:5px;}
+div[data-module=board] div.searchbar > div.search > button {width:40px; height:40px; background:#b5b7c0; border:0px; cursor:pointer; vertical-align:middle;}
+div[data-module=board] div.searchbar > div.search > button > i {font-size:14px; color:#fff;}
+div[data-module=board] div.searchbar > div.search > button:hover {background:#828595;}
+div[data-module=board] div.searchbar > button, div[data-module=board] div.searchbar > a {display:inline-block; background:#b5b7c0; height:40px; line-height:40px; border:0px; cursor:pointer; vertical-align:middle; font-size:13px; color:#fff; padding:0px 12px 0px 2px; float:right; box-sizing:border-box; text-decoration:none;}
+div[data-module=board] div.searchbar > button > i, div[data-module=board] div.searchbar > a > i {width:30px; height:40px; line-height:40px; text-align:center; float:left;}
+div[data-module=board] div.searchbar > button:hover, div[data-module=board] div.searchbar > a:hover {background:#828595;}
+
+div[data-module=board] div.pagination {margin-top:20px; text-align:center;}

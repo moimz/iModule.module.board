@@ -9,6 +9,13 @@
  * @version 3.0.0.161211
  */
 var Board = {
+	getUrl:function(view,idx) {
+		var url = $("div[data-module=board]").attr("data-base-url") ? $("div[data-module=board]").attr("data-base-url") : ENV.getUrl(null,null,false);
+		if (!view || view == false) return url;
+		url+= "/"+view;
+		if (!idx || idx == false) return url;
+		return url+"/"+idx;
+	},
 	/**
 	 * 게시물 작성
 	 */
@@ -27,7 +34,7 @@ var Board = {
 		submit:function($form) {
 			$form.send(ENV.getProcessUrl("board","savePost"),function(result) {
 				if (result.success == true) {
-					location.href = ENV.getUrl(null,null,"view",result.idx);
+					location.href = Board.getUrl("view",result.idx);
 				}
 			});
 		}

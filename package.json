@@ -29,6 +29,7 @@
 	"global":false,
 	"article":true,
 	"widget":true,
+	"include":true,
 	"databases":{
 		"board_attachment_table":{
 			"columns":{
@@ -404,6 +405,10 @@
 					"type":"varchar",
 					"length":30
 				},
+				"templet_configs":{
+					"type":"text",
+					"is_null":true
+				},
 				"use_category":{
 					"type":"enum",
 					"length":"'NONE','USED','USEDALL','FORCE'",
@@ -478,6 +483,10 @@
 					"type":"int",
 					"length":11,
 					"default":0
+				},
+				"attachment":{
+					"type":"text",
+					"value":"{\"attachment\":false}"
 				},
 				"permission":{
 					"type":"text"

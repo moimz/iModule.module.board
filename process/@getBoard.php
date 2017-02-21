@@ -29,6 +29,14 @@ if ($data == null) {
 			$data->{'permission_'.$key} = $value;
 		}
 	}
+	
+	unset($data->templet_configs);
+	
+	$attachment = json_decode($data->attachment);
+	unset($data->attachment);
+	$data->use_attachment = $attachment->attachment;
+	$data->attachment = $data->use_attachment == true ? $attachment->templet : '#';
+	
 	$results->success = true;
 	$results->data = $data;
 }

@@ -18,10 +18,10 @@ $errors = array();
 $insert = array();
 $insert['title'] = Request('title') ? Request('title') : $errors['title'] = $this->getErrorText('REQUIRED');
 $insert['templet'] = Request('templet') ? Request('templet') : $errors['templet'] = $this->getErrorText('REQUIRED');
-$insert['postlimit'] = Request('postlimit') && is_numeric(Request('postlimit')) == true ? Request('postlimit') : $errors['postlimit'] = $this->getErrorText('REQUIRED');
-$insert['mentlimit'] = Request('mentlimit') && is_numeric(Request('mentlimit')) == true ? Request('mentlimit') : $errors['mentlimit'] = $this->getErrorText('REQUIRED');
-$insert['pagelimit'] = Request('pagelimit') && is_numeric(Request('pagelimit')) == true ? Request('pagelimit') : $errors['pagelimit'] = $this->getErrorText('REQUIRED');
-$insert['pagetype'] = Request('pagetype') && in_array(Request('pagetype'),array('FIXED','CENTER')) == true ? Request('pagetype') : $errors['pagetype'] = $this->getErrorText('REQUIRED');
+$insert['post_limit'] = Request('postlimit') && is_numeric(Request('postlimit')) == true ? Request('postlimit') : $errors['postlimit'] = $this->getErrorText('REQUIRED');
+$insert['ment_limit'] = Request('mentlimit') && is_numeric(Request('mentlimit')) == true ? Request('mentlimit') : $errors['mentlimit'] = $this->getErrorText('REQUIRED');
+$insert['page_limit'] = Request('pagelimit') && is_numeric(Request('pagelimit')) == true ? Request('pagelimit') : $errors['pagelimit'] = $this->getErrorText('REQUIRED');
+$insert['page_type'] = Request('pagetype') && in_array(Request('pagetype'),array('FIXED','CENTER')) == true ? Request('pagetype') : $errors['pagetype'] = $this->getErrorText('REQUIRED');
 $insert['view_notice_page'] = Request('view_notice_page') && in_array(Request('view_notice_page'),array('FIRST','ALL')) == true ? Request('view_notice_page') : $errors['view_notice_page'] = $this->getErrorText('REQUIRED');
 $insert['view_notice_count'] = Request('view_notice_count') && in_array(Request('view_notice_count'),array('INCLUDE','EXCLUDE')) == true ? Request('view_notice_count') : $errors['view_notice_count'] = $this->getErrorText('REQUIRED');
 
@@ -38,18 +38,36 @@ $insert['ment_exp'] = Request('ment_exp') && is_numeric(Request('ment_exp')) == 
 $insert['vote_point'] = Request('vote_point') && is_numeric(Request('vote_point')) == true ? Request('vote_point') : $errors['vote_point'] = $this->getErrorText('REQUIRED');
 $insert['vote_exp'] = Request('vote_exp') && is_numeric(Request('vote_exp')) == true ? Request('vote_exp') : $errors['vote_exp'] = $this->getErrorText('REQUIRED');
 
-$permission = array();
+$attachment = new stdClass();
+$attachment->attachment = Request('use_attachment') ? true : false;
+if ($attachment->attachment == true) {
+	$attachment->templet = Request('attachment') ? Request('attachment') : $errors['attachment'] = $this->getErrorText('REQUIRED');
+	$attachment->templet_configs = new stdClass();
+}
+
+$templetConfigs = new stdClass();
+$permission = new stdClass();
 foreach ($_POST as $key=>$value) {
 	if (preg_match('/^permission_/',$key) == true && preg_match('/_selector$/',$key) == false) {
 		if ($this->IM->checkPermissionString($value) !== true) {
 			$errors[$key] = $this->IM->checkPermissionString($value);
 		} else {
-			$permission[str_replace('permission_','',$key)] = $value;
+			$permission->{str_replace('permission_','',$key)} = $value;
 		}
+	}
+	
+	if (preg_match('/^templet_configs_/',$key) == true) {
+		$templetConfigs->{str_replace('templet_configs_','',$key)} = $value;
+	}
+	
+	if (preg_match('/^attachment_configs_/',$key) == true) {
+		$attachment->templet_configs->{str_replace('attachment_configs_','',$key)} = $value;
 	}
 }
 
+$insert['templet_configs'] = json_encode($templetConfigs,JSON_UNESCAPED_UNICODE);
 $insert['permission'] = json_encode($permission,JSON_UNESCAPED_UNICODE);
+$insert['attachment'] = json_encode($attachment,JSON_UNESCAPED_UNICODE);
 
 if ($mode == 'add') {
 	$bid = Request('bid');
