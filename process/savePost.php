@@ -77,7 +77,7 @@ if (empty($errors) == true) {
 	$insert['is_secret'] = $is_secret;
 	$insert['is_hidename'] = $is_hidename;
 	
-	if ($idx == null) { // save new post
+	if ($idx == null) {
 		$insert['midx'] = $midx;
 		$insert['password'] = $password;
 		$insert['name'] = $name;
@@ -98,15 +98,15 @@ if (empty($errors) == true) {
 		$results->success = true;
 		$post = $this->getPost($idx); // get original post data
 		
-		if ($this->checkPermission($post->bid,'post_modify') == false) { // check permission
+		if ($this->checkPermission($post->bid,'post_modify') == false) {
 			if ($post->midx != 0 && $post->midx != $this->IM->getModule('member')->getLogged()) {
 				$results->success = false;
-				$results->message = $this->getText('error/forbidden');
+				$results->message = $this->getErrorText('FORBIDDEN');
 			} elseif ($post->midx == 0) {
 				if ($mHash->password_validate($password,$post->password) == false) {
 					$results->success = false;
-					$results->errors = array('password'=>$this->getText('error/incorrectPassword'));
-					$results->message = $this->getText('error/incorrectPassword');
+					$results->errors = array('password'=>$this->getErrorText('INCORRENT_PASSWORD'));
+					$results->message = $this->getErrorText('INCORRENT_PASSWORD');
 				}
 			}
 		}
@@ -127,7 +127,6 @@ if (empty($errors) == true) {
 				$this->updateCategory($post->category);
 			}
 			
-			// modified others user not original author
 			if ($post->midx != 0 && $post->midx != $this->IM->getModule('member')->getLogged()) {
 				$this->IM->getModule('push')->sendPush($post->midx,'board','post_modify',$idx,array('from'=>$name));
 			}
@@ -139,11 +138,12 @@ if (empty($errors) == true) {
 	}
 	
 	if ($results->success == true) {
-		// save attachment
 		$mAttachment = $this->IM->getModule('attachment');
 		for ($i=0, $loop=count($attachments);$i<$loop;$i++) {
-			if ($this->db()->select($this->table->attachment)->where('idx',$attachments[$i])->count() == 0) {
-				$this->db()->insert($this->table->attachment,array('idx'=>$attachments[$i],'bid'=>$bid,'type'=>'POST','parent'=>$idx))->execute();
+			$file = $mAttachment->getFileInfo($attachments[$i]);
+			
+			if ($file != null) {
+				$this->db()->replace($this->table->attachment,array('idx'=>$file->idx,'bid'=>$bid,'type'=>'POST','parent'=>$idx))->execute();
 			}
 			$mAttachment->filePublish($attachments[$i]);
 		}
@@ -157,5 +157,10 @@ if (empty($errors) == true) {
 } else {
 	$results->success = false;
 	$results->errors = $errors;
+}
+
+$templet = Request('templet');
+if (is_file($this->getTemplet($templet)->getPath().'/process/savePost.php') == true) {
+	INCLUDE $this->getTemplet($templet)->getPath().'/process/savePost.php';
 }
 ?>

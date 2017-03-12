@@ -321,6 +321,21 @@
 					"length":255,
 					"is_null":true
 				},
+				"field4":{
+					"type":"int",
+					"length":11,
+					"default":0
+				},
+				"field5":{
+					"type":"int",
+					"length":11,
+					"default":0
+				},
+				"field6":{
+					"type":"int",
+					"length":11,
+					"default":0
+				},
 				"image":{
 					"type":"int",
 					"length":11,
@@ -411,7 +426,7 @@
 				},
 				"use_category":{
 					"type":"enum",
-					"length":"'NONE','USED','USEDALL','FORCE'",
+					"length":"'NONE','USED','FORCE'",
 					"default":"NONE"
 				},
 				"post_limit":{

@@ -25,10 +25,13 @@ $insert['page_type'] = Request('pagetype') && in_array(Request('pagetype'),array
 $insert['view_notice_page'] = Request('view_notice_page') && in_array(Request('view_notice_page'),array('FIRST','ALL')) == true ? Request('view_notice_page') : $errors['view_notice_page'] = $this->getErrorText('REQUIRED');
 $insert['view_notice_count'] = Request('view_notice_count') && in_array(Request('view_notice_count'),array('INCLUDE','EXCLUDE')) == true ? Request('view_notice_count') : $errors['view_notice_count'] = $this->getErrorText('REQUIRED');
 
-if (Request('use_category') == 'on') {
-	// @todo
+$use_category = Request('use_category') == 'on';
+if ($use_category == true) {
+	$insert['use_category'] = 'USED';
+	$category = json_decode(Request('category'));
 } else {
 	$insert['use_category'] = 'NONE';
+	$category = array();
 }
 
 $insert['post_point'] = Request('post_point') && is_numeric(Request('post_point')) == true ? Request('post_point') : $errors['post_point'] = $this->getErrorText('REQUIRED');
@@ -82,6 +85,20 @@ if (count($errors) == 0) {
 		$bid = Request('bid');
 		$this->db()->update($this->table->board,$insert)->where('bid',$bid)->execute();
 	}
+	
+	if ($use_category == true) {
+		for ($i=0, $loop=count($category);$i<$loop;$i++) {
+			if ($category[$i]->idx == 0) {
+				$this->db()->insert($this->table->category,array('bid'=>$bid,'title'=>$category[$i]->title,'permission'=>json_encode($category[$i]->permission,JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK),'sort'=>$category[$i]->sort))->execute();
+			} else {
+				$this->db()->update($this->table->category,array('title'=>$category[$i]->title,'permission'=>json_encode($category[$i]->permission,JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK),'sort'=>$category[$i]->sort))->where('idx',$category[$i]->idx)->execute();
+			}
+		}
+	} else {
+		$this->db()->delete($this->table->category)->where('bid',$bid)->execute();
+		$this->db()->update($this->table->post,array('category'=>0))->where('bid',$bid)->execute();
+	}
+	
 	
 	$results->success = true;
 } else {

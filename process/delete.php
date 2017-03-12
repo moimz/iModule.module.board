@@ -1,0 +1,45 @@
+<?php
+/**
+ * 이 파일은 iModule 게시판모듈의 일부입니다. (https://www.imodule.kr)
+ * 
+ * 게시물 / 댓글을 삭제한다.
+ *
+ * @file /modules/board/process/delete.php
+ * @author Arzz (arzz@arzz.com)
+ * @license GPLv3
+ * @version 3.0.0.160923
+ */
+if (defined('__IM__') == false) exit;
+
+$type = Request('type');
+$idx = Request('idx');
+
+if ($type == 'post') {
+	$post = $this->getPost($idx);
+	
+	if ($post == null) {
+		$results->success = false;
+		$results->message = $this->getErrorText('NOT_FOUND');
+	} elseif ($this->checkPermission($post->bid,'post_delete') == true) {
+		$this->deletePost($idx);
+		$results->success = true;
+	} elseif ($post->midx != 0 && $post->midx != $this->IM->getModule('member')->getLogged()) {
+		$this->deletePost($idx);
+		$results->success = false;
+	} elseif ($post->midx == 0) {
+		$password = Request('password');
+		
+		$mHash = new Hash();
+		if ($mHash->password_validate($password,$post->password) == true) {
+			$this->deletePost($idx);
+			$results->success = true;
+		} else {
+			$results->success = false;
+			$results->errors = array('password'=>$this->getErrorText('INCORRENT_PASSWORD'));
+		}
+	} else {
+		$results->success = false;
+		$results->message = $this->getErrorText('FORBIDDEN');
+	}
+}
+?>

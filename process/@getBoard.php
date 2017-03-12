@@ -37,6 +37,14 @@ if ($data == null) {
 	$data->use_attachment = $attachment->attachment;
 	$data->attachment = $data->use_attachment == true ? $attachment->templet : '#';
 	
+	$data->use_category = $data->use_category != 'NONE';
+	if ($data->use_category == true) {
+		$category = $this->db()->select($this->table->category,'idx,title,post,permission,sort')->where('bid',$bid)->orderBy('sort','asc')->get();
+		for ($i=0, $loop=count($category);$i<$loop;$i++) {
+			$category[$i]->permission = json_decode($category[$i]->permission);
+		}
+		$data->category = json_encode($category,JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK);
+	}
 	$results->success = true;
 	$results->data = $data;
 }

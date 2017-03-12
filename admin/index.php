@@ -13,7 +13,7 @@ var panel = new Ext.TabPanel({
 					text:Board.getText("admin/list/addBoard"),
 					iconCls:"fa fa-plus",
 					handler:function() {
-						Board.addBoard();
+						Board.list.add();
 					}
 				})
 			],
@@ -68,7 +68,7 @@ var panel = new Ext.TabPanel({
 			}),
 			listeners:{
 				itemdblclick:function(grid,record) {
-					Board.addBoard(record.data.bid);
+					Board.list.add(record.data.bid);
 				}
 			}
 		})

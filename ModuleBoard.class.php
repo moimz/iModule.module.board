@@ -8,7 +8,7 @@
  * @author Arzz (arzz@arzz.com)
  * @license MIT License
  * @version 3.0.0.161211
- */     
+ */
 class ModuleBoard {
 	/**
 	 * iModule 및 Module 코어클래스
@@ -38,12 +38,12 @@ class ModuleBoard {
 	 * DB접근을 줄이기 위해 DB에서 불러온 데이터를 저장할 변수를 정의한다.
 	 *
 	 * @private $members 회원정보
-	 * @private $labels 라벨정보
+	 * @private $categories 카테고리정보
 	 * @private $memberPages 회원관련 컨텍스트를 사용하고 있는 사이트메뉴 정보
 	 * @private $logged 현재 로그인한 회원정보
 	 */
 	private $boards = array();
-	private $categorys = array();
+	private $categories = array();
 	private $posts = array();
 	private $ments = array();
 	
@@ -252,39 +252,42 @@ class ModuleBoard {
 	 * [사이트관리자] 모듈의 컨텍스트 환경설정을 구성한다.
 	 *
 	 * @param object $site 설정대상 사이트
+	 * @param object $values 설정값
 	 * @param string $context 설정대상 컨텍스트명
 	 * @return object[] $configs 환경설정
 	 */
-	function getContextConfigs($site,$context) {
+	function getContextConfigs($site,$values,$context) {
 		$configs = array();
 		
 		$templet = new stdClass();
 		$templet->title = $this->IM->getText('text/templet');
 		$templet->name = 'templet';
-		$templet->type = 'select';
-		$templet->data = array();
+		$templet->type = 'templet';
+		$templet->target = 'board';
+		$templet->use_default = true;
+		$templet->value = $values != null && isset($values->templet) == true ? $values->templet : '#';
+		$configs[] = $templet;
 		
-		$templet->data[] = array('#',$this->getText('admin/configs/form/default_setting'));
-		
-		$templets = $this->getModule()->getTemplets();
-		for ($i=0, $loop=count($templets);$i<$loop;$i++) {
-			$templet->data[] = array($templets[$i]->getName(),$templets[$i]->getTitle().' ('.$templets[$i]->getDir().')');
-		}
-		
-		$templet->value = count($templet->data) > 0 ? $templet->data[0][0] : '#';
+		$templet = new stdClass();
+		$templet->title = '첨부파일 템플릿';
+		$templet->name = 'attachment';
+		$templet->type = 'templet';
+		$templet->target = 'attachment';
+		$templet->use_default = true;
+		$templet->value = $values != null && isset($values->attachment) == true ? $values->attachment : '#';
 		$configs[] = $templet;
 		
 		$category = new stdClass();
-		$category->title = $this->getText('category');
+		$category->title = $this->getText('text/category');
 		$category->name = 'category';
 		$category->type = 'select';
 		$category->data = array();
-		$category->data[] = array(0,$this->getText('category_all'));
+		$category->data[] = array(0,$this->getText('text/category_all'));
 		$categorys = $this->db()->select($this->table->category,'idx,title')->where('bid',$context)->orderBy('sort','asc')->get();
 		for ($i=0, $loop=count($categorys);$i<$loop;$i++) {
 			$category->data[] = array($categorys[$i]->idx,$categorys[$i]->title);
 		}
-		$category->value = 0;
+		$category->value = $values != null && isset($values->category) == true ? $values->category : 0;
 		$configs[] = $category;
 		
 		return $configs;
@@ -396,6 +399,7 @@ class ModuleBoard {
 	 */
 	function getContextTitle($context) {
 		$board = $this->getBoard($context);
+		if ($board == null) return '삭제된 게시판';
 		return $board->title.'('.$board->bid.')';
 	}
 	
@@ -428,13 +432,20 @@ class ModuleBoard {
 		 */
 		if (is_object($templet) == true) {
 			$templet = $templet !== null && isset($templet->templet) == true ? $templet->templet : '#';
+			$templet_configs = $templet !== null && isset($templet->templet_configs) == true ? $templet->templet_configs : null;
+		} else {
+			$templet_configs = null;
 		}
 		
 		/**
 		 * 템플릿명이 # 이면 모듈 기본설정에 설정된 템플릿을 사용한다.
 		 */
-		$templet = $templet == '#' ? $this->getModule()->getConfig('templet') : $templet;
-		return $this->getModule()->getTemplet($templet);
+		if ($templet == '#') {
+			$templet = $this->getModule()->getConfig('templet');
+			$templet_configs = $this->getModule()->getConfig('templet_configs');
+		}
+		
+		return $this->getModule()->getTemplet($templet,$templet_configs);
 	}
 	
 	/**
@@ -462,7 +473,12 @@ class ModuleBoard {
 		
 		if ($configs == null) $configs = new stdClass();
 		if (isset($configs->templet) == false) $configs->templet = '#';
-		if ($configs->templet == '#') $configs->templet = $board->templet;
+		if ($configs->templet == '#') {
+			$configs->templet = $board->templet;
+			$configs->templet_configs = $board->templet_configs;
+		} else {
+			$configs->templet_configs = isset($configs->templet_configs) == true ? $configs->templet_configs : null;
+		}
 
 		$html = PHP_EOL.'<!-- BOARD MODULE -->'.PHP_EOL.'<div data-role="context" data-type="module" data-module="board" data-base-url="'.($configs == null || isset($configs->baseUrl) == false ? '' : $configs->baseUrl).'" data-bid="'.$bid.'" data-view="'.$view.'">'.PHP_EOL;
 		$html.= $this->getHeader($bid,$configs);
@@ -472,12 +488,10 @@ class ModuleBoard {
 				$html.= $this->getListContext($bid,$configs);
 				break;
 			
-			// post view context
 			case 'view' :
 				$html.= $this->getViewContext($bid,$configs);
 				break;
 			
-			// write / modify post context
 			case 'write' :
 				$html.= $this->getWriteContext($bid,$configs);
 				break;
@@ -550,13 +564,30 @@ class ModuleBoard {
 		
 		$board = $this->getBoard($bid);
 		
+		if ($board->use_category != 'NONE') {
+			$categories = $this->db()->select($this->table->category)->where('bid',$bid)->get();
+		} else {
+			$categories = array();
+		}
+		
 		$lists = $this->db()->select($this->table->post.' p','p.*')->where('p.bid',$bid);
-		$total = $lists->copy()->count();
 		
 		$idx = $this->getIdx() ? explode('/',$this->getIdx()) : array(1);
 		$category = null;
 		if (count($idx) == 2) list($category,$p) = $idx;
 		elseif (count($idx) == 1) list($p) = $idx;
+		
+		if ($configs != null && isset($configs->category) == true && $configs->category != 0) {
+			$lists->where('p.category',$configs->category);
+			$categories = array();
+		} else {
+			if ($category != null) $lists->where('p.category',$category);
+		}
+		
+		$keyword = Request('keyword');
+		if ($keyword) $lists = $this->IM->getModule('keyword')->getWhere($lists,array('title','search'),$keyword);
+		
+		$total = $lists->copy()->count();
 		
 		if ($this->getView() == 'view') $idx = $p;
 		else $idx = 0;
@@ -566,12 +597,13 @@ class ModuleBoard {
 		$start = ($p - 1) * $limit;
 		
 		$sort = Request('sort') ? Request('sort') : 'idx';
-		$dir = Request('dir') ? Request('dir') : 'asc';
+		$dir = Request('dir') ? Request('dir') : (in_array($sort,array('idx')) == true ? 'desc' : 'asc');
 		$lists = $lists->orderBy($sort,$dir)->limit($start,$limit)->get();
 		
 		$loopnum = $total - ($p - 1) * $limit;
 		for ($i=0, $loop=count($lists);$i<$loop;$i++) {
 			$lists[$i] = $this->getPost($lists[$i]);
+			$lists[$i]->category = $lists[$i]->category == 0 ? null : $this->getCategory($lists[$i]->category);
 			$lists[$i]->loopnum = $loopnum - $i;
 			$lists[$i]->link = $this->getUrl('view',($category == null ? '' : $category.'/').$lists[$i]->idx).$this->IM->getQueryString();
 		}
@@ -611,6 +643,21 @@ class ModuleBoard {
 		
 		$post = $this->getPost($idx);
 		if ($post == null) return $this->getTemplet($configs)->getError('NOT_FOUND_PAGE');
+		
+		/**
+		 * 조회수 증가
+		 * @todo 한번에 하나씩만 올리도록 세션처리
+		 */
+		$this->db()->update($this->table->post,array('hit'=>$this->db()->inc()))->where('idx',$idx)->execute();
+		$post->hit = $post->hit + 1;
+		
+		/**
+		 * 첨부파일
+		 */
+		$attachments = $this->db()->select($this->table->attachment)->where('type','POST')->where('parent',$idx)->get();
+		for ($i=0, $loop=count($attachments);$i<$loop;$i++) {
+			$attachments[$i] = $this->IM->getModule('attachment')->getFileInfo($attachments[$i]->idx);
+		}
 		
 		/**
 		 * 현재 게시물이 속한 페이지를 구한다.
@@ -656,11 +703,15 @@ class ModuleBoard {
 		$board = $this->getBoard($bid);
 		$idx = $this->getIdx();
 		
+		if ($board->use_category != 'NONE') {
+			$categories = $this->db()->select($this->table->category)->where('bid',$bid)->orderBy('sort','asc')->get();
+		}
+		
 		/**
 		 * 게시물 수정
 		 */
 		if ($idx !== null) {
-			$post = $this->getPost($idx);
+			$post = $this->db()->select($this->table->post)->where('idx',$idx)->getOne();
 			
 			if ($post == null) {
 				header("HTTP/1.1 404 Not Found");
@@ -669,47 +720,115 @@ class ModuleBoard {
 			
 			if ($this->checkPermission($bid,'post_modify') == false) {
 				if ($post->midx != 0 && $post->midx != $this->IM->getModule('member')->getLogged()) {
-					header("HTTP/1.1 403 Forbidden");
-					return $this->getError($this->getLanguage('error/forbidden'));
+					return $this->getError($this->getErrorText('FORBIDDEN'));
 				} elseif ($post->midx == 0) {
 					$password = Request('password');
 					$mHash = new Hash();
 					if ($mHash->password_validate($password,$post->password) == false) {
-						header("HTTP/1.1 403 Forbidden");
-					
-						$context = $this->getError($this->getLanguage('error/incorrectPassword'));
-						$context.= PHP_EOL.'<script>Board.post.modify('.$idx.');</script>'.PHP_EOL;
+						$context = $this->getError($this->getErrorText('INCORRENT_PASSWORD'));
+						$context.= PHP_EOL.'<script>Board.view.modify('.$idx.');</script>'.PHP_EOL;
 						
 						return $context;
 					}
 				}
 			}
 			
-			$post->content = $this->getArticleContent($post->content);
-			$post->is_notice = $post->is_notice == 'TRUE' ? true : false;
-			$post->is_html_title = $post->is_html_title == 'TRUE' ? true : false;
-			$post->is_secret = $post->is_secret == 'TRUE' ? true : false;
-			$post->is_hidename = $post->is_hidename == 'TRUE' ? true : false;
-			
-			$post->attachments = $this->db()->select($this->table->attachment)->where('parent',$idx)->where('type','POST')->get();
-			for ($i=0, $loop=count($post->attachments);$i<$loop;$i++) {
-				$post->attachments[$i] = $post->attachments[$i]->idx;
-			}
+			$post->content = $this->IM->getModule('wysiwyg')->decodeContent($post->content,false);
 		} else {
 			$post = null;
 		}
 		
 		$header = PHP_EOL.'<form id="ModuleBoardWriteForm-'.$bid.'" data-autosave="true">'.PHP_EOL;
+		$header.= '<input type="hidden" name="templet" value="'.$this->getTemplet($configs)->getName().'">'.PHP_EOL;
 		$header.= '<input type="hidden" name="bid" value="'.$bid.'">'.PHP_EOL;
 		if ($post !== null) $header.= '<input type="hidden" name="idx" value="'.$post->idx.'">'.PHP_EOL;
+		if ($configs != null && isset($configs->category) == true && $configs->category != 0) {
+			$categories = array();
+			$header.= '<input type="hidden" name="category" value="'.$configs->category.'">'.PHP_EOL;
+		}
 		$footer = PHP_EOL.'</form>'.PHP_EOL.'<script>Board.write.init("ModuleBoardWriteForm-'.$bid.'");</script>'.PHP_EOL;
 		
-		$wysiwyg = $this->IM->getModule('wysiwyg')->setRequired(true)->setContent($post == null ? '' : $post->content)->get();
+		$wysiwyg = $this->IM->getModule('wysiwyg')->setModule('board')->setName('content')->setRequired(true)->setContent($post == null ? '' : $post->content);
 		
+		if ($board->use_attachment == true) {
+			$uploader = $this->IM->getModule('attachment');
+			if ($configs == null || isset($configs->attachment) == null || $configs->attachment == '#') {
+				$attachment_templet_name = $board->attachment->templet;
+				$attachment_templet_configs = $board->attachment->templet_configs;
+			} else {
+				$attachment_templet_name = $configs->attachment;
+				$attachment_templet_configs = isset($configs->attachment_configs) == true ? $configs->attachment_configs : null;
+			}
+			
+			if ($attachment_templet_name != '#') {
+				$attachment_templet = new stdClass();
+				$attachment_templet->templet = $attachment_templet_name;
+				$attachment_templet->templet_configs = $attachment_templet_configs;
+			} else {
+				$attachment_templet = '#';
+			}
+			
+			$uploader = $uploader->setTemplet($attachment_templet)->setModule('board')->setWysiwyg('content');
+			if ($post != null) $uploader->setLoader($this->IM->getProcessUrl('board','getFiles',array('idx'=>Encoder(json_encode(array('type'=>'POST','idx'=>$post->idx))))));
+			$uploader = $uploader->get();
+		} else {
+			$uploader = '';
+		}
+		$wysiwyg = $wysiwyg->get();
+		
+		
+//		$attachment->setTem
+//		print_r($configs);
+		/*
+		$attachment = $this->IM->getModule('attachment');
+		if ($configs == null || isset($configs->attachment_templet) == false || $configs->attachment_templet == '#') {
+			$attachment->setTemplet($board->attachment_templet == '#')get();
+		*/
 		/**
 		 * 템플릿파일을 호출한다.
 		 */
 		return $this->getTemplet($configs)->getContext('write',get_defined_vars(),$header,$footer);
+	}
+	
+	/**
+	 * 삭제모달을 가져온다.
+	 *
+	 * @param string $type post or ment
+	 * @param int $idx 게시물/댓글 고유번호
+	 * @return string $html 모달 HTML
+	 */
+	function getDeleteModal($type,$idx) {
+		$title = $type == 'post' ? '게시물 삭제' : '댓글 삭제';
+		
+		$content = '<input type="hidden" name="type" value="'.$type.'">'.PHP_EOL;
+		$content.= '<input type="hidden" name="idx" value="'.$idx.'">'.PHP_EOL;
+		
+		if ($type == 'post') {
+			$post = $this->getPost($idx);
+			
+			if ($this->checkPermission($post->bid,'post_delete') == false && $post->midx != 0 && $post->midx != $this->IM->getModule('member')->getLogged()) return;
+			
+			$content.= '<div data-role="message">게시물을 삭제하시겠습니까?</div>';
+			
+			if ($this->checkPermission($post->bid,'post_delete') == false && $post->midx == 0) {
+				$content.= '<div data-role="input" data-default="게시물 등록시 입력한 패스워드를 입력하여 주십시오."><input type="password" name="password"></div>';
+			}
+		}
+		
+		$buttons = array();
+		
+		$button = new stdClass();
+		$button->type = 'submit';
+		$button->text = '삭제하기';
+		$button->class = 'danger';
+		$buttons[] = $button;
+		
+		$button = new stdClass();
+		$button->type = 'close';
+		$button->text = '취소';
+		$buttons[] = $button;
+		
+		return $this->getTemplet()->getModal($title,$content,true,array(),$buttons);
 	}
 	
 	/**
@@ -766,10 +885,11 @@ class ModuleBoard {
 			}
 			
 			if ($is_link == true) {
-				$page = $this->IM->getContextUrl('board',$post->bid,array(),array('category'=>0),true);
+				$page = $this->IM->getContextUrl('board',$post->bid,array(),array('category'=>$post->category),true);
 				$post->link = $this->IM->getUrl($page->menu,$page->page,'view',$post->idx);
 			}
 			
+			$post->image = $post->image > 0 ? $this->IM->getModule('attachment')->getFileInfo($post->image) : null;
 			
 			$post->content = $this->IM->getModule('wysiwyg')->decodeContent($post->content);
 			$post->is_rendered = true;
@@ -777,6 +897,18 @@ class ModuleBoard {
 			$this->posts[$post->idx] = $post;
 			return $this->posts[$post->idx];
 		}
+	}
+	
+	/**
+	 * 카테고리정보를 가져온다.
+	 *
+	 * @param int $idx 카테고리고유번호
+	 * @return object $category
+	 */
+	function getCategory($idx) {
+		if (isset($this->categories[$idx]) == true) return $this->categories[$idx];
+		$this->categories[$idx] = $this->db()->select($this->table->category)->where('idx',$idx)->getOne();
+		return $this->categories[$idx];
 	}
 	
 	/**
@@ -826,6 +958,43 @@ class ModuleBoard {
 		$this->db()->update($this->table->category,array('post'=>$status->total,'latest_post'=>($status->latest ? $status->latest : 0)))->where('idx',$category)->execute();
 	}
 	
+	
+	
+	/**
+	 * 게시물을 삭제한다.
+	 *
+	 * @param int $idx 게시물고유번호
+	 */
+	function deletePost($idx) {
+		$post = $this->getPost($idx);
+		if ($post == null) return false;
+		
+		/**
+		 * 게시물에 첨부된 첨부파일을 삭제한다.
+		 */
+		$attachments = $this->db()->select($this->table->attachment)->where('type','POST')->where('parent',$idx)->get();
+		for ($i=0, $loop=count($attachments);$i<$loop;$i++) {
+			$this->IM->getModule('attachment')->fileDelete($attachments[$i]->idx);
+		}
+		
+		/**
+		 * 게시물에 작성된 댓글을 삭제한다.
+		 */
+		$ments = $this->db()->select($this->table->ment)->where('parent',$idx)->get();
+		for ($i=0, $loop=count($ments);$i<$loop;$i++) {
+			$this->deleteMent($ments[$i]->idx);
+		}
+		
+		/**
+		 * 게시물을 삭제한다.
+		 */
+		$this->db()->delete($this->table->post)->where('idx',$idx)->execute();
+		if ($post->category != 0) $this->updateCategory($post->category);
+		$this->updateBoard($post->bid);
+		
+		return true;
+	}
+	
 	/**
 	 * 현재 모듈에서 처리해야하는 요청이 들어왔을 경우 처리하여 결과를 반환한다.
 	 * 소스코드 관리를 편하게 하기 위해 각 요쳥별로 별도의 PHP 파일로 관리한다.
@@ -849,6 +1018,21 @@ class ModuleBoard {
 		$this->IM->fireEvent('afterDoProcess','member',$action,$values,$results);
 		
 		return $results;
+	}
+	
+	/**
+	 * 첨부파일을 동기화한다.
+	 *
+	 * @param string $action 동기화작업
+	 * @param int $idx 파일 고유번호
+	 */
+	function syncAttachment($action,$idx) {
+		/**
+		 * 첨부파일 삭제
+		 */
+		if ($action == 'delete') {
+			$this->db()->delete($this->table->attachment)->where('idx',$idx)->execute();
+		}
 	}
 }
 ?>

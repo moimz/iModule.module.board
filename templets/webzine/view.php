@@ -45,5 +45,3 @@ if (defined('__IM__') == false) exit;
 		</div>
 	</li>
 </ul>
-
-<script>AddDepth("<?php echo GetString($post->title,'input'); ?>","#");</script>
