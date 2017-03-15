@@ -53,3 +53,21 @@ div[data-module=board] div.searchbar > button:hover, div[data-module=board] div.
 div[data-module=board] div.pagination {margin-top:20px; text-align:center;}
 
 div[data-module=board] div[data-role=button] {margin-top:10px;}
+
+@media (max-width:767px) {
+	div[data-module=board] div.searchbar > div.search {width:100%;}
+	div[data-module=board] div.searchbar > a + div.search {width:calc(100% - 120px);}
+	
+	div[data-module=board] ul[data-role=table] > li.thead > span.loopnum {display:none;}
+	div[data-module=board] ul[data-role=table] > li.thead > span.name {display:none;}
+	div[data-module=board] ul[data-role=table] > li.thead > span.reg_date {display:none;}
+	div[data-module=board] ul[data-role=table] > li.thead > span.hit {display:none;}
+	
+	div[data-module=board] ul[data-role=table] > li.tbody {display:block; padding:15px 0px;}
+	div[data-module=board] ul[data-role=table] > li.tbody > span.loopnum {display:none;}
+	div[data-module=board] ul[data-role=table] > li.tbody > span.title {display:block; width:100%; height:auto; min-height:20px; line-height:20px; padding:0px; margin-bottom:5px;}
+	div[data-module=board] ul[data-role=table] > li.tbody > span.name {display:inline-block; width:auto; height:14px; line-height:14px; padding:0px 8px 0px 0px; border-right:1px solid #ccc;}
+	div[data-module=board] ul[data-role=table] > li.tbody > span.reg_date {display:inline-block; width:auto; height:14px; line-height:14px; padding:0px 8px; border-right:1px solid #ccc;}
+	div[data-module=board] ul[data-role=table] > li.tbody > span.hit {display:inline-block; width:auto; height:14px; line-height:14px; padding:0px 8px;}
+	div[data-module=board] ul[data-role=table] > li.tbody > span.hit:before {content:"조회 : ";}
+}
