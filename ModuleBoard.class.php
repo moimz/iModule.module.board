@@ -570,7 +570,7 @@ class ModuleBoard {
 			$categories = array();
 		}
 		
-		$lists = $this->db()->select($this->table->post.' p','p.*')->where('p.bid',$bid);
+		$lists = $this->db()->select($this->table->post)->where('bid',$bid);
 		
 		$idx = $this->getIdx() ? explode('/',$this->getIdx()) : array(1);
 		$category = null;
@@ -578,15 +578,14 @@ class ModuleBoard {
 		elseif (count($idx) == 1) list($p) = $idx;
 		
 		if ($configs != null && isset($configs->category) == true && $configs->category != 0) {
-			$lists->where('p.category',$configs->category);
+			$lists->where('category',$configs->category);
 			$categories = array();
 		} else {
-			if ($category != null) $lists->where('p.category',$category);
+			if ($category != null) $lists->where('category',$category);
 		}
 		
 		$keyword = Request('keyword');
 		if ($keyword) $lists = $this->IM->getModule('keyword')->getWhere($lists,array('title','search'),$keyword);
-		
 		$total = $lists->copy()->count();
 		
 		if ($this->getView() == 'view') $idx = $p;
@@ -664,8 +663,9 @@ class ModuleBoard {
 		 */
 		$sort = Request('sort') ? Request('sort') : 'idx';
 		$dir = Request('dir') ? Request('dir') : 'asc';
-		$previous = $this->db()->select($this->table->post.' p','p.*')->where('p.bid',$post->bid)->where('p.'.$sort,$post->{$sort},$dir == 'desc' ? '>=' : '<=');
+		$previous = $this->db()->select($this->table->post.' p','p.*')->where('p.bid',$post->bid)->where('p.'.$sort,$post->{$sort},$dir == 'desc' ? '<=' : '>=');
 		$previous = $previous->count();
+		
 		$p = ceil($previous/$board->post_limit);
 		
 		$configs = $configs == null ? new stdClass() : $configs;
@@ -957,8 +957,6 @@ class ModuleBoard {
 		$status = $this->db()->select($this->table->post,'COUNT(*) as total, MAX(reg_date) as latest')->where('category',$category)->getOne();
 		$this->db()->update($this->table->category,array('post'=>$status->total,'latest_post'=>($status->latest ? $status->latest : 0)))->where('idx',$category)->execute();
 	}
-	
-	
 	
 	/**
 	 * 게시물을 삭제한다.
