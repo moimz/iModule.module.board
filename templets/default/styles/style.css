@@ -19,8 +19,8 @@ div[data-module=board] article[data-role=post] > header > ul {list-style:none; m
 div[data-module=board] article[data-role=post] > header > ul > li {font-size:13px; color:#666;}
 div[data-module=board] article[data-role=post] > header > ul > li > b {display:inline-block; width:60px;}
 div[data-module=board] article[data-role=post] > header > ul > li.name {display:block; height:30px; line-height:30px; font-size:13px;}
-div[data-module=board] article[data-role=post] > header > ul > li.date {display:inline-block; width:50%; height:30px; line-height:30px; vertical-align:middle;}
-div[data-module=board] article[data-role=post] > header > ul > li.hit {display:inline-block; width:50%; height:30px; line-height:30px; vertical-align:middle; text-align:right;}
+div[data-module=board] article[data-role=post] > header > ul > li.date {display:inline-block; width:70%; height:30px; line-height:30px; vertical-align:middle;}
+div[data-module=board] article[data-role=post] > header > ul > li.hit {display:inline-block; width:30%; height:30px; line-height:30px; vertical-align:middle; text-align:right;}
 div[data-module=board] article[data-role=post] > header > ul > li.hit > b {margin-right:10px;}
 
 div[data-module=board] article[data-role=post] div[data-role=wysiwyg-content] {font-size:13px; line-height:1.6;}

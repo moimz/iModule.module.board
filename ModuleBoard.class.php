@@ -705,6 +705,8 @@ class ModuleBoard {
 		
 		if ($board->use_category != 'NONE') {
 			$categories = $this->db()->select($this->table->category)->where('bid',$bid)->orderBy('sort','asc')->get();
+		} else {
+			$categories = array();
 		}
 		
 		/**
