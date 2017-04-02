@@ -29,6 +29,7 @@ $errors = array();
 $idx = Request('idx');
 $bid = Request('bid');
 $category = Request('category');
+$prefix = Request('prefix');
 $title = Request('title') ? Request('title') : $errors['title'] = $this->getErrorText('REQUIRED');
 $content = Request('content') ? Request('content') : $errors['content'] = $this->getErrorText('REQUIRED');;
 $is_notice = Request('is_notice') && $this->checkPermission($bid,'notice') == true ? 'TRUE' : 'FALSE';
@@ -63,12 +64,21 @@ if ($board->use_category != 'NONE') {
 	$category = 0;
 }
 
+if ($board->use_prefix == 'TRUE') {
+	if ($prefix != 0 && $this->db()->select($this->table->prefix)->where('idx',$prefix)->has() == false) {
+		$errors['prefix'] = $this->getErrorText('NOT_FOUND');
+	}
+} else {
+	$prefix = 0;
+}
+
 if (empty($errors) == true) {
 	$mHash = new Hash();
 	
 	$insert = array();
 	$insert['bid'] = $bid;
 	$insert['category'] = $category;
+	$insert['prefix'] = $prefix;
 	$insert['title'] = $title;
 	$insert['content'] = $content;
 	$insert['search'] = GetString($content,'index');
@@ -127,6 +137,10 @@ if (empty($errors) == true) {
 				$this->updateCategory($post->category);
 			}
 			
+			if ($post->prefix != $prefix) {
+				$this->updatePrefix($post->prefix);
+			}
+			
 			if ($post->midx != 0 && $post->midx != $this->IM->getModule('member')->getLogged()) {
 				$this->IM->getModule('push')->sendPush($post->midx,'board','post_modify',$idx,array('from'=>$name));
 			}
@@ -149,6 +163,7 @@ if (empty($errors) == true) {
 		}
 		
 		$this->updateCategory($category);
+		$this->updatePrefix($prefix);
 		$this->updateBoard($bid);
 		$this->IM->setArticle('board',$bid,'post',$idx,time());
 		

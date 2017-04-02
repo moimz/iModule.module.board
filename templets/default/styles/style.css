@@ -54,6 +54,8 @@ div[data-module=board] div.pagination {margin-top:20px; text-align:center;}
 
 div[data-module=board] div[data-role=button] {margin-top:10px;}
 
+div[data-module=board] ul[data-role=form] div[data-role=input][data-name=prefix] {width:180px;}
+
 @media (max-width:767px) {
 	div[data-module=board] div.searchbar > div.search {width:100%;}
 	div[data-module=board] div.searchbar > a + div.search {width:calc(100% - 120px);}
@@ -70,4 +72,9 @@ div[data-module=board] div[data-role=button] {margin-top:10px;}
 	div[data-module=board] ul[data-role=table] > li.tbody > span.reg_date {display:inline-block; width:auto; height:14px; line-height:14px; padding:0px 8px; border-right:1px solid #ccc;}
 	div[data-module=board] ul[data-role=table] > li.tbody > span.hit {display:inline-block; width:auto; height:14px; line-height:14px; padding:0px 8px;}
 	div[data-module=board] ul[data-role=table] > li.tbody > span.hit:before {content:"조회 : ";}
+	
+	div[data-module=board] ul[data-role=form] div[data-role=inputset].flex {display:block;}
+	div[data-module=board] ul[data-role=form] div[data-role=inputset].flex > div {display:block; margin:5px 0px 0px 0px; border-left:0px;}
+	div[data-module=board] ul[data-role=form] div[data-role=inputset].flex > div:first-child {margin-top:0px;}
+	div[data-module=board] ul[data-role=form] div[data-role=input][data-name=prefix] {width:100%;}
 }

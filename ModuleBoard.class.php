@@ -39,11 +39,13 @@ class ModuleBoard {
 	 *
 	 * @private $members 회원정보
 	 * @private $categories 카테고리정보
+	 * @private $prefixes 말머리정보
 	 * @private $memberPages 회원관련 컨텍스트를 사용하고 있는 사이트메뉴 정보
 	 * @private $logged 현재 로그인한 회원정보
 	 */
 	private $boards = array();
 	private $categories = array();
+	private $prefixes = array();
 	private $posts = array();
 	private $ments = array();
 	
@@ -74,6 +76,7 @@ class ModuleBoard {
 		$this->table = new stdClass();
 		$this->table->board = 'board_table';
 		$this->table->category = 'board_category_table';
+		$this->table->prefix = 'board_prefix_table';
 		$this->table->post = 'board_post_table';
 		$this->table->ment = 'board_ment_table';
 		$this->table->ment_depth = 'board_ment_depth_table';
@@ -603,6 +606,7 @@ class ModuleBoard {
 		for ($i=0, $loop=count($lists);$i<$loop;$i++) {
 			$lists[$i] = $this->getPost($lists[$i]);
 			$lists[$i]->category = $lists[$i]->category == 0 ? null : $this->getCategory($lists[$i]->category);
+			$lists[$i]->prefix = $lists[$i]->prefix == 0 ? null : $this->getPrefix($lists[$i]->prefix);
 			$lists[$i]->loopnum = $loopnum - $i;
 			$lists[$i]->link = $this->getUrl('view',($category == null ? '' : $category.'/').$lists[$i]->idx).$this->IM->getQueryString();
 		}
@@ -649,6 +653,8 @@ class ModuleBoard {
 		 */
 		$this->db()->update($this->table->post,array('hit'=>$this->db()->inc()))->where('idx',$idx)->execute();
 		$post->hit = $post->hit + 1;
+		
+		$post->prefix = $post->prefix == 0 ? null : $this->getPrefix($post->prefix);
 		
 		/**
 		 * 첨부파일
@@ -707,6 +713,12 @@ class ModuleBoard {
 			$categories = $this->db()->select($this->table->category)->where('bid',$bid)->orderBy('sort','asc')->get();
 		} else {
 			$categories = array();
+		}
+		
+		if ($board->use_prefix == 'TRUE') {
+			$prefixes = $this->db()->select($this->table->prefix)->where('bid',$bid)->orderBy('sort','asc')->get();
+		} else {
+			$prefixes = array();
 		}
 		
 		/**
@@ -914,6 +926,18 @@ class ModuleBoard {
 	}
 	
 	/**
+	 * 말머리정보를 가져온다.
+	 *
+	 * @param int $idx 말머리고유번호
+	 * @return object $prefix
+	 */
+	function getPrefix($idx) {
+		if (isset($this->prefixes[$idx]) == true) return $this->prefixes[$idx];
+		$this->prefixes[$idx] = $this->db()->select($this->table->prefix)->where('idx',$idx)->getOne();
+		return $this->prefixes[$idx];
+	}
+	
+	/**
 	 * 권한을 확인한다.
 	 *
 	 * @param string $bid 게시판 ID
@@ -958,6 +982,18 @@ class ModuleBoard {
 		
 		$status = $this->db()->select($this->table->post,'COUNT(*) as total, MAX(reg_date) as latest')->where('category',$category)->getOne();
 		$this->db()->update($this->table->category,array('post'=>$status->total,'latest_post'=>($status->latest ? $status->latest : 0)))->where('idx',$category)->execute();
+	}
+	
+	/**
+	 * 말머리 정보를 업데이트한다.
+	 *
+	 * @param int $prefix 말머리고유번호
+	 */
+	function updatePrefix($prefix) {
+		if ($prefix == 0) return;
+		
+		$status = $this->db()->select($this->table->post,'COUNT(*) as total, MAX(reg_date) as latest')->where('prefix',$prefix)->getOne();
+		$this->db()->update($this->table->prefix,array('post'=>$status->total,'latest_post'=>($status->latest ? $status->latest : 0)))->where('idx',$prefix)->execute();
 	}
 	
 	/**

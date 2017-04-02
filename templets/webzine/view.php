@@ -3,7 +3,7 @@ if (defined('__IM__') == false) exit;
 ?>
 <article data-role="post">
 	<header>
-		<h5><?php echo $post->title; ?></h5>
+		<h5><?php echo $post->prefix != null ? '<span class="prefix" style="color:'.$post->prefix->color.';">['.$post->prefix->title.']</span> ' : ''; ?><?php echo $post->title; ?></h5>
 		
 		<ul>
 			<li class="name"><b>작성자</b> <span rel="author"><?php echo $post->name; ?></span></li>

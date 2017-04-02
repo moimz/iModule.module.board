@@ -45,9 +45,26 @@ if (defined('__IM__') == false) exit;
 	<li>
 		<label><?php echo $me->getText('text/title'); ?></label>
 		<div>
+			<?php if (count($prefixes) == 0) { ?>
 			<div data-role="input">
 				<input type="text" name="title" value="<?php echo $post == null ? '' : GetString($post->title,'input'); ?>">
 			</div>
+			<?php } else { ?>
+			<div data-role="inputset" class="flex">
+				<div data-role="input">
+					<select name="prefix">
+						<option value="0">선택안함</option>
+						<?php for ($i=0, $loop=count($prefixes);$i<$loop;$i++) { ?>
+						<option value="<?php echo $prefixes[$i]->idx; ?>"<?php echo $post != null && $post->prefix == $prefixes[$i]->idx ? ' selected="selected"' : ''; ?>><?php echo $prefixes[$i]->title; ?></option>
+						<?php } ?>
+					</select>
+				</div>
+				
+				<div data-role="input">
+					<input type="text" name="title" value="<?php echo $post == null ? '' : GetString($post->title,'input'); ?>">
+				</div>
+			</div>
+			<?php } ?>
 		</div>
 	</li>
 	<li>

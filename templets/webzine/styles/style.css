@@ -89,6 +89,8 @@ div[data-module=board] div.cover > button[data-loading=TRUE] {background:#b5b7c0
 div[data-module=board] div.cover > button:hover {background:#828595; color:#fff;}
 div[data-module=board] div.cover > p {color:#666; padding-top:10px; line-height:1.6;}
 
+div[data-module=board] ul[data-role=form] div[data-role=input][data-name=prefix] {width:180px;}
+
 /**
  * cropit
  */
@@ -124,4 +126,9 @@ div[data-module=board] .photo-editor input.cropit-image-zoom-input:focus::-ms-fi
 	
 	div[data-module=board] div.searchbar > div.search {width:100%;}
 	div[data-module=board] div.searchbar > a + div.search {width:calc(100% - 120px);}
+
+	div[data-module=board] ul[data-role=form] div[data-role=inputset].flex {display:block;}
+	div[data-module=board] ul[data-role=form] div[data-role=inputset].flex > div {display:block; margin:5px 0px 0px 0px; border-left:0px;}
+	div[data-module=board] ul[data-role=form] div[data-role=inputset].flex > div:first-child {margin-top:0px;}
+	div[data-module=board] ul[data-role=form] div[data-role=input][data-name=prefix] {width:100%;}
 }

@@ -94,6 +94,46 @@
 			},
 			"auto_increment":"idx"
 		},
+		"board_prefix_table":{
+			"columns":{
+				"idx":{
+					"type":"int",
+					"length":11
+				},
+				"bid":{
+					"type":"varchar",
+					"length":20
+				},
+				"title":{
+					"type":"varchar",
+					"length":20
+				},
+				"color":{
+					"type":"char",
+					"length":7
+				},
+				"post":{
+					"type":"int",
+					"length":11,
+					"default":0
+				},
+				"latest_post":{
+					"type":"int",
+					"length":11,
+					"default":0
+				},
+				"sort":{
+					"type":"int",
+					"length":11,
+					"default":0
+				}
+			},
+			"indexes":{
+				"idx":"primary_key",
+				"bid":"index"
+			},
+			"auto_increment":"idx"
+		},
 		"board_history_table":{
 			"columns":{
 				"idx":{
@@ -296,6 +336,11 @@
 					"length":65,
 					"is_null":true
 				},
+				"prefix":{
+					"type":"int",
+					"length":11,
+					"default":0
+				},
 				"title":{
 					"type":"varchar",
 					"length":255
@@ -428,6 +473,11 @@
 					"type":"enum",
 					"length":"'NONE','USED','FORCE'",
 					"default":"NONE"
+				},
+				"use_prefix":{
+					"type":"enum",
+					"length":"'TRUE','FALSE'",
+					"default":"FALSE"
 				},
 				"post_limit":{
 					"type":"int",
