@@ -790,14 +790,6 @@ class ModuleBoard {
 		}
 		$wysiwyg = $wysiwyg->get();
 		
-		
-//		$attachment->setTem
-//		print_r($configs);
-		/*
-		$attachment = $this->IM->getModule('attachment');
-		if ($configs == null || isset($configs->attachment_templet) == false || $configs->attachment_templet == '#') {
-			$attachment->setTemplet($board->attachment_templet == '#')get();
-		*/
 		/**
 		 * 템플릿파일을 호출한다.
 		 */
