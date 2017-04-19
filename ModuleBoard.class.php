@@ -434,8 +434,8 @@ class ModuleBoard {
 		 * 사이트맵 관리를 통해 설정된 페이지 컨텍스트 설정일 경우
 		 */
 		if (is_object($templet) == true) {
-			$templet = $templet !== null && isset($templet->templet) == true ? $templet->templet : '#';
 			$templet_configs = $templet !== null && isset($templet->templet_configs) == true ? $templet->templet_configs : null;
+			$templet = $templet !== null && isset($templet->templet) == true ? $templet->templet : '#';
 		} else {
 			$templet_configs = null;
 		}

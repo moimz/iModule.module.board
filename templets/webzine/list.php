@@ -24,7 +24,7 @@ if (defined('__IM__') == false) exit;
 						<label><?php echo $data->category->title; ?></label>
 						
 						<h4><?php echo $data->title; ?></h4>
-						<time data-moment="YYYY-MM-DD" data-time="<?php echo time(); ?>"></time>
+						<time data-moment="YYYY-MM-DD" data-time="<?php echo $data->reg_date; ?>"></time>
 					</a>
 				</div>
 			</div>
