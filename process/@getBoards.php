@@ -17,7 +17,8 @@ $start = Request('start');
 $limit = Request('limit');
 $lists = $this->db()->select($this->table->board);
 $total = $lists->copy()->count();
-$lists = $lists->limit($start,$limit)->get();
+if ($limit > 0) $lists->limit($start,$limit);
+$lists = $lists->get();
 
 for ($i=0, $loop=count($lists);$i<$loop;$i++) {
 	
