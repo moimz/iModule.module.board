@@ -102,73 +102,70 @@ if (empty($errors) == true) {
 			$this->IM->getModule('member')->sendPoint(null,$board->post_point,'board','post',array('idx'=>$idx));
 			$this->IM->getModule('member')->addActivity(null,$board->post_exp,'board','post',array('idx'=>$idx));
 		}
-		
-		$results->success = true;
 	} else {
-		$results->success = true;
-		$post = $this->getPost($idx); // get original post data
+		$post = $this->getPost($idx);
 		
 		if ($this->checkPermission($post->bid,'post_modify') == false) {
 			if ($post->midx != 0 && $post->midx != $this->IM->getModule('member')->getLogged()) {
 				$results->success = false;
 				$results->message = $this->getErrorText('FORBIDDEN');
+				return;
 			} elseif ($post->midx == 0) {
 				if ($mHash->password_validate($password,$post->password) == false) {
 					$results->success = false;
 					$results->errors = array('password'=>$this->getErrorText('INCORRENT_PASSWORD'));
 					$results->message = $this->getErrorText('INCORRENT_PASSWORD');
+					return;
 				}
 			}
 		}
 		
-		if ($results->success == true) {
-			$idx = $post->idx;
-			
-			if ($post->midx == 0 && $this->IM->getModule('member')->isLogged() == false) {
-				$insert['name'] = $name;
-				$insert['password'] = $password ? $mHash->password_hash($password) : '';
-				$insert['email'] = $email;
-				$insert['ip'] = $_SERVER['REMOTE_ADDR'];
-			}
-			
-			$this->db()->update($this->table->post,$insert)->where('idx',$idx)->execute();
-			
-			if ($post->category != $category) {
-				$this->updateCategory($post->category);
-			}
-			
-			if ($post->prefix != $prefix) {
-				$this->updatePrefix($post->prefix);
-			}
-			
-			if ($post->midx != 0 && $post->midx != $this->IM->getModule('member')->getLogged()) {
-				$this->IM->getModule('push')->sendPush($post->midx,'board','post_modify',$idx,array('from'=>$name));
-			}
-			
-			if ($this->IM->getModule('member')->isLogged() == true) {
-				$this->IM->getModule('member')->addActivity(null,0,'board','post_modify',array('idx'=>$idx));
-			}
+		
+		$idx = $post->idx;
+		
+		if ($post->midx == 0 && $this->IM->getModule('member')->isLogged() == false) {
+			$insert['name'] = $name;
+			$insert['password'] = $password ? $mHash->password_hash($password) : '';
+			$insert['email'] = $email;
+			$insert['ip'] = $_SERVER['REMOTE_ADDR'];
+		}
+		
+		$this->db()->update($this->table->post,$insert)->where('idx',$idx)->execute();
+		
+		if ($post->category != $category) {
+			$this->updateCategory($post->category);
+		}
+		
+		if ($post->prefix != $prefix) {
+			$this->updatePrefix($post->prefix);
+		}
+		
+		if ($post->midx != 0 && $post->midx != $this->IM->getModule('member')->getLogged()) {
+			$this->IM->getModule('push')->sendPush($post->midx,'board','post_modify',$idx,array('from'=>$name));
+		}
+		
+		if ($this->IM->getModule('member')->isLogged() == true) {
+			$this->IM->getModule('member')->addActivity(null,0,'board','post_modify',array('idx'=>$idx));
 		}
 	}
 	
-	if ($results->success == true) {
-		$mAttachment = $this->IM->getModule('attachment');
-		for ($i=0, $loop=count($attachments);$i<$loop;$i++) {
-			$file = $mAttachment->getFileInfo($attachments[$i]);
-			
-			if ($file != null) {
-				$this->db()->replace($this->table->attachment,array('idx'=>$file->idx,'bid'=>$bid,'type'=>'POST','parent'=>$idx))->execute();
-			}
-			$mAttachment->filePublish($attachments[$i]);
+	$mAttachment = $this->IM->getModule('attachment');
+	for ($i=0, $loop=count($attachments);$i<$loop;$i++) {
+		$file = $mAttachment->getFileInfo($attachments[$i]);
+		
+		if ($file != null) {
+			$this->db()->replace($this->table->attachment,array('idx'=>$file->idx,'bid'=>$bid,'type'=>'POST','parent'=>$idx))->execute();
 		}
-		
-		$this->updateCategory($category);
-		$this->updatePrefix($prefix);
-		$this->updateBoard($bid);
-		$this->IM->setArticle('board',$bid,'post',$idx,time());
-		
-		$results->idx = $idx;
+		$mAttachment->filePublish($attachments[$i]);
 	}
+	
+	$this->updateCategory($category);
+	$this->updatePrefix($prefix);
+	$this->updateBoard($bid);
+	$this->IM->setArticle('board',$bid,'post',$idx,time());
+	
+	$results->success = true;
+	$results->idx = $idx;
 } else {
 	$results->success = false;
 	$results->errors = $errors;

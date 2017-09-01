@@ -20,7 +20,21 @@ if ($type == 'post_modify') {
 	if ($this->checkPermission($post->bid,'post_modify') == true) {
 		$results->success = true;
 	} elseif ($post->midx == 0) {
+		$password = Request('password');
 		
+		if ($password) {
+			$mHash = new Hash();
+			if (true || $mHash->password_validate($password,$post->password) == true) {
+				$results->success = true;
+				$results->idx = $idx;
+			} else {
+				$results->success = false;
+				$results->errors = array('password'=>$this->getErrorText('INCORRENT_PASSWORD'));
+			}
+		} else {
+			$results->success = true;
+			$results->modalHtml = $this->getPasswordModal($type,$idx);
+		}
 	} elseif ($post->midx == $this->IM->getModule('member')->getLogged()) {
 		$results->success = true;
 	} else {

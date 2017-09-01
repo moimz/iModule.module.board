@@ -42,14 +42,14 @@ var Board = {
 	 */
 	view:{
 		init:function() {
-			var $form = $("#ModuleBoardViewForm");
+			var $context = $("#ModuleBoardView");
 			
-			$("button[data-action=modify]",$form).on("click",function() {
-				Board.view.modify($("input[name=idx]",$form).val());
+			$("button[data-action=modify]",$context).on("click",function() {
+				Board.view.modify($context.attr("data-idx"));
 			});
 			
-			$("button[data-action=delete]",$form).on("click",function() {
-				Board.view.delete($("input[name=idx]",$form).val());
+			$("button[data-action=delete]",$context).on("click",function() {
+				Board.view.delete($context.attr("data-idx"));
 			});
 		},
 		/**
@@ -60,6 +60,19 @@ var Board = {
 				if (result.success == true) {
 					if (result.modalHtml) {
 						iModule.modal.showHtml(result.modalHtml,function($modal,$form) {
+							$form.on("submit",function() {
+								$form.send(ENV.getProcessUrl("board","checkPermission"),function(result) {
+									if (result.success == true) {
+										$("input[name=password]",$form).enable();
+										$form.attr("action",Board.getUrl("write",result.idx));
+										$form.attr("method","post");
+										$form.off("submit");
+										$form.submit();
+									}
+								});
+								return false;
+							});
+							return false;
 						});
 					} else {
 						location.href = Board.getUrl("write",idx);
@@ -110,5 +123,161 @@ var Board = {
 				}
 			});
 		}
+	},
+	/**
+	 * 댓글
+	 */
+	ment:{
+		/**
+		 * 댓글 초기화
+		 */
+		init:function(id) {
+			if (typeof id == "string") {
+				var $form = $("#"+id);
+				
+				if (id.search(/ModuleBoardMentForm-/) == 0) {
+					$form.inits(Board.ment.submit);
+				}
+			} else if (typeof id == "number") {
+				Board.ment.init($("div[data-module=board] div[data-role=ment][data-parent="+id+"] div[data-role=list]"));
+				Board.ment.init($("div[data-module=board] div[data-role=ment][data-parent="+id+"] div[data-role=pagination]"));
+			} else {
+				var $container = id;
+				
+				if ($container.attr("data-role") == "list" || $container.attr("data-role") == "item") {
+					$("button[data-ment-action]",$container).on("click",function(e) {
+						var action = $(this).attr("data-ment-action");
+						var $parent = $(this).parents("div[data-role=item]");
+						var parent = $parent.attr("data-parent");
+						
+						if (action == "action") {
+							$(this).toggleClass("opened");
+							e.stopPropagation();
+							return;
+						}
+						
+						if ($parent.attr("data-ment-action") == action) {
+							console.log("hre");
+							Board.ment.reset(parent);
+							return;
+						}
+						
+						if (action == "reply") {
+							var source = $parent.attr("data-idx");
+							
+							Board.ment.reset(parent,source);
+							var $form = $("#ModuleBoardMentForm-"+parent);
+							$parent.attr("data-ment-action","reply");
+							$("input[name=source]",$form).val(source);
+						}
+						
+						if (action == "modify") {
+							var idx = $parent.attr("data-idx");
+							$.send(ENV.getProcessUrl("board","getMent"),{idx:idx},function(result) {
+								if (result.success == true) {
+									if (result.modalHtml) {
+										iModule.modal.showHtml(modalHtml,function($modal,$form) {
+											console.log($modal,$form);
+										})
+									}
+								}
+							});
+						}
+					});
+				} else if ($container.attr("data-role") == "pagination") {
+					$("a",$container).on("click",function(e) {
+						var parent = $container.parents("div[data-role=ment]").attr("data-parent");
+						var page = $(this).attr("data-page");
+						if (page != $container.attr("data-page")) {
+							Board.ment.page(parent,page,function(result) {
+								var $container = $("div[data-role=ment][data-parent="+result.parent+"]",$("div[data-module=board]"));
+								$container.children().eq(0).scroll();
+							});
+						}
+						e.preventDefault();
+					});
+				}
+			}
+		},
+		page:function(parent,page,callback) {
+			$.send(ENV.getProcessUrl("board","getMents"),{parent:parent,page:page},function(result) {
+				if (result.success == true) {
+					var $container = $("div[data-role=ment][data-parent="+result.parent+"]",$("div[data-module=board]"));
+					var $lists = $(result.lists);
+					var $pagination = $(result.pagination);
+					
+					$("div[data-role=list]",$container).replaceWith($lists);
+					Board.ment.init($lists);
+					
+					$("div[data-role=pagination]",$container).replaceWith($pagination);
+					Board.ment.init($pagination);
+					
+					if (typeof callback == "function") callback(result);
+				}
+			});
+		},
+		reset:function(parent,position) {
+			var $form = $("#ModuleBoardMentForm-"+parent);
+			var $container = $("div[data-module=board] div[data-role=ment][data-parent="+parent+"]");
+			
+			$("div[data-role=item]",$container).attr("data-ment-action","");
+			$("input[name=idx]",$form).val("");
+			$("input[name=source]",$form).val("");
+			
+			$("input[name=name]",$form).val("");
+			$("input[name=password]",$form).val("");
+			$("input[name=email]",$form).val("");
+			
+			$("input[name=is_secret]",$form).prop("checked",false);
+			$("input[name=is_anonymity]",$form).prop("checked",false);
+			$("textarea[name=content]",$form).val("");
+			
+			$("textarea[name=content]",$form).froalaEditor("destroy");
+			var $clone = $form.clone(true);
+			$form.remove();
+			
+			var $position = position ? $("div[data-idx="+position+"]",$container) : $("#ModuleBoardMentWrite-"+parent);
+			$position.append($clone);
+			
+			$("textarea[name=content]",$clone).wysiwyg(true);
+			$("textarea[name=content]",$clone).froalaEditor("html.set","");
+			
+			var $attachment = $("div[data-module=attachment]",$clone);
+			Attachment.reset($attachment.attr("id"));
+			
+			$clone.status("default");
+		},
+		/**
+		 * 댓글 저장
+		 */
+		submit:function($form) {
+			$form.send(ENV.getProcessUrl("board","saveMent"),function(result) {
+				if (result.success == true) {
+					var idx = result.idx;
+					
+					if ($("input[name=idx]",$form).val() == idx) {
+						Board.ment.reset(result.parent);
+					} else {
+						Board.ment.reset(result.parent);
+						Board.ment.page(result.parent,result.page,function(result) {
+							var $container = $("div[data-role=ment][data-parent="+result.parent+"]",$("div[data-module=board]"));
+							$("div[data-role=item][data-idx="+idx+"]",$container).scroll();
+						});
+					}
+				}
+			});
+		}
+	},
+	modal:{
+		password:function($modal,$form) {
+			console.log($modal,$form);
+			
+		}
 	}
 };
+
+$(document).ready(function() {
+	$(document).on("click",function() {
+		$("button[data-ment-action=action]",$("div[data-module=board]")).removeClass("opened");
+	});
+})

@@ -287,7 +287,7 @@
 					"length":"'TRUE','FALSE'",
 					"default":"FALSE"
 				},
-				"is_hidename":{
+				"is_anonymity":{
 					"type":"enum",
 					"length":"'TRUE','FALSE'",
 					"default":"FALSE"
@@ -548,6 +548,26 @@
 					"type":"int",
 					"length":11,
 					"default":0
+				},
+				"ment":{
+					"type":"int",
+					"length":11,
+					"default":0
+				},
+				"latest_ment":{
+					"type":"int",
+					"length":11,
+					"default":0
+				},
+				"allow_secret":{
+					"type":"enum",
+					"length":"'TRUE','FALSE'",
+					"default":"TRUE"
+				},
+				"allow_anonymity":{
+					"type":"enum",
+					"length":"'TRUE','FALSE'",
+					"default":"TRUE"
 				},
 				"attachment":{
 					"type":"text",

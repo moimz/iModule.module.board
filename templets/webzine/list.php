@@ -21,7 +21,7 @@ if (defined('__IM__') == false) exit;
 			<div>
 				<div class="item"<?php echo $data->image != null ? ' data-cover="TRUE" style="background-image:url('.$data->image->path.');"' : 'data-cover="FALSE"'; ?>>
 					<a href="<?php echo $data->link; ?>" class="box">
-						<label><?php echo $data->category->title; ?></label>
+						<?php if (count($categories) > 0) { ?><label><?php echo $data->category->title; ?></label><?php } ?>
 						
 						<h4><?php echo $data->title; ?></h4>
 						<time data-moment="YYYY-MM-DD" data-time="<?php echo $data->reg_date; ?>"></time>

@@ -1,9 +1,21 @@
 <?php
+/**
+ * 이 파일은 iModule 게시판모듈의 일부입니다. (https://www.imodule.kr)
+ *
+ * 게시물 보기 템플릿
+ * 
+ * @file /modules/board/templets/default/view.php
+ * @author Arzz (arzz@arzz.com)
+ * @license MIT License
+ * @version 3.0.0.161211
+ */
 if (defined('__IM__') == false) exit;
 ?>
 <article data-role="post">
 	<header>
 		<h5><?php echo $post->prefix != null ? '<span class="prefix" style="color:'.$post->prefix->color.';">['.$post->prefix->title.']</span> ' : ''; ?><?php echo $post->title; ?></h5>
+		
+		<?php echo $post->photo; ?>
 		
 		<ul>
 			<li class="name"><b>작성자</b> <span rel="author"><?php echo $post->name; ?></span></li>
@@ -30,6 +42,8 @@ if (defined('__IM__') == false) exit;
 		</ul>
 	</div>
 	<?php } ?>
+	
+	<?php echo $ment; ?>
 </article>
 
 <ul class="buttons">

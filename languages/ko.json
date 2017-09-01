@@ -7,10 +7,19 @@
 		"email_help":"이메일을 입력하시면 게시물에 댓글이 입력될 경우 알림메일을 받을 수 있습니다.",
 		"title":"제목",
 		"category":"카테고리",
-		"category_all":"전체"
+		"category_all":"전체",
+		"ment_option":"댓글옵션"
+	},
+	"ment":{
+		"empty":"등록된 댓글이 없습니다."
+	},
+	"ment_option":{
+		"secret":"게시물 작성자 및 본인에게만 공개합니다.",
+		"anonymity":"익명으로 등록합니다."
 	},
 	"button":{
-		"write":"등록하기"
+		"ment_write":"댓글 등록하기",
+		"post_write":"게시물 등록하기"
 	},
 	"error":{
 	},
@@ -40,6 +49,9 @@
 				"attachment_setting":"첨부파일 업로드 사용",
 				"attachment_templet":"첨부파일 템플릿",
 				"attachment_templet_default":"첨부파일모듈 기본설정사용",
+				"option":"게시판 옵션",
+				"allow_secret":"비밀글 기능을 활성화합니다.",
+				"allow_anonymity":"게시물 또는 댓글을 익명으로 등록할 수 있도록 합니다.",
 				"notice_setting":"공지사항 설정",
 				"category_setting":"카테고리 사용",
 				"permission_setting":"권한설정",

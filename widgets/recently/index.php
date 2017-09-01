@@ -23,7 +23,7 @@ $cache = $Widget->getValue('cache');
 
 if ($type == null) return $Templet->getError('INVALID_VALUE',$Widget->getValue('type'));
 
-if (true || $Widget->checkCache() < time() - $cache) {
+if ($Widget->checkCache() < time() - $cache) {
 	$lists = $me->db()->select($me->getTable($type));
 	if (count($bid) > 0) $lists->where('bid',$bid,'IN');
 	if (count($category) > 0) $lists->where('category',$category,'IN');

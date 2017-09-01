@@ -1,4 +1,14 @@
 <?php
+/**
+ * 이 파일은 iModule 게시판모듈의 일부입니다. (https://www.imodule.kr)
+ *
+ * 게시물 작성 템플릿
+ * 
+ * @file /modules/board/templets/default/write.php
+ * @author Arzz (arzz@arzz.com)
+ * @license MIT License
+ * @version 3.0.0.161211
+ */
 if (defined('__IM__') == false) exit;
 ?>
 <ul data-role="form" class="black inner">
@@ -76,6 +86,6 @@ if (defined('__IM__') == false) exit;
 </ul>
 
 <div data-role="button">
-	<button type="submit"><?php echo $me->getText('button/write'); ?></button>
+	<button type="submit"><?php echo $me->getText('button/post_write'); ?></button>
 	<a href="<?php echo $me->getUrl('list',false); ?>"><?php echo $me->getText('button/cancel'); ?></a>
 </div>

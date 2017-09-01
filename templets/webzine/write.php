@@ -3,7 +3,7 @@ if (defined('__IM__') == false) exit;
 
 $IM->addHeadResource('script',$Templet->getDir().'/scripts/jquery.cropit.min.js');
 
-$cover = $post != null && $post->field1 && is_numeric($post->field1) == true ? $IM->getModule('attachment')->getFileInfo($post->field1) : null;
+$cover = $post != null && $post->image && is_numeric($post->image) == true ? $IM->getModule('attachment')->getFileInfo($post->image) : null;
 if ($cover == null || $cover->module != 'board' || $cover->target != 'cover') $cover = null;
 ?>
 <ul data-role="form" class="black inner">

@@ -582,19 +582,24 @@ class ModuleBoard {
 		elseif (count($idx) == 1) list($p) = $idx;
 		
 		if ($configs != null && isset($configs->category) == true && $configs->category != 0) {
-			$lists->where('category',$configs->category);
+			$category = $configs->category;
 			$categories = array();
-		} else {
-			if ($category != null) $lists->where('category',$category);
 		}
+		
+		if ($configs != null && isset($configs->p) == true) {
+			$p = $configs->p;
+		}
+		
+		if ($category != null && $category != 0) $lists->where('category',$category);
 		
 		$keyword = Request('keyword');
 		if ($keyword) $lists = $this->IM->getModule('keyword')->getWhere($lists,array('title','search'),$keyword);
 		$total = $lists->copy()->count();
 		
-		if ($this->getView() == 'view') $idx = $p;
-		else $idx = 0;
-		if ($configs != null && isset($configs->p) == true) $p = $configs->p;
+		$idx = 0;
+		if ($configs != null && isset($configs->idx) == true) {
+			$idx = $configs->idx;
+		}
 		
 		$limit = $board->post_limit;
 		$start = ($p - 1) * $limit;
@@ -606,10 +611,10 @@ class ModuleBoard {
 		$loopnum = $total - ($p - 1) * $limit;
 		for ($i=0, $loop=count($lists);$i<$loop;$i++) {
 			$lists[$i] = $this->getPost($lists[$i]);
+			$lists[$i]->loopnum = $loopnum - $i;
 			$lists[$i]->category = $lists[$i]->category == 0 ? null : $this->getCategory($lists[$i]->category);
 			$lists[$i]->prefix = $lists[$i]->prefix == 0 ? null : $this->getPrefix($lists[$i]->prefix);
-			$lists[$i]->loopnum = $loopnum - $i;
-			$lists[$i]->link = $this->getUrl('view',($category == null ? '' : $category.'/').$lists[$i]->idx).$this->IM->getQueryString();
+			$lists[$i]->link = $this->getUrl('view',($board->use_category == 'NONE' ? $lists[$i]->idx : ($category == null ? '0' : $category).'/'.$lists[$i]->idx)).$this->IM->getQueryString();
 		}
 		
 		$pagination = $this->getTemplet($configs)->getPagination($p,ceil($total/$limit),$board->page_limit,$this->getUrl('list',($category == null ? '' : $category.'/').'{PAGE}'),$board->page_type);
@@ -642,8 +647,16 @@ class ModuleBoard {
 		$board = $this->getBoard($bid);
 		$idx = $this->getIdx() ? explode('/',$this->getIdx()) : array(0);
 		$category = null;
-		if (count($idx) == 2) list($category,$idx) = $idx;
-		elseif (count($idx) == 1) list($idx) = $idx;
+		$page = 1;
+		
+		if ($board->use_category == 'NONE') {
+			if (count($idx) == 2) list($idx,$page) = $idx;
+			elseif (count($idx) == 1) list($idx) = $idx;
+		} else {
+			if (count($idx) == 3) list($category,$idx,$page) = $idx;
+			elseif (count($idx) == 2) list($category,$idx) = $idx;
+			elseif (count($idx) == 1) list($idx) = $idx;
+		}
 		
 		$post = $this->getPost($idx);
 		if ($post == null) return $this->getTemplet($configs)->getError('NOT_FOUND_PAGE');
@@ -666,6 +679,11 @@ class ModuleBoard {
 		}
 		
 		/**
+		 * 댓글 컴포넌트를 불러온다.
+		 */
+		$ment = $this->getMentComponent($idx,$page,$configs);
+		
+		/**
 		 * 현재 게시물이 속한 페이지를 구한다.
 		 */
 		$sort = Request('sort') ? Request('sort') : 'idx';
@@ -675,19 +693,18 @@ class ModuleBoard {
 		
 		$p = ceil($previous/$board->post_limit);
 		
-		$configs = $configs == null ? new stdClass() : $configs;
-		$configs->p = $p;
-		
 		$link = new stdClass();
 		$link->list = $this->getUrl('list',($category == null ? '' : $category.'/').$p);
 		$link->write = $this->getUrl('write',false);
 		
-		$header = PHP_EOL.'<form id="ModuleBoardViewForm">'.PHP_EOL;
-		$header.= '<input type="hidden" name="idx" value="'.$idx.'">'.PHP_EOL;
-		$footer = PHP_EOL.'</form>'.PHP_EOL.'<script>Board.view.init("ModuleBoardViewForm");</script>';
+		$header = PHP_EOL.'<div id="ModuleBoardView" data-idx="'.$idx.'">'.PHP_EOL;
+		$footer = PHP_EOL.'</div>'.PHP_EOL.'<script>Board.view.init("ModuleBoardView");</script>';
+		
+		$configs = $configs == null ? new stdClass() : $configs;
+		$configs->idx = $idx;
+		$configs->p = $p;
+		
 		$footer.= $this->getListContext($bid,$configs);
-		
-		
 		
 		/**
 		 * 템플릿파일을 호출한다.
@@ -784,7 +801,9 @@ class ModuleBoard {
 			}
 			
 			$uploader = $uploader->setTemplet($attachment_templet)->setModule('board')->setWysiwyg('content');
-			if ($post != null) $uploader->setLoader($this->IM->getProcessUrl('board','getFiles',array('idx'=>Encoder(json_encode(array('type'=>'POST','idx'=>$post->idx))))));
+			if ($post != null) {
+				$uploader->setLoader($this->IM->getProcessUrl('board','getFiles',array('idx'=>Encoder(json_encode(array('type'=>'POST','idx'=>$post->idx))))));
+			}
 			$uploader = $uploader->get();
 		} else {
 			$uploader = '';
@@ -795,6 +814,204 @@ class ModuleBoard {
 		 * 템플릿파일을 호출한다.
 		 */
 		return $this->getTemplet($configs)->getContext('write',get_defined_vars(),$header,$footer);
+	}
+	
+	/**
+	 * 게시물 댓글 컴포넌트
+	 *
+	 * @param int $parent 댓글을 달린 게시물 번호
+	 * @param int $page 댓글 페이지
+	 * @param object $configs 설정값
+	 * @return string $html
+	 */
+	function getMentComponent($parent,$page,$configs) {
+		$post = $this->getPost($parent);
+		$board = $this->getBoard($post->bid);
+		
+		if ($this->checkPermission($board->bid,'ment_write') == true) {
+			$form = $this->getMentWriteComponent($parent,$configs);
+		} else {
+			$form = '';
+		}
+		
+		$ment = $this->getMentListComponent($parent,null,$configs);
+		$pagination = $this->getMentPagination($parent,null,$configs);
+		
+		$total = '<span data-role="count">'.$post->ment.'</span>';
+		
+		$header = PHP_EOL.'<div data-role="ment" data-parent="'.$parent.'">'.PHP_EOL;
+		$footer = PHP_EOL.'</div>'.PHP_EOL;
+		$footer.= PHP_EOL.'<script>Board.ment.init('.$parent.');</script>'.PHP_EOL;
+		
+		return $this->getTemplet($configs)->getContext('ment',get_defined_vars(),$header,$footer);
+	}
+	
+	/**
+	 * 댓글 목록 컴포넌트
+	 *
+	 * @param int $parent 댓글을 달린 게시물 번호
+	 * @param int $page 댓글 페이지
+	 * @param object $configs 설정값
+	 * @return string $html
+	 */
+	function getMentListComponent($parent,$page,$configs) {
+		$post = $this->getPost($parent);
+		$board = $this->getBoard($post->bid);
+		
+		$total = $this->db()->select($this->table->ment)->where('parent',$parent)->count();
+		$page = is_numeric($page) == false || $page == null || $page > max(1,ceil($total/$board->ment_limit)) ? max(1,ceil($total/$board->ment_limit)) : $page;
+		$start = ($page - 1) * $board->ment_limit;
+		$lists = $this->db()->select($this->table->ment_depth.' d','d.*,m.*')->join($this->table->ment.' m','d.idx=m.idx','LEFT')->where('d.parent',$parent)->orderBy('head','asc')->orderBy('arrange','asc')->limit($start,$board->ment_limit)->get();
+		
+		$context = PHP_EOL.'<div data-role="list" data-page="'.$page.'">'.PHP_EOL;
+		for ($i=0, $loop=count($lists);$i<$loop;$i++) {
+			$context.= $this->getMentItemComponent($lists[$i],$configs);
+		}
+		
+		if (count($lists) == 0) $context.= '<div class="empty">'.$this->getText('ment/empty').'</div>'.PHP_EOL;
+		
+		$context.= PHP_EOL.'</div>'.PHP_EOL;
+		
+		return $context;
+	}
+	
+	/**
+	 * 댓글 페이징 컴포넌트
+	 *
+	 * @param int $parent 댓글을 달린 게시물 번호
+	 * @param int $page 댓글 페이지
+	 * @param object $configs 설정값
+	 * @return string $html
+	 */
+	function getMentPagination($parent,$page,$configs) {
+		$post = $this->getPost($parent);
+		$board = $this->getBoard($post->bid);
+		
+		$total = $this->db()->select($this->table->ment)->where('parent',$parent)->count();
+		$page = is_numeric($page) == false || $page == null || $page > max(1,ceil($total/$board->ment_limit)) ? max(1,ceil($total/$board->ment_limit)) : $page;
+		
+		if (ceil($total/$board->ment_limit) <= 1) return '<div data-role="pagination" data-page="1"></div>';
+		else return $this->getTemplet($configs)->getPagination($page,ceil($total/$board->ment_limit),$board->ment_limit,'#!{PAGE}',$board->page_type);
+	}
+	
+	/**
+	 * 댓글 보기 컴포넌트
+	 *
+	 * @param object 댓글정보
+	 * @param object $configs 설정값
+	 * @return string $html
+	 */
+	function getMentItemComponent($ment,$configs) {
+		$board = $this->getBoard($ment->bid);
+		
+		$ment = $this->getMent($ment);
+		
+		$attachments = $this->db()->select($this->table->attachment)->where('parent',$ment->idx)->where('type','MENT')->get();
+		for ($i=0, $loop=count($attachments);$i<$loop;$i++) {
+			$attachments[$i] = $this->IM->getModule('attachment')->getFileInfo($attachments[$i]->idx);
+		}
+		
+		/*
+		if ($this->IM->getModule('member')->isLogged() == true) {
+			$vote = $this->db()->select($this->table->history)->where('type','MENT')->where('parent',$ment->idx)->where('action','VOTE')->where('midx',$this->IM->getModule('member')->getLogged())->getOne();
+			$voted = $vote == null ? null : $vote->result;
+		} else {
+			$voted = null;
+		}
+		*/
+		
+		
+		$header = PHP_EOL.'<div data-role="item" data-idx="'.$ment->idx.'" data-parent="'.$ment->parent.'" data-depth="'.$ment->depth.'" data-modify="'.$ment->modify_date.'" style="margin-left:'.($ment->depth * 20).'px;">'.PHP_EOL;
+		$footer = PHP_EOL.'</div>'.PHP_EOL;
+		
+		/**
+		 * 템플릿파일을 호출한다.
+		 */
+		return $this->getTemplet($configs)->getContext('ment.item',get_defined_vars(),$header,$footer);
+	}
+	
+	/**
+	 * 댓글 작성 컴포넌트
+	 *
+	 * @param int $parent 댓글을 작성할 게시물 번호
+	 * @param object $configs 설정값
+	 * @return string $html
+	 */
+	function getMentWriteComponent($parent,$configs) {
+		$post = $this->getPost($parent);
+		$board = $this->getBoard($post->bid);
+		
+		$wysiwyg = $this->IM->getModule('wysiwyg')->setModule('board')->setName('content')->setHeight(100)->setRequired(true);
+		
+		if ($board->use_attachment == true) {
+			$uploader = $this->IM->getModule('attachment');
+			if ($configs == null || isset($configs->attachment) == null || $configs->attachment == '#') {
+				$attachment_templet_name = $board->attachment->templet;
+				$attachment_templet_configs = $board->attachment->templet_configs;
+			} else {
+				$attachment_templet_name = $configs->attachment;
+				$attachment_templet_configs = isset($configs->attachment_configs) == true ? $configs->attachment_configs : null;
+			}
+			
+			if ($attachment_templet_name != '#') {
+				$attachment_templet = new stdClass();
+				$attachment_templet->templet = $attachment_templet_name;
+				$attachment_templet->templet_configs = $attachment_templet_configs;
+			} else {
+				$attachment_templet = '#';
+			}
+			
+			$uploader = $uploader->setTemplet($attachment_templet)->setModule('board')->setWysiwyg('content')->get();
+		} else {
+			$uploader = '';
+		}
+		$wysiwyg = $wysiwyg->get();
+		
+		$header = PHP_EOL.'<div id="ModuleBoardMentWrite-'.$parent.'">'.PHP_EOL;
+		$header.= '<form id="ModuleBoardMentForm-'.$parent.'">'.PHP_EOL;
+		$header.= '<input type="hidden" name="idx" value="">'.PHP_EOL;
+		$header.= '<input type="hidden" name="parent" value="'.$parent.'">'.PHP_EOL;
+		$header.= '<input type="hidden" name="source" value="">'.PHP_EOL;
+		$footer = PHP_EOL.'</form>'.PHP_EOL;
+		$footer.= '</div>'.PHP_EOL;
+		$footer.= '<script>Board.ment.init("ModuleBoardMentForm-'.$parent.'");</script>';
+		
+		/**
+		 * 템플릿파일을 호출한다.
+		 */
+		return $this->getTemplet($configs)->getContext('ment.write',get_defined_vars(),$header,$footer);
+	}
+	
+	/**
+	 * 패스워드 확인 모들을 가져온다.
+	 *
+	 * @return string $html 모달 HTML
+	 */
+	function getPasswordModal($type,$idx) {
+		$title = '패스워드 확인';
+		$content = '<input type="text" name="type" value="'.$type.'">';
+		$content.= '<input type="text" name="idx" value="'.$idx.'">';
+		$content.= '<div data-role="message">';
+		
+		if ($type == 'post_modify') $content.= '게시물을 수정하려면 패스워드를 입력하여 주십시오.';
+		
+		$content.= '</div>';
+		$content.= '<div data-role="input"><input type="password" name="password"></div>';
+		
+		
+		$buttons = array();
+		
+		$button = new stdClass();
+		$button->type = 'close';
+		$button->text = '취소';
+		$buttons[] = $button;
+		
+		$button = new stdClass();
+		$button->type = 'submit';
+		$button->text = '확인';
+		$buttons[] = $button;
+		
+		return $this->getTemplet()->getModal($title,$content,true,array(),$buttons);
 	}
 	
 	/**
@@ -860,6 +1077,10 @@ class ModuleBoard {
 				$board->attachment->templet = $attachment->templet;
 				$board->attachment->templet_configs = $attachment->templet_configs;
 			}
+			
+			$board->allow_secret = $board->allow_secret == 'TRUE';
+			$board->allow_anonymity = $board->allow_anonymity == 'TRUE';
+			
 			$this->boards[$bid] = $board;
 		}
 		
@@ -883,13 +1104,10 @@ class ModuleBoard {
 			$post = $idx;
 			if (isset($post->is_rendered) === true && $post->is_rendered === true) return $post;
 			
-			if ($post->midx == 0) {
-				$post->nicname = $post->name;
-			} else {
-				$member = $this->IM->getModule('member')->getMember($post->midx);
-				$post->name = $member->name;
-				$post->nickname = $member->nickname;
-			}
+			$post->member = $this->IM->getModule('member')->getMember($post->midx);
+			$post->name = $this->IM->getModule('member')->getMemberName($post->midx,$post->name,true);
+			$post->nickname = $this->IM->getModule('member')->getMemberNickname($post->midx,$post->name,true);
+			$post->photo = $this->IM->getModule('member')->getMemberPhoto($post->midx);
 			
 			if ($is_link == true) {
 				$page = $this->IM->getContextUrl('board',$post->bid,array(),array('category'=>$post->category),true);
@@ -904,6 +1122,63 @@ class ModuleBoard {
 			$this->posts[$post->idx] = $post;
 			return $this->posts[$post->idx];
 		}
+	}
+	
+	/**
+	 * 댓글정보를 가져온다.
+	 *
+	 * @param int $idx 댓글 고유번호
+	 * @param int $is_link 게시물 링크를 구할지 여부 (기본값 : false)
+	 * @return object $ment
+	 */
+	function getMent($idx,$is_link=false) {
+		if (is_null($idx) == true) return null;
+		
+		if (is_numeric($idx) == true) {
+			if (isset($this->ments[$idx]) == true) return $this->ments[$idx];
+			else return $this->getMent($this->db()->select($this->table->ment_depth.' d','d.*,m.*')->join($this->table->ment.' m','d.idx=m.idx','LEFT')->where('d.idx',$idx)->getOne());
+		} else {
+			$ment = $idx;
+			if (isset($ment->is_rendered) === true && $ment->is_rendered === true) return $ment;
+			
+			$ment->member = $this->IM->getModule('member')->getMember($ment->midx);
+			$ment->name = $this->IM->getModule('member')->getMemberName($ment->midx,$ment->name,true);
+			$ment->nickname = $this->IM->getModule('member')->getMemberNickname($ment->midx,$ment->name,true);
+			$ment->photo = $this->IM->getModule('member')->getMemberPhoto($ment->midx);
+			
+			if ($is_link == true) {
+//				$page = $this->IM->getContextUrl('board',$ment->bid,array(),array('category'=>$post->category),true);
+//				$post->link = $page == null ? '#' : $this->IM->getUrl($page->menu,$page->page,'view',$post->idx);
+			}
+			
+//			$post->image = $post->image > 0 ? $this->IM->getModule('attachment')->getFileInfo($post->image) : null;
+			
+			$ment->content = $this->IM->getModule('wysiwyg')->decodeContent($ment->content);
+			
+			$ment->is_delete = $ment->is_delete == 'TRUE';
+			$ment->is_rendered = true;
+			
+			
+			$this->ments[$ment->idx] = $ment;
+			return $this->ments[$ment->idx];
+		}
+	}
+	
+	/**
+	 * 댓글이 위치한 페이지번호를 가져온다.
+	 *
+	 * @param int $idx 댓글번호
+	 * @return int $page 페이지번호
+	 */
+	function getMentPage($idx) {
+		$ment = $this->getMent($idx);
+		if ($ment == null) return null;
+		
+		$board = $this->getBoard($ment->bid);
+		$position = $this->db()->select($this->table->ment_depth)->where('parent',$ment->parent)->where('head',$ment->head,'<=')->where('arrange',$ment->arrange,'<=')->count();
+		$page = ceil($position/$board->ment_limit);
+		
+		return $page;
 	}
 	
 	/**
@@ -951,8 +1226,8 @@ class ModuleBoard {
 	 * @param string $bid 게시판 ID
 	 */
 	function updateBoard($bid) {
-		$status = $this->db()->select($this->table->post,'COUNT(*) as total, MAX(reg_date) as latest')->where('bid',$bid)->getOne();
-		$this->db()->update($this->table->board,array('post'=>$status->total,'latest_post'=>($status->latest ? $status->latest : 0)))->where('bid',$bid)->execute();
+		$status = $this->db()->select($this->table->post,'COUNT(*) as total, MAX(reg_date) as latest, SUM(ment) as ment, MAX(latest_ment) as latest_ment')->where('bid',$bid)->getOne();
+		$this->db()->update($this->table->board,array('post'=>$status->total,'latest_post'=>($status->latest ? $status->latest : 0),'ment'=>$status->ment,'latest_ment'=>($status->latest_ment ? $status->latest_ment : 0)))->where('bid',$bid)->execute();
 	}
 	
 	/**

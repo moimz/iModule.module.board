@@ -1,4 +1,14 @@
 <?php
+/**
+ * 이 파일은 iModule 게시판모듈의 일부입니다. (https://www.imodule.kr)
+ *
+ * 게시판 목록 템플릿
+ * 
+ * @file /modules/board/templets/default/list.php
+ * @author Arzz (arzz@arzz.com)
+ * @license MIT License
+ * @version 3.0.0.161211
+ */
 if (defined('__IM__') == false) exit;
 ?>
 <?php if (count($categories) > 0) { ?>
@@ -26,7 +36,7 @@ if (defined('__IM__') == false) exit;
 	<li class="tbody">
 		<span class="loopnum"><?php echo $idx == $data->idx ? '<i class="fa fa-caret-right"></i>' : $data->loopnum; ?></span>
 		<span class="title"><span><?php echo count($categories) > 0 && $data->category != null ? '<span class="category">['.$data->category->title.']</span> ' : ''; ?><a href="<?php echo $data->link; ?>"><?php echo $data->prefix != null ? '<span class="prefix" style="color:'.$data->prefix->color.';">['.$data->prefix->title.']</span> ' : ''; ?> <?php echo $data->title; ?></a></span></span>
-		<span class="name"><?php echo $data->name; ?></span>
+		<span class="name"><?php echo $data->photo; ?><?php echo $data->name; ?></span>
 		<span class="reg_date"><?php echo GetTime('Y-m-d',$data->reg_date); ?></span>
 		<span class="hit"><?php echo number_format($data->hit); ?></span>
 	</li>

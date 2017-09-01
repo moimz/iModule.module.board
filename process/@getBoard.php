@@ -37,6 +37,9 @@ if ($data == null) {
 	$data->use_attachment = $attachment->attachment;
 	$data->attachment = $data->use_attachment == true ? $attachment->templet : '#';
 	
+	$data->allow_secret = $data->allow_secret == 'TRUE';
+	$data->allow_anonymity = $data->allow_anonymity == 'TRUE';
+	
 	$data->use_category = $data->use_category != 'NONE';
 	if ($data->use_category == true) {
 		$category = $this->db()->select($this->table->category,'idx,title,post,permission,sort')->where('bid',$bid)->orderBy('sort','asc')->get();

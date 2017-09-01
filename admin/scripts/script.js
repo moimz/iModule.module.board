@@ -124,6 +124,21 @@ var Board = {
 								]
 							}),
 							new Ext.form.FieldSet({
+								title:Board.getText("admin/list/form/option"),
+								items:[
+									new Ext.form.Checkbox({
+										name:"allow_secret",
+										boxLabel:Board.getText("admin/list/form/allow_secret"),
+										checked:true
+									}),
+									new Ext.form.Checkbox({
+										name:"allow_anonymity",
+										boxLabel:Board.getText("admin/list/form/allow_anonymity"),
+										checked:true
+									})
+								]
+							}),
+							new Ext.form.FieldSet({
 								title:Board.getText("admin/list/form/notice_setting"),
 								collapsible:true,
 								collapsed:true,
@@ -184,9 +199,17 @@ var Board = {
 										border:true,
 										tbar:[
 											new Ext.Button({
+												iconCls:"mi mi-plus",
 												text:"카테고리추가",
 												handler:function() {
 													Board.category.add();
+												}
+											}),
+											new Ext.Button({
+												iconCls:"mi mi-trash",
+												text:"선택 카테고리 삭제",
+												handler:function() {
+													Board.category.delete();
 												}
 											})
 										],
@@ -214,7 +237,7 @@ var Board = {
 											dataIndex:"permission",
 											width:150,
 											renderer:function(value) {
-												if (value == null) return "게시판 권한설정 사용";
+												if (value == null || value == "") return "게시판 권한설정 사용";
 												else return "카테고리 개별권한 사용"
 											}
 										}],
@@ -230,9 +253,40 @@ var Board = {
 												handler:function() {
 													Admin.gridSort(Ext.getCmp("ModuleBoardCategoryList"),"sort","down");
 												}
-											})
+											}),
+											"->",
+											{xtype:"tbtext",text:"더블클릭 : 카테고리수정 / 마우스우클릭 : 상세메뉴"}
 										],
-										selModel:new Ext.selection.CheckboxModel()
+										selModel:new Ext.selection.CheckboxModel(),
+										listeners:{
+											itemdblclick:function(grid,record,td,index) {
+												Board.category.add(index);
+											},
+											itemcontextmenu:function(grid,record,item,index,e) {
+												var menu = new Ext.menu.Menu();
+												
+												menu.add('<div class="x-menu-title">'+record.data.title+'</div>');
+												
+												menu.add({
+													iconCls:"xi xi-form",
+													text:"카테고리 수정",
+													handler:function() {
+														Board.category.add(index);
+													}
+												});
+												
+												menu.add({
+													iconCls:"mi mi-trash",
+													text:"카테고리 삭제",
+													handler:function() {
+														Board.category.delete();
+													}
+												});
+												
+												e.stopEvent();
+												menu.showAt(e.getXY());
+											}
+										}
 									})
 								]
 							}),
@@ -253,7 +307,6 @@ var Board = {
 									Admin.permissionField(Board.getText("admin/list/form/permission_ment_delete"),"permission_ment_delete","{$member.type} == 'ADMINISTRATOR'"),
 									Admin.permissionField(Board.getText("admin/list/form/permission_html_title"),"permission_html_title","{$member.type} == 'ADMINISTRATOR'"),
 									Admin.permissionField(Board.getText("admin/list/form/permission_notice"),"permission_notice","{$member.type} == 'ADMINISTRATOR'"),
-									Admin.permissionField(Board.getText("admin/list/form/permission_hidename"),"permission_hidename","{$member.type} != 'GUEST'",false),
 									Admin.permissionField(Board.getText("admin/list/form/permission_ip"),"permission_ip","{$member.type} == 'ADMINISTRATOR'"),
 									new Ext.Panel({
 										border:false,
@@ -352,7 +405,7 @@ var Board = {
 								waitMsg:Admin.getText("action/saving"),
 								success:function(form,action) {
 									Ext.Msg.show({title:Admin.getText("alert/info"),msg:Admin.getText("action/saved"),buttons:Ext.Msg.OK,icon:Ext.Msg.INFO,fn:function(button) {
-//										Ext.getCmp("ModuleBoardAddBoardWindow").close();
+										Ext.getCmp("ModuleBoardAddBoardWindow").close();
 										Ext.getCmp("ModuleBoardList").getStore().reload();
 									}});
 								},
@@ -424,8 +477,8 @@ var Board = {
 	 * @param object data 카테고리 데이터
 	 */
 	category:{
-		add:function(data) {
-			var data = data !== undefined && typeof data == "object" ? data : null;
+		add:function(index) {
+			var data = index !== undefined ? Ext.getCmp("ModuleBoardCategoryList").getStore().getAt(index).data : null;
 			
 			new Ext.Window({
 				id:"ModuleBoardAddCategoryWindow",
@@ -445,8 +498,10 @@ var Board = {
 								name:"title",
 								emptyText:"카테고리명",
 								allowBlank:false,
+								value:(data ? data.title : null),
 								validator:function(value) {
-									if (Ext.getCmp("ModuleBoardCategoryList").getStore().findExact("title",value) == -1) return true;
+									var check = Ext.getCmp("ModuleBoardCategoryList").getStore().findExact("title",value);
+									if (check == -1 || check == index) return true;
 									else return "카테고리명이 중복됩니다.";
 								}
 							}),
@@ -454,11 +509,11 @@ var Board = {
 								title:"카테고리 개별권한 사용",
 								checkboxName:"use_permission",
 								checkboxToggle:true,
-								collapsed:true,
+								collapsed:(data && data.permission ? false : true),
 								items:[
-									Admin.permissionField(Board.getText("admin/list/form/permission_view"),"permission_view","true"),
-									Admin.permissionField(Board.getText("admin/list/form/permission_post_write"),"permission_post_write","true"),
-									Admin.permissionField(Board.getText("admin/list/form/permission_ment_write"),"permission_ment_write","true"),
+									Admin.permissionField(Board.getText("admin/list/form/permission_view"),"permission_view",(data && data.permission && data.permission.view ? data.permission.view : "true")),
+									Admin.permissionField(Board.getText("admin/list/form/permission_post_write"),"permission_post_write",(data && data.permission && data.permission.post_write ? data.permission.post_write : "true")),
+									Admin.permissionField(Board.getText("admin/list/form/permission_ment_write"),"permission_ment_write",(data && data.permission && data.permission.ment_write ? data.permission.ment_write : "true")),
 									new Ext.Panel({
 										border:false,
 										html:'<div class="helpBlock">카테고리 개별적으로 권한을 설정할 수 있습니다.<br>개별 카테고리 권한을 사용하지 않을 경우 게시판 권한설정을 따르게 됩니다.</div>'
@@ -476,7 +531,6 @@ var Board = {
 							var list = Ext.getCmp("ModuleBoardCategoryList");
 							
 							if (form.isValid() == true) {
-								var idx = 0;
 								var title = form.findField("title").getValue();
 								
 								if (form.findField("use_permission").checked == true) {
@@ -488,16 +542,38 @@ var Board = {
 									var permission = null;
 								}
 								
-								var post = 0;
-								var sort = list.getStore().max("sort") === undefined ? 0 : Ext.getCmp("ModuleBoardCategoryList").getStore().max("sort") + 1;
+								if (index === undefined) {
+									var idx = 0;
+									var post = 0;
+									var sort = list.getStore().max("sort") === undefined ? 0 : Ext.getCmp("ModuleBoardCategoryList").getStore().max("sort") + 1;
+									list.getStore().add({idx:0,title:title,post:post,permission:permission,sort:sort});
+								} else {
+									list.getStore().getAt(index).set({title:title,permission:permission});
+								}
 								
-								list.getStore().add({idx:0,title:title,post:post,permission:permission,sort:sort});
 								Ext.getCmp("ModuleBoardAddCategoryWindow").close();
 							}
 						}
 					})
 				]
 			}).show();
+		},
+		delete:function() {
+			var selected = Ext.getCmp("ModuleBoardCategoryList").getSelectionModel().getSelection();
+			if (selected.length == 0) {
+				Ext.Msg.show({title:Admin.getText("alert/error"),msg:"삭제할 카테고리를 선택하여 주십시오.",buttons:Ext.Msg.OK,icon:Ext.Msg.ERROR});
+				return;
+			}
+			
+			Ext.Msg.show({title:Admin.getText("alert/info"),msg:"선택하신 카테고리를 삭제하시겠습니까?<br>삭제되는 카테고리의 게시물이 기본 카테고리로 이동됩니다.",buttons:Ext.Msg.OKCANCEL,icon:Ext.Msg.QUESTION,fn:function(button) {
+				if (button == "ok") {
+					var store = Ext.getCmp("ModuleBoardCategoryList").getStore();
+					store.remove(selected);
+					for (var i=0, loop=store.getCount();i<loop;i++) {
+						store.getAt(i).set({sort:i});
+					}
+				}
+			}});
 		}
 	}
 };

@@ -22,6 +22,10 @@ $insert['post_limit'] = Request('postlimit') && is_numeric(Request('postlimit'))
 $insert['ment_limit'] = Request('mentlimit') && is_numeric(Request('mentlimit')) == true ? Request('mentlimit') : $errors['mentlimit'] = $this->getErrorText('REQUIRED');
 $insert['page_limit'] = Request('pagelimit') && is_numeric(Request('pagelimit')) == true ? Request('pagelimit') : $errors['pagelimit'] = $this->getErrorText('REQUIRED');
 $insert['page_type'] = Request('pagetype') && in_array(Request('pagetype'),array('FIXED','CENTER')) == true ? Request('pagetype') : $errors['pagetype'] = $this->getErrorText('REQUIRED');
+
+$insert['allow_secret'] = Request('allow_secret') ? 'TRUE' : 'FALSE';
+$insert['allow_anonymity'] = Request('allow_anonymity') ? 'TRUE' : 'FALSE';
+
 $insert['view_notice_page'] = Request('view_notice_page') && in_array(Request('view_notice_page'),array('FIRST','ALL')) == true ? Request('view_notice_page') : $errors['view_notice_page'] = $this->getErrorText('REQUIRED');
 $insert['view_notice_count'] = Request('view_notice_count') && in_array(Request('view_notice_count'),array('INCLUDE','EXCLUDE')) == true ? Request('view_notice_count') : $errors['view_notice_count'] = $this->getErrorText('REQUIRED');
 
@@ -87,13 +91,18 @@ if (count($errors) == 0) {
 	}
 	
 	if ($use_category == true) {
+		$categories = array();
 		for ($i=0, $loop=count($category);$i<$loop;$i++) {
 			if ($category[$i]->idx == 0) {
-				$this->db()->insert($this->table->category,array('bid'=>$bid,'title'=>$category[$i]->title,'permission'=>json_encode($category[$i]->permission,JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK),'sort'=>$category[$i]->sort))->execute();
+				$categories[] = $this->db()->insert($this->table->category,array('bid'=>$bid,'title'=>$category[$i]->title,'permission'=>json_encode($category[$i]->permission,JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK),'sort'=>$category[$i]->sort))->execute();
 			} else {
+				$categories[] = $category[$i]->idx;
 				$this->db()->update($this->table->category,array('title'=>$category[$i]->title,'permission'=>json_encode($category[$i]->permission,JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK),'sort'=>$category[$i]->sort))->where('idx',$category[$i]->idx)->execute();
 			}
 		}
+		
+		$this->db()->delete($this->table->category)->where('bid',$bid)->where('idx',$categories,'NOT IN')->execute();
+		$this->db()->update($this->table->post,array('category'=>0))->where('bid',$bid)->where('category',$categories,'NOT IN')->execute();
 	} else {
 		$this->db()->delete($this->table->category)->where('bid',$bid)->execute();
 		$this->db()->update($this->table->post,array('category'=>0))->where('bid',$bid)->execute();
