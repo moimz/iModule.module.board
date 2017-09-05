@@ -4,7 +4,7 @@
  *
  * 게시판 댓글 작성 템플릿
  * 
- * @file /modules/board/templets/default/ment.write.php
+ * @file /modules/board/templets/webzine/ment.write.php
  * @author Arzz (arzz@arzz.com)
  * @license MIT License
  * @version 3.0.0.161211

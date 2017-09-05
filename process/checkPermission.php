@@ -13,18 +13,18 @@ if (defined('__IM__') == false) exit;
 
 $type = Request('type');
 
-if ($type == 'post_modify') {
+if (strpos($type,'post_') == 0) {
 	$idx = Request('idx');
 	$post = $this->getPost($idx);
 	
-	if ($this->checkPermission($post->bid,'post_modify') == true) {
+	if ($this->checkPermission($post->bid,$type) == true) {
 		$results->success = true;
 	} elseif ($post->midx == 0) {
 		$password = Request('password');
 		
 		if ($password) {
 			$mHash = new Hash();
-			if (true || $mHash->password_validate($password,$post->password) == true) {
+			if ($mHash->password_validate($password,$post->password) == true) {
 				$results->success = true;
 				$results->idx = $idx;
 			} else {

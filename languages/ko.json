@@ -8,10 +8,16 @@
 		"title":"제목",
 		"category":"카테고리",
 		"category_all":"전체",
+		"post_option":"게시물옵션",
 		"ment_option":"댓글옵션"
 	},
 	"ment":{
 		"empty":"등록된 댓글이 없습니다."
+	},
+	"post_option":{
+		"secret":"게시물 작성자 및 관리자에게만 공개합니다.",
+		"anonymity":"익명으로 등록합니다.",
+		"notice":"상단에 고정되는 공지사항으로 등록합니다."
 	},
 	"ment_option":{
 		"secret":"게시물 작성자 및 본인에게만 공개합니다.",

@@ -83,6 +83,30 @@ if (defined('__IM__') == false) exit;
 			<?php echo $uploader; ?>
 		</div>
 	</li>
+	<?php if ($board->allow_secret == true || $board->allow_anonymity == true) { ?>
+	<li>
+		<label><?php echo $me->getText('text/post_option'); ?></label>
+		<div>
+			<?php if ($me->checkPermission($board->bid,'notice') == true) { ?>
+			<div data-role="input">
+				<label><input type="checkbox" name="is_notice" value="TRUE"><?php echo $me->getText('post_option/notice'); ?></label>
+			</div>
+			<?php } ?>
+			
+			<?php if ($board->allow_secret == true) { ?>
+			<div data-role="input">
+				<label><input type="checkbox" name="is_secret" value="TRUE"><?php echo $me->getText('post_option/secret'); ?></label>
+			</div>
+			<?php } ?>
+			
+			<?php if ($board->allow_anonymity == true) { ?>
+			<div data-role="input">
+				<label><input type="checkbox" name="is_anonymity" value="TRUE"><?php echo $me->getText('post_option/anonymity'); ?></label>
+			</div>
+			<?php } ?>
+		</div>
+	</li>
+	<?php } ?>
 </ul>
 
 <div data-role="button">

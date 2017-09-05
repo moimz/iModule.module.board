@@ -574,8 +574,6 @@ class ModuleBoard {
 			$categories = array();
 		}
 		
-		$lists = $this->db()->select($this->table->post)->where('bid',$bid);
-		
 		$idx = $this->getIdx() ? explode('/',$this->getIdx()) : array(1);
 		$category = null;
 		if (count($idx) == 2) list($category,$p) = $idx;
@@ -590,6 +588,44 @@ class ModuleBoard {
 			$p = $configs->p;
 		}
 		
+		$limit = $board->post_limit;
+		$start = ($p - 1) * $limit;
+		
+		$sort = Request('sort') ? Request('sort') : 'idx';
+		$dir = Request('dir') ? Request('dir') : (in_array($sort,array('idx')) == true ? 'desc' : 'asc');
+		
+		$notice = $this->db()->select($this->table->post)->where('bid',$bid)->where('is_notice','TRUE')->count();
+		
+		if ($board->view_notice_count == 'INCLUDE') {
+			if ($board->view_notice_page == 'FIRST') {
+				if (ceil($notice / $limit) >= $p) {
+					$notices = $this->db()->select($this->table->post)->where('bid',$bid)->where('is_notice','TRUE')->orderBy('reg_date','desc')->limit($start,$limit)->get();
+					$start = 0;
+					$limit = $limit - count($notices);
+				} else {
+					$notices = array();
+					$start = $start - $notice;
+				}
+				
+				$lists = $this->db()->select($this->table->post)->where('bid',$bid)->where('is_notice','FALSE');
+			} elseif ($board->view_notice_page == 'ALL') {
+				$notices = $this->db()->select($this->table->post)->where('bid',$bid)->where('is_notice','TRUE')->orderBy('reg_date','desc')->limit(0,$limit)->get();
+				
+				$start = ($p - 1) * ($limit - count($notices));
+				$limit = $limit - count($notices);
+				
+				echo $start.'~'.$limit;
+				$lists = $this->db()->select($this->table->post)->where('bid',$bid)->where('is_notice','FALSE');
+			}
+		} else {
+			if ($p == 1 || $board->view_notice_page == 'ALL') {
+				$notices = $this->db()->select($this->table->post)->where('bid',$bid)->where('is_notice','TRUE')->orderBy('reg_date','desc')->limit($start,$limit)->get();
+			} else {
+				$notices = array();
+			}
+			$lists = $this->db()->select($this->table->post)->where('bid',$bid)->where('is_notice','FALSE');
+		}
+		
 		if ($category != null && $category != 0) $lists->where('category',$category);
 		
 		$keyword = Request('keyword');
@@ -601,23 +637,25 @@ class ModuleBoard {
 			$idx = $configs->idx;
 		}
 		
-		$limit = $board->post_limit;
-		$start = ($p - 1) * $limit;
-		
-		$sort = Request('sort') ? Request('sort') : 'idx';
-		$dir = Request('dir') ? Request('dir') : (in_array($sort,array('idx')) == true ? 'desc' : 'asc');
 		$lists = $lists->orderBy($sort,$dir)->limit($start,$limit)->get();
 		
-		$loopnum = $total - ($p - 1) * $limit;
+		for ($i=0, $loop=count($notices);$i<$loop;$i++) {
+			$notices[$i] = $this->getPost($notices[$i]);
+			$notices[$i]->category = $notices[$i]->category == 0 ? null : $this->getCategory($notices[$i]->category);
+			$notices[$i]->prefix = $notices[$i]->prefix == 0 ? null : $this->getPrefix($notices[$i]->prefix);
+			$notices[$i]->link = $this->getUrl('view',($board->use_category == 'NONE' ? $notices[$i]->idx : ($category == null ? '0' : $category).'/'.$notices[$i]->idx)).$this->IM->getQueryString().($notices[$i]->is_secret == true ? '#secret-'.$notices[$i]->idx : '');
+		}
+		
+		$loopnum = $total - $start;
 		for ($i=0, $loop=count($lists);$i<$loop;$i++) {
 			$lists[$i] = $this->getPost($lists[$i]);
 			$lists[$i]->loopnum = $loopnum - $i;
 			$lists[$i]->category = $lists[$i]->category == 0 ? null : $this->getCategory($lists[$i]->category);
 			$lists[$i]->prefix = $lists[$i]->prefix == 0 ? null : $this->getPrefix($lists[$i]->prefix);
-			$lists[$i]->link = $this->getUrl('view',($board->use_category == 'NONE' ? $lists[$i]->idx : ($category == null ? '0' : $category).'/'.$lists[$i]->idx)).$this->IM->getQueryString();
+			$lists[$i]->link = $this->getUrl('view',($board->use_category == 'NONE' ? $lists[$i]->idx : ($category == null ? '0' : $category).'/'.$lists[$i]->idx)).$this->IM->getQueryString().($lists[$i]->is_secret == true ? '#secret-'.$lists[$i]->idx : '');
 		}
 		
-		$pagination = $this->getTemplet($configs)->getPagination($p,ceil($total/$limit),$board->page_limit,$this->getUrl('list',($category == null ? '' : $category.'/').'{PAGE}'),$board->page_type);
+		$pagination = $this->getTemplet($configs)->getPagination($p,ceil(($total + $notice)/$board->post_limit),$board->page_limit,$this->getUrl('list',($category == null ? '' : $category.'/').'{PAGE}'),$board->page_type);
 		
 		$link = new stdClass();
 		$link->list = $this->getUrl('list',($category == null ? '' : $category.'/').$p);
@@ -660,6 +698,21 @@ class ModuleBoard {
 		
 		$post = $this->getPost($idx);
 		if ($post == null) return $this->getTemplet($configs)->getError('NOT_FOUND_PAGE');
+		
+		if ($post->is_secret == true && $this->checkPermission($bid,'post_secret') == false) {
+			if ($post->midx != 0 && $post->midx != $this->IM->getModule('member')->getLogged()) {
+				return $this->getError($this->getErrorText('FORBIDDEN'));
+			} elseif ($post->midx == 0) {
+				$password = Request('password');
+				$mHash = new Hash();
+				if ($mHash->password_validate($password,$post->password) == false) {
+					$context = $this->getError($this->getErrorText('INCORRENT_PASSWORD'));
+					$context.= PHP_EOL.'<script>Board.view.secret('.$idx.');</script>'.PHP_EOL;
+					
+					return $context;
+				}
+			}
+		}
 		
 		/**
 		 * 조회수 증가
@@ -831,6 +884,8 @@ class ModuleBoard {
 		if ($this->checkPermission($board->bid,'ment_write') == true) {
 			$form = $this->getMentWriteComponent($parent,$configs);
 		} else {
+			if ($post->ment == 0) return '';
+			
 			$form = '';
 		}
 		
@@ -989,11 +1044,12 @@ class ModuleBoard {
 	 */
 	function getPasswordModal($type,$idx) {
 		$title = '패스워드 확인';
-		$content = '<input type="text" name="type" value="'.$type.'">';
-		$content.= '<input type="text" name="idx" value="'.$idx.'">';
+		$content = '<input type="hidden" name="type" value="'.$type.'">';
+		$content.= '<input type="hidden" name="idx" value="'.$idx.'">';
 		$content.= '<div data-role="message">';
 		
 		if ($type == 'post_modify') $content.= '게시물을 수정하려면 패스워드를 입력하여 주십시오.';
+		if ($type == 'post_secret') $content.= '비밀글을 열람하시려면 패스워드를 입력하여 주십시오.';
 		
 		$content.= '</div>';
 		$content.= '<div data-role="input"><input type="password" name="password"></div>';
@@ -1117,6 +1173,11 @@ class ModuleBoard {
 			$post->image = $post->image > 0 ? $this->IM->getModule('attachment')->getFileInfo($post->image) : null;
 			
 			$post->content = $this->IM->getModule('wysiwyg')->decodeContent($post->content);
+			
+			$post->is_secret = $post->is_secret == 'TRUE';
+			$post->is_anonymity = $post->is_anonymity == 'TRUE';
+			$post->is_notice = $post->is_notice == 'TRUE';
+			
 			$post->is_rendered = true;
 			
 			$this->posts[$post->idx] = $post;

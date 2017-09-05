@@ -35,6 +35,16 @@ var Board = {
 				
 				$("select[name=category]",$form).disable();
 			});
+			
+			$("a",$form).on("click",function(e) {
+				var link = document.createElement("a");
+				link.href = $(this).attr("href");
+				
+				if (link.hash.indexOf("#secret-") == 0) {
+					Board.view.secret(link.hash.replace("#secret-",""),link.search);
+					e.preventDefault();
+				}
+			});
 		}
 	},
 	/**
@@ -76,6 +86,34 @@ var Board = {
 						});
 					} else {
 						location.href = Board.getUrl("write",idx);
+					}
+				}
+			});
+		},
+		/**
+		 * 게시물 수정
+		 */
+		secret:function(idx,query) {
+			$.send(ENV.getProcessUrl("board","checkPermission"),{type:"post_secret",idx:idx},function(result) {
+				if (result.success == true) {
+					if (result.modalHtml) {
+						iModule.modal.showHtml(result.modalHtml,function($modal,$form) {
+							$form.on("submit",function() {
+								$form.send(ENV.getProcessUrl("board","checkPermission"),function(result) {
+									if (result.success == true) {
+										$("input[name=password]",$form).enable();
+										$form.attr("action",Board.getUrl("view",result.idx) + (query ? query : ""));
+										$form.attr("method","post");
+										$form.off("submit");
+										$form.submit();
+									}
+								});
+								return false;
+							});
+							return false;
+						});
+					} else {
+						location.href = Board.getUrl("view",idx);
 					}
 				}
 			});

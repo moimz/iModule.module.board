@@ -120,10 +120,34 @@ if ($cover == null || $cover->module != 'board' || $cover->target != 'cover') $c
 			</div>
 		</div>
 	</li>
+	<?php if ($board->allow_secret == true || $board->allow_anonymity == true) { ?>
+	<li>
+		<label><?php echo $me->getText('text/post_option'); ?></label>
+		<div>
+			<?php if ($me->checkPermission($board->bid,'notice') == true) { ?>
+			<div data-role="input">
+				<label><input type="checkbox" name="is_notice" value="TRUE"><?php echo $me->getText('post_option/notice'); ?></label>
+			</div>
+			<?php } ?>
+			
+			<?php if ($board->allow_secret == true) { ?>
+			<div data-role="input">
+				<label><input type="checkbox" name="is_secret" value="TRUE"><?php echo $me->getText('post_option/secret'); ?></label>
+			</div>
+			<?php } ?>
+			
+			<?php if ($board->allow_anonymity == true) { ?>
+			<div data-role="input">
+				<label><input type="checkbox" name="is_anonymity" value="TRUE"><?php echo $me->getText('post_option/anonymity'); ?></label>
+			</div>
+			<?php } ?>
+		</div>
+	</li>
+	<?php } ?>
 </ul>
 
 <div data-role="button">
-	<button type="submit"><?php echo $me->getText('button/write'); ?></button>
+	<button type="submit"><?php echo $me->getText('button/post_write'); ?></button>
 	<a href="<?php echo $me->getUrl('list',false); ?>"><?php echo $me->getText('button/cancel'); ?></a>
 </div>
 

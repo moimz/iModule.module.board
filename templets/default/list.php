@@ -32,10 +32,24 @@ if (defined('__IM__') == false) exit;
 		<span class="reg_date">등록일</span>
 		<span class="hit">조회</span>
 	</li>
+	<?php foreach ($notices as $data) { ?>
+	<li class="tbody">
+		<span class="notice">공지</span>
+		<span class="title">
+			<span><?php echo $data->ment > 0 ? ('<span class="ment">['.number_format($data->ment).($data->latest_ment > time() - 60 * 60 * 24 ? '+' : '').']</span>') : ''; ?><?php echo $data->is_secret == true ? '<i class="xi xi-lock"></i>' : ''; ?><?php echo count($categories) > 0 && $data->category != null ? '<span class="category">['.$data->category->title.']</span> ' : ''; ?><a href="<?php echo $data->link; ?>"><?php echo $data->prefix != null ? '<span class="prefix" style="color:'.$data->prefix->color.';">['.$data->prefix->title.']</span> ' : ''; ?><?php echo $data->title; ?></a></span>
+		</span>
+		<span class="name"><?php echo $data->photo; ?><?php echo $data->name; ?></span>
+		<span class="reg_date"><?php echo GetTime('Y-m-d',$data->reg_date); ?></span>
+		<span class="hit"><?php echo number_format($data->hit); ?></span>
+	</li>
+	<?php } ?>
+	
 	<?php foreach ($lists as $data) { ?>
 	<li class="tbody">
 		<span class="loopnum"><?php echo $idx == $data->idx ? '<i class="fa fa-caret-right"></i>' : $data->loopnum; ?></span>
-		<span class="title"><span><?php echo count($categories) > 0 && $data->category != null ? '<span class="category">['.$data->category->title.']</span> ' : ''; ?><a href="<?php echo $data->link; ?>"><?php echo $data->prefix != null ? '<span class="prefix" style="color:'.$data->prefix->color.';">['.$data->prefix->title.']</span> ' : ''; ?> <?php echo $data->title; ?></a></span></span>
+		<span class="title">
+			<span><?php echo $data->ment > 0 ? ('<span class="ment">['.number_format($data->ment).($data->latest_ment > time() - 60 * 60 * 24 ? '+' : '').']</span>') : ''; ?><?php echo $data->is_secret == true ? '<i class="xi xi-lock"></i>' : ''; ?><?php echo count($categories) > 0 && $data->category != null ? '<span class="category">['.$data->category->title.']</span> ' : ''; ?><a href="<?php echo $data->link; ?>"><?php echo $data->prefix != null ? '<span class="prefix" style="color:'.$data->prefix->color.';">['.$data->prefix->title.']</span> ' : ''; ?><?php echo $data->title; ?></a></span>
+		</span>
 		<span class="name"><?php echo $data->photo; ?><?php echo $data->name; ?></span>
 		<span class="reg_date"><?php echo GetTime('Y-m-d',$data->reg_date); ?></span>
 		<span class="hit"><?php echo number_format($data->hit); ?></span>

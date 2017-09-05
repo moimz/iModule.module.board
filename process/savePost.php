@@ -19,7 +19,7 @@
  * @post string $is_notice set notice (TRUE or FALSE)
  * @post string $is_html_title using html tag in post title (TRUE or FALSE)
  * @post string $is_secret set secret post (TRUE or FALSE)
- * @post string $is_hidename set hide author name (TRUE or FALSE)
+ * @post string $is_anonymity set hide author name (TRUE or FALSE)
  * @return object $results
  */
 if (defined('__IM__') == false) exit;
@@ -28,14 +28,16 @@ $errors = array();
 
 $idx = Request('idx');
 $bid = Request('bid');
+$board = $this->getBoard($bid);
+
 $category = Request('category');
 $prefix = Request('prefix');
 $title = Request('title') ? Request('title') : $errors['title'] = $this->getErrorText('REQUIRED');
 $content = Request('content') ? Request('content') : $errors['content'] = $this->getErrorText('REQUIRED');;
 $is_notice = Request('is_notice') && $this->checkPermission($bid,'notice') == true ? 'TRUE' : 'FALSE';
 $is_html_title = Request('is_html_title') && $this->checkPermission($bid,'html_title') == true ? 'TRUE' : 'FALSE';
-$is_secret = Request('is_secret') ? 'TRUE' : 'FALSE';
-$is_hidename = Request('is_hidename') && $this->checkPermission($bid,'hidename') == true ? 'TRUE' : 'FALSE';
+$is_secret = $board->allow_secret == true && Request('is_secret') ? 'TRUE' : 'FALSE';
+$is_anonymity = $board->allow_anonymity == true && Request('is_anonymity') && $this->IM->getModule('member')->isLogged() == true ? 'TRUE' : 'FALSE';
 
 if ($this->IM->getModule('member')->isLogged() == false) {
 	$name = Request('name') ? Request('name') : $errors['name'] = $this->getErrorText('REQUIRED');
@@ -85,7 +87,7 @@ if (empty($errors) == true) {
 	$insert['is_notice'] = $is_notice;
 	$insert['is_html_title'] = $is_html_title;
 	$insert['is_secret'] = $is_secret;
-	$insert['is_hidename'] = $is_hidename;
+	$insert['is_anonymity'] = $is_anonymity;
 	
 	if ($idx == null) {
 		$insert['midx'] = $midx;

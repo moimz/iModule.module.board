@@ -435,7 +435,7 @@
 					"length":"'TRUE','FALSE'",
 					"default":"FALSE"
 				},
-				"is_hidename":{
+				"is_anonymity":{
 					"type":"enum",
 					"length":"'TRUE','FALSE'",
 					"default":"FALSE"
