@@ -42,4 +42,36 @@ if ($type == 'post') {
 		$results->message = $this->getErrorText('FORBIDDEN');
 	}
 }
+
+if ($type == 'ment') {
+	$ment = $this->getMent($idx);
+	
+	if ($ment == null) {
+		$results->success = false;
+		$results->message = $this->getErrorText('NOT_FOUND');
+	} elseif ($this->checkPermission($ment->bid,'ment_delete') == true) {
+		$this->deleteMent($idx);
+		$results->success = true;
+		$results->parent = $ment->parent;
+	} elseif ($ment->midx != 0 && $ment->midx != $this->IM->getModule('member')->getLogged()) {
+		$this->deleteMent($idx);
+		$results->success = false;
+		$results->parent = $ment->parent;
+	} elseif ($ment->midx == 0) {
+		$password = Request('password');
+		
+		$mHash = new Hash();
+		if ($mHash->password_validate($password,$ment->password) == true) {
+			$this->deleteMent($idx);
+			$results->success = true;
+			$results->parent = $ment->parent;
+		} else {
+			$results->success = false;
+			$results->errors = array('password'=>$this->getErrorText('INCORRENT_PASSWORD'));
+		}
+	} else {
+		$results->success = false;
+		$results->message = $this->getErrorText('FORBIDDEN');
+	}
+}
 ?>

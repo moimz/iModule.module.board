@@ -734,7 +734,7 @@ class ModuleBoard {
 		/**
 		 * 댓글 컴포넌트를 불러온다.
 		 */
-		$ment = $this->getMentComponent($idx,$page,$configs);
+		$ment = $this->getMentComponent($idx,null,$configs);
 		
 		/**
 		 * 현재 게시물이 속한 페이지를 구한다.
@@ -961,11 +961,6 @@ class ModuleBoard {
 		
 		$ment = $this->getMent($ment);
 		
-		$attachments = $this->db()->select($this->table->attachment)->where('parent',$ment->idx)->where('type','MENT')->get();
-		for ($i=0, $loop=count($attachments);$i<$loop;$i++) {
-			$attachments[$i] = $this->IM->getModule('attachment')->getFileInfo($attachments[$i]->idx);
-		}
-		
 		/*
 		if ($this->IM->getModule('member')->isLogged() == true) {
 			$vote = $this->db()->select($this->table->history)->where('type','MENT')->where('parent',$ment->idx)->where('action','VOTE')->where('midx',$this->IM->getModule('member')->getLogged())->getOne();
@@ -975,8 +970,29 @@ class ModuleBoard {
 		}
 		*/
 		
+		$ment->is_visible = true;
+		if ($ment->is_secret == true) {
+			$permission = $this->checkSecretMentPermission($ment->idx);
+			
+			if ($permission === 'PASSWORD') {
+				$ment->content = '<div data-secret="TRUE" data-password="TRUE">'.$this->getText('ment/secret').'</div>';
+				$ment->is_visible = false;
+			} elseif ($permission === false) {
+				$ment->content = '<div data-secret="TRUE" data-password="FALSE">'.$this->getErrorText('FORBIDDEN_SECRET').'</div>';
+				$ment->is_visible = false;
+			}
+		}
 		
-		$header = PHP_EOL.'<div data-role="item" data-idx="'.$ment->idx.'" data-parent="'.$ment->parent.'" data-depth="'.$ment->depth.'" data-modify="'.$ment->modify_date.'" style="margin-left:'.($ment->depth * 20).'px;">'.PHP_EOL;
+		if ($ment->is_visible == true) {
+			$attachments = $this->db()->select($this->table->attachment)->where('parent',$ment->idx)->where('type','MENT')->get();
+			for ($i=0, $loop=count($attachments);$i<$loop;$i++) {
+				$attachments[$i] = $this->IM->getModule('attachment')->getFileInfo($attachments[$i]->idx);
+			}
+		} else {
+			$attachments = array();
+		}
+		
+		$header = PHP_EOL.'<div data-role="item" data-idx="'.$ment->idx.'" data-parent="'.$ment->parent.'" data-depth="'.$ment->depth.'" style="margin-left:'.($ment->depth * 20).'px;">'.PHP_EOL;
 		$footer = PHP_EOL.'</div>'.PHP_EOL;
 		
 		/**
@@ -1051,6 +1067,16 @@ class ModuleBoard {
 		if ($type == 'post_modify') $content.= '게시물을 수정하려면 패스워드를 입력하여 주십시오.';
 		if ($type == 'post_secret') $content.= '비밀글을 열람하시려면 패스워드를 입력하여 주십시오.';
 		
+		if ($type == 'ment_modify') $content.= '댓글을 수정하려면 패스워드를 입력하여 주십시오.';
+		if ($type == 'ment_secret') {
+			$ment = $this->getMent($idx);
+			if ($ment->source == 0) {
+				$content.= '비밀댓글을 열람하시려면 댓글 또는 게시물의 패스워드를 입력하여 주십시오.';
+			} else {
+				$content.= '비밀댓글을 열람하시려면 댓글 또는 부모댓글의 패스워드를 입력하여 주십시오.';
+			}
+		}
+		
 		$content.= '</div>';
 		$content.= '<div data-role="input"><input type="password" name="password"></div>';
 		
@@ -1092,6 +1118,15 @@ class ModuleBoard {
 			
 			if ($this->checkPermission($post->bid,'post_delete') == false && $post->midx == 0) {
 				$content.= '<div data-role="input" data-default="게시물 등록시 입력한 패스워드를 입력하여 주십시오."><input type="password" name="password"></div>';
+			}
+		} elseif ($type == 'ment') {
+			$ment = $this->getMent($idx);
+			
+			if ($this->checkPermission($ment->bid,'ment_delete') == false && $ment->midx != 0 && $ment->midx != $this->IM->getModule('member')->getLogged()) return;
+			
+			$content.= '<div data-role="message">댓글을 삭제하시겠습니까?</div>';
+			if ($this->checkPermission($ment->bid,'ment_delete') == false && $ment->midx == 0) {
+				$content.= '<div data-role="input" data-default="댓글 등록시 입력한 패스워드를 입력하여 주십시오."><input type="password" name="password"></div>';
 			}
 		}
 		
@@ -1178,6 +1213,11 @@ class ModuleBoard {
 			$post->is_anonymity = $post->is_anonymity == 'TRUE';
 			$post->is_notice = $post->is_notice == 'TRUE';
 			
+			if ($post->is_anonymity == true) {
+				$post->name = $post->nickname = '<span data-module="member" data-role="name">익명-'.strtoupper(substr(base_convert(ip2long($post->ip),10,32),0,6)).'</span>';
+				$post->photo = '<i data-module="member" data-role="photo" style="background-image:url('.$this->getModule()->getDir().'/images/icon_'.(ip2long($post->ip) % 2 == 0 ? 'man' : 'woman').'.png);"></i>';
+			}
+			
 			$post->is_rendered = true;
 			
 			$this->posts[$post->idx] = $post;
@@ -1216,9 +1256,15 @@ class ModuleBoard {
 			
 			$ment->content = $this->IM->getModule('wysiwyg')->decodeContent($ment->content);
 			
+			$ment->is_secret = $ment->is_secret == 'TRUE';
+			$ment->is_anonymity = $ment->is_anonymity == 'TRUE';
 			$ment->is_delete = $ment->is_delete == 'TRUE';
 			$ment->is_rendered = true;
 			
+			if ($ment->is_anonymity == true) {
+				$ment->name = $ment->nickname = '<span data-module="member" data-role="name">익명-'.strtoupper(substr(base_convert(ip2long($ment->ip),10,32),0,6)).'</span>';
+				$ment->photo = '<i data-module="member" data-role="photo" style="background-image:url('.$this->getModule()->getDir().'/images/icon_'.(ip2long($ment->ip) % 2 == 0 ? 'man' : 'woman').'.png);"></i>';
+			}
 			
 			$this->ments[$ment->idx] = $ment;
 			return $this->ments[$ment->idx];
@@ -1279,6 +1325,38 @@ class ModuleBoard {
 		
 		if (isset($permission->{$type}) == false) return false;
 		return $this->IM->parsePermissionString($permission->{$type});
+	}
+	
+	/**
+	 * 비밀댓글 열람권한을 확인한다.
+	 *
+	 * @param string $idx 댓글고유번호
+	 * @return boolean $hasPermssion
+	 */
+	function checkSecretMentPermission($idx) {
+		$ment = $this->getMent($idx);
+		if ($ment == null) return false;
+		
+		if ($ment->is_secret == false) return true;
+		if ($this->checkPermission($ment->bid,'ment_secret') == true) return true;
+		if ($ment->midx != 0 && $ment->midx == $this->IM->getModule('member')->getLogged()) return true;
+		
+		$permittedSecretMents = Request('ModuleBoardPermittedSecretMents','session') ? Request('ModuleBoardPermittedSecretMents','session') : array();
+		if (in_array($ment->idx,$permittedSecretMents) == true) return true;
+		
+		if ($ment->source == 0) {
+			$post = $this->getPost($ment->parent);
+			if ($post->midx != 0 && $post->midx == $this->IM->getModule('member')->getLogged()) return true;
+			if ($post->midx == 0 || $ment->midx == 0) return 'PASSWORD';
+			else return false;
+		} else {
+			$parent = $this->getMent($ment->source);
+			if ($parent->midx != 0 && $parent->midx == $this->IM->getModule('member')->getLogged()) return true;
+			if ($parent->midx == 0 || $ment->midx == 0) return 'PASSWORD';
+			else return false;
+		}
+		
+		return false;
 	}
 	
 	/**
@@ -1345,7 +1423,7 @@ class ModuleBoard {
 		/**
 		 * 게시물에 작성된 댓글을 삭제한다.
 		 */
-		$ments = $this->db()->select($this->table->ment)->where('parent',$idx)->get();
+		$ments = $this->db()->select($this->table->ment)->where('parent',$idx)->orderBy('reg_date','desc')->get();
 		for ($i=0, $loop=count($ments);$i<$loop;$i++) {
 			$this->deleteMent($ments[$i]->idx);
 		}
@@ -1358,6 +1436,69 @@ class ModuleBoard {
 		$this->updateBoard($post->bid);
 		
 		return true;
+	}
+	
+	/**
+	 * 댓글을 삭제한다.
+	 *
+	 * @param int $idx 댓글고유번호
+	 * @return boolean $success
+	 */
+	function deleteMent($idx) {
+		$ment = $this->getMent($idx);
+		if ($ment == null) return false;
+		
+		/**
+		 * 게시물에 첨부된 첨부파일을 삭제한다.
+		 */
+		$attachments = $this->db()->select($this->table->attachment)->where('type','MENT')->where('parent',$idx)->get();
+		for ($i=0, $loop=count($attachments);$i<$loop;$i++) {
+			$this->IM->getModule('attachment')->fileDelete($attachments[$i]->idx);
+		}
+		
+		if ($this->hasChildrenMent($idx) == true) {
+			$this->db()->update($this->table->ment,array('is_delete'=>'TRUE'))->where('idx',$idx)->execute();
+		} else {
+			$this->db()->delete($this->table->ment)->where('idx',$idx)->execute();
+			$this->db()->delete($this->table->ment_depth)->where('idx',$idx)->execute();
+			
+			while ($ment->source > 0) {
+				$ment = $this->getMent($ment->source);
+				if ($ment->is_delete == true && $this->hasChildrenMent($ment->idx) == false) {
+					$this->db()->delete($this->table->ment)->where('idx',$ment->idx)->execute();
+					$this->db()->delete($this->table->ment_depth)->where('idx',$ment->idx)->execute();
+				}
+			}
+		}
+		
+		$this->updatePost($ment->parent);
+		
+		return true;
+	}
+	
+	/**
+	 * 삭제되지 않은 자식 댓글이 있는지 확인한다.
+	 *
+	 * @param int $parent 부모댓글고유번호
+	 * @return boolean $hasChildren
+	 */
+	function hasChildrenMent($parent) {
+		$children = $this->db()->select($this->table->ment_depth.' d','m.idx, m.is_delete')->join($this->table->ment.' m','d.idx=m.idx','LEFT')->where('d.source',$parent)->get();
+		
+		foreach ($children as $ment) {
+			if ($ment->is_delete == 'FALSE') return true;
+			elseif ($this->hasChildrenMent($ment->idx) == true) return true;
+		}
+		
+		$parent = $this->getMent($parent);
+		if ($parent->is_delete == true) {
+			foreach ($children as $ment) {
+				$this->db()->delete($this->table->ment)->where('idx',$ment->idx)->execute();
+				$this->db()->delete($this->table->ment_depth)->where('idx',$ment->idx)->execute();
+			}
+		}
+		
+		return false;
 	}
 	
 	/**

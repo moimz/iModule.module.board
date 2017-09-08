@@ -31,5 +31,20 @@ if ($modal == 'delete') {
 			$results->message = $this->getErrorText('FORBIDDEN');
 		}
 	}
+	
+	if ($type == 'ment') {
+		$ment = $this->getMent($idx);
+		
+		if ($ment == null) {
+			$results->success = false;
+			$results->message = $this->getErrorText('NOT_FOUND');
+		} elseif ($this->checkPermission($ment->bid,'ment_delete') == true || $ment->midx == $this->IM->getModule('member')->getLogged()) {
+			$results->success = true;
+			$results->modalHtml = $this->getDeleteModal('ment',$idx);
+		} else {
+			$results->success = false;
+			$results->message = $this->getErrorText('FORBIDDEN');
+		}
+	}
 }
 ?>

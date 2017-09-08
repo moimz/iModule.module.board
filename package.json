@@ -405,17 +405,17 @@
 					"length":11,
 					"default":0
 				},
+				"latest_ment":{
+					"type":"int",
+					"length":11,
+					"default":0
+				},
 				"good":{
 					"type":"int",
 					"length":11,
 					"default":0
 				},
 				"bad":{
-					"type":"int",
-					"length":11,
-					"default":0
-				},
-				"latest_ment":{
 					"type":"int",
 					"length":11,
 					"default":0

@@ -37,7 +37,7 @@ $content = Request('content') ? Request('content') : $errors['content'] = $this-
 $is_notice = Request('is_notice') && $this->checkPermission($bid,'notice') == true ? 'TRUE' : 'FALSE';
 $is_html_title = Request('is_html_title') && $this->checkPermission($bid,'html_title') == true ? 'TRUE' : 'FALSE';
 $is_secret = $board->allow_secret == true && Request('is_secret') ? 'TRUE' : 'FALSE';
-$is_anonymity = $board->allow_anonymity == true && Request('is_anonymity') && $this->IM->getModule('member')->isLogged() == true ? 'TRUE' : 'FALSE';
+$is_anonymity = $board->allow_anonymity == true && Request('is_anonymity') ? 'TRUE' : 'FALSE';
 
 if ($this->IM->getModule('member')->isLogged() == false) {
 	$name = Request('name') ? Request('name') : $errors['name'] = $this->getErrorText('REQUIRED');

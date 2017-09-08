@@ -21,7 +21,7 @@ $board = $this->getBoard($post->bid);
 $bid = $board->bid;
 
 $is_secret = $board->allow_secret == true && Request('is_secret') ? 'TRUE' : 'FALSE';
-$is_anonymity = $board->allow_anonymity == true && Request('is_anonymity') && $this->IM->getModule('member')->isLogged() == true ? 'TRUE' : 'FALSE';
+$is_anonymity = $board->allow_anonymity == true && Request('is_anonymity') ? 'TRUE' : 'FALSE';
 $content = Request('content') ? Request('content') : $errors['content'] = $this->getErrorText('REQUIRED');
 
 if ($this->IM->getModule('member')->isLogged() == false) {
@@ -45,7 +45,7 @@ if ($source) {
 	$sourceData = $this->getMent($source);
 	if ($sourceData == null) {
 		$results->success = false;
-		$results->message = $this->getLanguage('mentWrite/deleteSource');
+		$results->message = $this->getErrorText('NOT_FOUND');
 		return;
 	}
 }
@@ -112,39 +112,43 @@ if (empty($errors) == true) {
 		if ($source != 0 && $sourceData->midx != 0 && $sourceData->midx != $this->IM->getModule('member')->getLogged()) {
 //			$this->IM->getModule('push')->sendPush($sourceData->midx,'board','replyment',$post->idx,array('idx'=>$idx,'from'=>($name)));
 		}
+		
+		$message = '댓글을 성공적으로 작성하였습니다.';
 	} else {
 		$ment = $this->getMent($idx);
 		
 		if ($this->checkPermission($bid,'ment_modify') == false && ($ment->midx != 0 && $ment->midx != $this->IM->getModule('member')->getLogged())) {
 			$results->success = false;
 			$results->message = $this->getErrorText('FORBIDDEN');
-		} elseif ($this->checkPermission($bid,'ment_modify') == false && $ment->midx == 0) {
+			return;
+		} elseif ($ment->midx == 0) {
 			if ($mHash->password_validate($password,$ment->password) == false) {
 				$results->success = false;
-				$results->errors = array('password'=>$this->getLanguage('error/incorrectPassword'));
-				$results->message = $this->getLanguage('error/incorrectPassword');
+				$results->errors = array('password'=>$this->getErrorText('INCORRENT_PASSWORD'));
+				return;
 			}
 		}
 		
-		if ($results->success == true) {
-			if ($this->IM->getModule('member')->isLogged() == false) {
-				$insert['name'] = $name;
-				$insert['password'] = $password ? $mHash->password_hash($password) : '';
-				$insert['email'] = $email;
-				$insert['ip'] = $_SERVER['REMOTE_ADDR'];
-			}
-			$insert['modify_date'] = time();
-			
-			$this->db()->update($this->table->ment,$insert)->where('idx',$ment->idx)->execute();
-			
-			if ($ment->midx != 0 && $ment->midx != $this->IM->getModule('member')->getLogged()) {
-//				$this->IM->getModule('push')->sendPush($ment->midx,'board','ment_modify',$idx,array('from'=>($name)));
-			}
-			
-			if ($this->IM->getModule('member')->isLogged() == true) {
-//				$this->IM->getModule('member')->addActivity(null,0,'board','ment_modify',array('idx'=>$idx));
-			}
+		if ($ment->midx == 0) {
+			$insert['name'] = $name;
+			$insert['password'] = $password ? $mHash->password_hash($password) : '';
+			$insert['email'] = $email;
+			$insert['ip'] = $_SERVER['REMOTE_ADDR'];
 		}
+		
+		$insert['modify_date'] = time();
+		
+		$this->db()->update($this->table->ment,$insert)->where('idx',$ment->idx)->execute();
+			
+		if ($ment->midx != 0 && $ment->midx != $this->IM->getModule('member')->getLogged()) {
+//				$this->IM->getModule('push')->sendPush($ment->midx,'board','ment_modify',$idx,array('from'=>($name)));
+		}
+		
+		if ($this->IM->getModule('member')->isLogged() == true) {
+//				$this->IM->getModule('member')->addActivity(null,0,'board','ment_modify',array('idx'=>$idx));
+		}
+		
+		$message = '댓글을 성공적으로 수정하였습니다.';
 	}
 	
 	for ($i=0, $loop=count($attachments);$i<$loop;$i++) {
@@ -162,14 +166,21 @@ if (empty($errors) == true) {
 //			$this->IM->setArticle('board',$bid,'post',$post->idx,time());
 	}
 	
+	if ($is_secret == 'TRUE') {
+		$permittedSecretMents = Request('ModuleBoardPermittedSecretMents','session') ? Request('ModuleBoardPermittedSecretMents','session') : array();
+		$permittedSecretMents[] = $idx;
+		
+		$permittedSecretMents = array_unique($permittedSecretMents);
+		$_SESSION['ModuleBoardPermittedSecretMents'] = $permittedSecretMents;
+	}
+	
 	$results->success = true;
 	$results->idx = $idx;
 	$results->parent = $parent;
 	$results->page = $this->getMentPage($idx);
-	$results->message = '댓글을 성공적으로 작성하였습니다.';
+	$results->message = $message;
 } else {
 	$results->success = false;
-	$results->message = $this->getErrorText('REQUIRED');
 	$results->errors = $errors;
 }
 ?>

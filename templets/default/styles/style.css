@@ -10,7 +10,7 @@ div[data-module=board] ul[data-role=table] > li > span.title > span > a:hover {c
 div[data-module=board] ul[data-role=table] > li > span.title > span > i.xi {margin-right:3px;}
 div[data-module=board] ul[data-role=table] > li > span.title > span > i.xi-lock {color:#F44336;}
 div[data-module=board] ul[data-role=table] > li > span.title > span > span.ment {display:inline-block; float:right; margin:3px 0px 0px 5px; color:#FF5722; font-size:11px; vertical-align:middle;}
-div[data-module=board] ul[data-role=table] > li > span.name {width:120px; text-align:center;}
+div[data-module=board] ul[data-role=table] > li > span.name {width:140px; text-align:center;}
 div[data-module=board] ul[data-role=table] > li.tbody > span.notice {width:60px; text-align:center; font-weight:bold; color:#F44336;}
 div[data-module=board] ul[data-role=table] > li.tbody > span.name {text-align:left;}
 div[data-module=board] ul[data-role=table] > li.tbody > span.name > i[data-role=photo] {width:24px; height:24px; margin-right:5px;}
@@ -50,8 +50,9 @@ div[data-module=board] div[data-role=ment] > h5 > span[data-role=count] {color:#
 div[data-module=board] div[data-role=ment] > div[data-role=list] {background:url(../images/ment_line_bg.png);}
 div[data-module=board] div[data-role=ment] > div[data-role=list] > div[data-role=item] {background:#f4f4f4; padding:10px 15px; font-size:0; border-top:1px solid #e5e5e5; position:relative;}
 div[data-module=board] div[data-role=ment] > div[data-role=list] > div[data-role=item]:first-child {border-top:0px;}
-div[data-module=board] div[data-role=ment] > div[data-role=list] > div[data-role=item] > i.xi {font-size:12px; color:#F44336; position:absolute; top:15px; left:-10px; width:20px; text-align:center;}
-div[data-module=board] div[data-role=ment] > div[data-role=list] > div[data-role=item][data-depth="0"] > i.xi {display:none;}
+div[data-module=board] div[data-role=ment] > div[data-role=list] > div[data-role=item] > i.xi-reply-all {font-size:12px; color:#F44336; position:absolute; top:15px; left:-10px; width:20px; text-align:center;}
+div[data-module=board] div[data-role=ment] > div[data-role=list] > div[data-role=item][data-depth="0"] > i.xi-reply-all {display:none;}
+div[data-module=board] div[data-role=ment] > div[data-role=list] > div[data-role=item] > i.xi-lock {font-size:12px; color:#fff; position:absolute; top:30px; left:40px; width:20px; height:20px; background:#F44336; line-height:20px; border-radius:50%; text-align:center;}
 div[data-module=board] div[data-role=ment] > div[data-role=list] > div[data-role=item] > i[data-role=photo] {width:40px; height:40px; vertical-align:top; margin-right:10px;}
 div[data-module=board] div[data-role=ment] > div[data-role=list] > div[data-role=item] > div {width:calc(100% - 50px); display:inline-block; vertical-align:top; font-size:13px; padding:5px 0px;}
 div[data-module=board] div[data-role=ment] > div[data-role=list] > div[data-role=item] > div > div.info {height:24px; position:relative;}
@@ -69,12 +70,31 @@ div[data-module=board] div[data-role=ment] > div[data-role=list] > div[data-role
 div[data-module=board] div[data-role=ment] > div[data-role=list] > div[data-role=item][data-ment-action=reply] > div > div.info > ul > li > button[data-ment-action=reply] > i:before {content:"\e616";}
 div[data-module=board] div[data-role=ment] > div[data-role=list] > div[data-role=item] > div > div.info > ul > li > button[data-ment-action=modify] {background:#2196f3; color:#fff;}
 div[data-module=board] div[data-role=ment] > div[data-role=list] > div[data-role=item] > div > div.info > ul > li > button[data-ment-action=modify]:hover {background:#1e88e5;}
-div[data-module=board] div[data-role=ment] > div[data-role=list] > div[data-role=item][data-ment-action=modify] > div > div.info > ul > li > button[data-ment-action=reply] {background:#1e88e5;}
+div[data-module=board] div[data-role=ment] > div[data-role=list] > div[data-role=item][data-ment-action=modify] > div > div.info > ul > li > button[data-ment-action=modify] {background:#1e88e5;}
+div[data-module=board] div[data-role=ment] > div[data-role=list] > div[data-role=item][data-ment-action=modify] > div > div.info > ul > li > button[data-ment-action=modify] > i:before {content:"\e616";}
+div[data-module=board] div[data-role=ment] > div[data-role=list] > div[data-role=item][data-ment-action=modify] > div > div[data-role=wysiwyg-content] {display:none;}
+div[data-module=board] div[data-role=ment] > div[data-role=list] > div[data-role=item][data-ment-action=modify] > div > div[data-module=attachment] {display:none;}
+div[data-module=board] div[data-role=ment] > div[data-role=list] > div[data-role=item][data-ment-action=modify] form {margin-top:10px;}
 div[data-module=board] div[data-role=ment] > div[data-role=list] > div[data-role=item] > div > div.info > ul > li > button[data-ment-action=delete] {background:#F44336; color:#fff;}
 div[data-module=board] div[data-role=ment] > div[data-role=list] > div[data-role=item] > div > div.info > ul > li > button[data-ment-action=delete]:hover {background:#E53935;}
 
 div[data-module=board] div[data-role=ment] > div[data-role=list] > div[data-role=item] > div > div[data-role=wysiwyg-content] {padding-top:10px;}
+div[data-module=board] div[data-role=ment] > div[data-role=list] > div[data-role=item] > div > div[data-module=attachment] {margin-top:10px;}
 div[data-module=board] div[data-role=ment] > div[data-role=list] > div[data-role=item] > form {font-size:13px;}
+
+div[data-module=board] div[data-role=ment] > div[data-role=list] > div[data-role=item] div[data-secret=TRUE] {font-size:13px; text-align:center; width:100%; padding:10px 0px; line-height:1.6; background:#FFEBEE; margin-top:10px; color:#F44336;}
+div[data-module=board] div[data-role=ment] > div[data-role=list] > div[data-role=item] div[data-secret=TRUE][data-password=TRUE] {cursor:pointer;}
+div[data-module=board] div[data-role=ment] > div[data-role=list] > div[data-role=item] div[data-secret=TRUE][data-password=TRUE]:hover {background:#FFCDD2;}
+div[data-module=board] div[data-role=ment] > div[data-role=list] > div[data-role=item] div[data-delete=TRUE] {font-size:13px; text-align:center; width:calc(100% + 30px); padding:10px 0px; line-height:1.6; background:#FFECB3; color:#FF8F00; margin:-10px -15px;}
+
+div[data-module=board] div[data-role=ment] > div[data-role=list] > div[data-role=item] > div > div[data-module=attachment] {padding:20px 0px 10px 0px;}
+div[data-module=board] div[data-role=ment] > div[data-role=list] > div[data-role=item] > div > div[data-module=attachment] > h5 {font-size:14px; height:30px; line-height:30px; border-bottom:1px solid #e3e4e5; margin-bottom:5px;}
+div[data-module=board] div[data-role=ment] > div[data-role=list] > div[data-role=item] > div > div[data-module=attachment] > h5 > i {font-size:12px; width:20px; height:30px; float:left; line-height:30px;}
+div[data-module=board] div[data-role=ment] > div[data-role=list] > div[data-role=item] > div > div[data-module=attachment] > ul {list-style:none;}
+div[data-module=board] div[data-role=ment] > div[data-role=list] > div[data-role=item] > div > div[data-module=attachment] > ul > li {height:20px; padding:5px 0px;}
+div[data-module=board] div[data-role=ment] > div[data-role=list] > div[data-role=item] > div > div[data-module=attachment] > ul > li > i.icon {width:20px; height:20px; margin-right:5px; float:left; vertical-align:middle; background-size:contain; background-position:0 50%; vertical-align:middle;}
+div[data-module=board] div[data-role=ment] > div[data-role=list] > div[data-role=item] > div > div[data-module=attachment] > ul > li > a {display:inline-block; max-width:calc(100% - 25px); height:20px; line-height:20px; color:#333; text-decoration:none; font-size:13px; text-overflow:ellipsis; overflow:hidden; white-space:nowrap; vertical-align:middle;}
+div[data-module=board] div[data-role=ment] > div[data-role=list] > div[data-role=item] > div > div[data-module=attachment] > ul > li > a > span.size {color:#999; font-size:12px; float:right; display:inline-block; vertical-align:middle; margin-left:5px; line-height:22px; height:20px;}
 
 div[data-module=board] div[data-role=ment] > div[data-role=list] > div.empty {height:100px; line-height:100px; text-align:center; background:#f4f4f4;}
 

@@ -30,5 +30,6 @@ $results->success = true;
 $results->parent = $parent;
 
 $results->lists = $this->getMentListComponent($parent,$page,$configs);
+$results->total = $post->ment;
 $results->pagination = $this->getMentPagination($parent,$page,$configs);
 ?>
