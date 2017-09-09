@@ -164,6 +164,4 @@ div[data-module=board] ul[data-role=form] div[data-module=attachment] {padding-t
 	div[data-module=board] ul[data-role=form] div[data-role=inputset].flex > div {display:block; margin:5px 0px 0px 0px; border-left:0px;}
 	div[data-module=board] ul[data-role=form] div[data-role=inputset].flex > div:first-child {margin-top:0px;}
 	div[data-module=board] ul[data-role=form] div[data-role=input][data-name=prefix] {width:100%;}
-	
-	
 }

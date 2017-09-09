@@ -17,11 +17,17 @@ $start = Request('start');
 $limit = Request('limit');
 $lists = $this->db()->select($this->table->board);
 $total = $lists->copy()->count();
+$sort = Request('sort') ? Request('sort') : 'title';
+$dir = Request('dir') ? Request('dir') : 'asc';
 if ($limit > 0) $lists->limit($start,$limit);
-$lists = $lists->get();
+$lists = $lists->orderBy($sort,$dir)->get();
 
 for ($i=0, $loop=count($lists);$i<$loop;$i++) {
+	$files = $this->db()->select($this->table->attachment)->where('bid',$lists[$i]->bid)->get('idx');
 	
+	$lists[$i]->category = $this->db()->select($this->table->category)->where('bid',$lists[$i]->bid)->count();
+	$lists[$i]->file = count($files);
+	$lists[$i]->file_size = $this->IM->getModule('attachment')->getTotalFileSize($files);
 }
 
 $results->success = true;

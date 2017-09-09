@@ -469,6 +469,31 @@ var Board = {
 					}
 				}
 			}).show();
+		},
+		delete:function() {
+			var selected = Ext.getCmp("ModuleBoardList").getSelectionModel().getSelection();
+			if (selected.length == 0) {
+				Ext.Msg.show({title:Admin.getText("alert/error"),msg:"삭제할 게시판을 선택하여 주십시오.",buttons:Ext.Msg.OK,icon:Ext.Msg.ERROR});
+				return;
+			}
+			
+			var bids = [];
+			for (var i=0, loop=selected.length;i<loop;i++) {
+				bids.push(selected[i].get("bid"));
+			}
+			
+			Ext.Msg.show({title:Admin.getText("alert/info"),msg:"선택하신 게시판을 정말 삭제하시겠습니까?<br>게시판에 포함된 모든 게시물/댓글/첨부파일이 함께 삭제됩니다.",buttons:Ext.Msg.OKCANCEL,icon:Ext.Msg.QUESTION,fn:function(button) {
+				if (button == "ok") {
+					Ext.Msg.wait(Admin.getText("action/working"),Admin.getText("action/wait"));
+					$.send(ENV.getProcessUrl("board","@deleteBoard"),{bid:bids.join(",")},function(result) {
+						if (result.success == true) {
+							Ext.Msg.show({title:Admin.getText("alert/info"),msg:Admin.getText("action/worked"),buttons:Ext.Msg.OK,icon:Ext.Msg.INFO,fn:function() {
+								Ext.getCmp("ModuleBoardList").getStore().reload();
+							}});
+						}
+					});
+				}
+			}});
 		}
 	},
 	/**

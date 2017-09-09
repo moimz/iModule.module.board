@@ -40,9 +40,13 @@
 				"title":"게시판명",
 				"templet":"템플릿",
 				"contextnum":"사용된메뉴",
-				"postnum":"게시물수",
-				"mentnum":"댓글수",
-				"filenum":"파일수"
+				"category":"카테고리",
+				"post":"게시물수",
+				"latest_post":"최근게시물",
+				"ment":"댓글수",
+				"latest_ment":"최근댓글",
+				"file":"첨부파일수",
+				"file_size":"첨부파일용량"
 			},
 			"form":{
 				"default_setting":"기본설정",

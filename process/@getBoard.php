@@ -12,7 +12,6 @@
  * @return object $results
  */
 if (defined('__IM__') == false) exit;
-if (defined('__IM__') == false) exit;
 
 $bid = Request('bid');
 $data = $this->db()->select($this->table->board)->where('bid',$bid)->getOne();

@@ -15,6 +15,13 @@ var panel = new Ext.TabPanel({
 					handler:function() {
 						Board.list.add();
 					}
+				}),
+				new Ext.Button({
+					text:"선택 게시판 삭제",
+					iconCls:"mi mi-trash",
+					handler:function() {
+						Board.list.delete();
+					}
 				})
 			],
 			store:new Ext.data.JsonStore({
@@ -25,7 +32,7 @@ var panel = new Ext.TabPanel({
 					reader:{type:"json"}
 				},
 				remoteSort:true,
-				sorters:[{property:"reg_date",direction:"DESC"}],
+				sorters:[{property:"bid",direction:"ASC"}],
 				autoLoad:true,
 				pageSize:50,
 				fields:["bid","title","nickname","exp","point","reg_date","last_login","display_url","count","image"],
@@ -41,16 +48,93 @@ var panel = new Ext.TabPanel({
 					}
 				}
 			}),
-			width:"100%",
 			columns:[{
 				text:Board.getText("admin/list/columns/bid"),
-				width:80,
+				width:120,
+				sortable:true,
 				dataIndex:"bid"
 			},{
 				text:Board.getText("admin/list/columns/title"),
-				minWidth:100,
+				minWidth:200,
 				flex:1,
+				sortable:true,
 				dataIndex:"title"
+			},{
+				text:Board.getText("admin/list/columns/category"),
+				width:80,
+				align:"right",
+				dataIndex:"category",
+				renderer:function(value,p) {
+					if (value == 0) {
+						p.style = "text-align:center;";
+						return "-";
+					}
+					return Ext.util.Format.number(value,"0,000");
+				}
+			},{
+				text:Board.getText("admin/list/columns/post"),
+				width:80,
+				align:"right",
+				dataIndex:"post",
+				sortable:true,
+				renderer:function(value,p) {
+					if (value == 0) {
+						p.style = "text-align:center;";
+						return "-";
+					}
+					return Ext.util.Format.number(value,"0,000");
+				}
+			},{
+				text:Board.getText("admin/list/columns/latest_post"),
+				width:130,
+				align:"center",
+				dataIndex:"latest_post",
+				sortable:true,
+				renderer:function(value) {
+					return value > 0 ? moment(value * 1000).format("YYYY-MM-DD HH:mm") : "-";
+				}
+			},{
+				text:Board.getText("admin/list/columns/ment"),
+				width:80,
+				align:"right",
+				dataIndex:"ment",
+				sortable:true,
+				renderer:function(value,p) {
+					if (value == 0) {
+						p.style = "text-align:center;";
+						return "-";
+					}
+					return Ext.util.Format.number(value,"0,000");
+				}
+			},{
+				text:Board.getText("admin/list/columns/latest_ment"),
+				width:130,
+				align:"center",
+				dataIndex:"latest_ment",
+				sortable:true,
+				renderer:function(value) {
+					return value > 0 ? moment(value * 1000).format("YYYY-MM-DD HH:mm") : "-";
+				}
+			},{
+				text:Board.getText("admin/list/columns/file"),
+				width:80,
+				align:"right",
+				dataIndex:"file",
+				renderer:function(value,p) {
+					if (value == 0) {
+						p.style = "text-align:center;";
+						return "-";
+					}
+					return Ext.util.Format.number(value,"0,000");
+				}
+			},{
+				text:Board.getText("admin/list/columns/file_size"),
+				width:100,
+				align:"right",
+				dataIndex:"file_size",
+				renderer:function(value) {
+					return iModule.getFileSize(value);
+				}
 			}],
 			selModel:new Ext.selection.CheckboxModel(),
 			bbar:new Ext.PagingToolbar({
@@ -58,7 +142,7 @@ var panel = new Ext.TabPanel({
 				displayInfo:false,
 				items:[
 					"->",
-					{xtype:"tbtext",text:Board.getText("admin/grid_help")}
+					{xtype:"tbtext",text:Admin.getText("text/grid_help")}
 				],
 				listeners:{
 					beforerender:function(tool) {
@@ -69,6 +153,30 @@ var panel = new Ext.TabPanel({
 			listeners:{
 				itemdblclick:function(grid,record) {
 					Board.list.add(record.data.bid);
+				},
+				itemcontextmenu:function(grid,record,item,index,e) {
+					var menu = new Ext.menu.Menu();
+					
+					menu.add('<div class="x-menu-title">'+record.data.title+'</div>');
+					
+					menu.add({
+						iconCls:"xi xi-form",
+						text:"게시판 수정",
+						handler:function() {
+							Board.list.add(record.data.bid);
+						}
+					});
+					
+					menu.add({
+						iconCls:"mi mi-trash",
+						text:"게시판 삭제",
+						handler:function() {
+							Board.list.delete();
+						}
+					});
+					
+					e.stopEvent();
+					menu.showAt(e.getXY());
 				}
 			}
 		})
