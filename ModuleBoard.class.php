@@ -74,6 +74,7 @@ class ModuleBoard {
 		 * @see 모듈폴더의 package.json 의 databases 참고
 		 */
 		$this->table = new stdClass();
+		$this->table->admin = 'board_admin_table';
 		$this->table->board = 'board_table';
 		$this->table->category = 'board_category_table';
 		$this->table->prefix = 'board_prefix_table';
@@ -1320,6 +1321,8 @@ class ModuleBoard {
 	 * @return boolean $hasPermssion
 	 */
 	function checkPermission($bid,$type) {
+		if ($this->IM->getModule('member')->isAdmin() == true || $this->isAdmin(null,$bid) == true) return true;
+		
 		$board = $this->getBoard($bid);
 		$permission = json_decode($board->permission);
 		
@@ -1539,6 +1542,26 @@ class ModuleBoard {
 		if ($action == 'delete') {
 			$this->db()->delete($this->table->attachment)->where('idx',$idx)->execute();
 		}
+	}
+	
+	/**
+	 * 모듈관리자인지 확인한다.
+	 *
+	 * @param int $midx 회원고유번호 (없을 경우 현재 로그인한 사용자)
+	 * @return boolean $isAdmin
+	 */
+	function isAdmin($midx=null,$bid=null) {
+		$midx = $midx == null ? $this->IM->getModule('member')->getLogged() : $midx;
+		if ($this->IM->getModule('member')->isAdmin($midx) == true) return true;
+		
+		$check = $this->db()->select($this->table->admin)->where('midx',$midx)->getOne();
+		if ($check == null) return false;
+		if ($check->bid == '*') return true;
+		
+		$bids = explode(',',$check->bid);
+		if ($bid != null && in_array($bid,$bids) === false) return false;
+		
+		return true;
 	}
 }
 ?>
