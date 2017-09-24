@@ -513,6 +513,24 @@ class ModuleBoard {
 	}
 	
 	/**
+	 * 모듈 외부컨테이너를 가져온다.
+	 *
+	 * @param string $container 컨테이너명
+	 * @return string $html 컨텍스트 HTML / FileBytes 파일 바이너리
+	 */
+	function getContainer($container) {
+		$html = $this->getContext($container);
+		
+		$this->IM->addHeadResource('style',$this->getModule()->getDir().'/styles/container.css');
+		
+		$this->IM->removeTemplet();
+		$footer = $this->IM->getFooter();
+		$header = $this->IM->getHeader();
+		
+		return $header.$html.$footer;
+	}
+	
+	/**
 	 * 컨텍스트 헤더를 가져온다.
 	 *
 	 * @param string $bid 게시판 ID

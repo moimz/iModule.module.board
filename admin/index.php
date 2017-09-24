@@ -142,7 +142,7 @@ var panel = new Ext.TabPanel({
 				displayInfo:false,
 				items:[
 					"->",
-					{xtype:"tbtext",text:Admin.getText("text/grid_help")}
+					{xtype:"tbtext",text:"항목 더블클릭 : 게시판보기 / 항목 우클릭 : 상세메뉴"}
 				],
 				listeners:{
 					beforerender:function(tool) {
@@ -152,7 +152,7 @@ var panel = new Ext.TabPanel({
 			}),
 			listeners:{
 				itemdblclick:function(grid,record) {
-					Board.list.add(record.data.bid);
+					Board.list.view(record.data.bid,record.data.title);
 				},
 				itemcontextmenu:function(grid,record,item,index,e) {
 					var menu = new Ext.menu.Menu();

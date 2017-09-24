@@ -470,6 +470,24 @@ var Board = {
 				}
 			}).show();
 		},
+		view:function(bid,title) {
+			new Ext.Window({
+				id:"ModuleBoardAddBoardWindow",
+				title:title,
+				modal:true,
+				width:900,
+				height:600,
+				border:false,
+				layout:"fit",
+				maximizable:true,
+				items:[
+					new Ext.Panel({
+						border:false,
+						html:'<iframe src="'+ENV.getModuleUrl("board","notice","list")+'" style="width:100%; height:100%; border:0px;" frameborder="0" scrolling="1"></iframe>'
+					})
+				]
+			}).show();
+		},
 		delete:function() {
 			var selected = Ext.getCmp("ModuleBoardList").getSelectionModel().getSelection();
 			if (selected.length == 0) {
