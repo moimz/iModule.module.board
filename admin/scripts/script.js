@@ -445,16 +445,6 @@ var Board = {
 											Ext.getCmp("ModuleBoardCategoryList").getStore().add(category[i]);
 										}
 									}
-									/*
-									form.findField("permission_list").fireEvent("blur",form.findField("permission_list"));
-									form.findField("permission_view").fireEvent("blur",form.findField("permission_view"));
-									form.findField("permission_write").fireEvent("blur",form.findField("permission_write"));
-									form.findField("permission_ment_write").fireEvent("blur",form.findField("permission_ment_write"));
-									form.findField("permission_modify").fireEvent("blur",form.findField("permission_modify"));
-									form.findField("permission_secret").fireEvent("blur",form.findField("permission_secret"));
-									form.findField("permission_delete").fireEvent("blur",form.findField("permission_delete"));
-									form.findField("permission_ip").fireEvent("blur",form.findField("permission_ip"));
-									*/
 								},
 								failure:function(form,action) {
 									if (action.result && action.result.message) {
@@ -472,10 +462,10 @@ var Board = {
 		},
 		view:function(bid,title) {
 			new Ext.Window({
-				id:"ModuleBoardAddBoardWindow",
+				id:"ModuleBoardViewBoardWindow",
 				title:title,
 				modal:true,
-				width:900,
+				width:950,
 				height:600,
 				border:false,
 				layout:"fit",
@@ -483,7 +473,7 @@ var Board = {
 				items:[
 					new Ext.Panel({
 						border:false,
-						html:'<iframe src="'+ENV.getModuleUrl("board","notice","list")+'" style="width:100%; height:100%; border:0px;" frameborder="0" scrolling="1"></iframe>'
+						html:'<iframe src="'+ENV.getModuleUrl("board",bid,"list")+'" style="width:100%; height:100%; border:0px;" frameborder="0" scrolling="1"></iframe>'
 					})
 				]
 			}).show();

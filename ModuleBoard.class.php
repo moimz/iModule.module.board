@@ -516,7 +516,7 @@ class ModuleBoard {
 	 * 모듈 외부컨테이너를 가져온다.
 	 *
 	 * @param string $container 컨테이너명
-	 * @return string $html 컨텍스트 HTML / FileBytes 파일 바이너리
+	 * @return string $html 컨텍스트 HTML
 	 */
 	function getContainer($container) {
 		$html = $this->getContext($container);
