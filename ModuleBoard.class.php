@@ -1209,7 +1209,7 @@ class ModuleBoard {
 		
 		if (is_numeric($idx) == true) {
 			if (isset($this->posts[$idx]) == true) return $this->posts[$idx];
-			else return $this->getPost($this->db()->select($this->table->post)->where('idx',$idx)->getOne());
+			else return $this->getPost($this->db()->select($this->table->post)->where('idx',$idx)->getOne(),$is_link);
 		} else {
 			$post = $idx;
 			if (isset($post->is_rendered) === true && $post->is_rendered === true) return $post;
@@ -1559,6 +1559,26 @@ class ModuleBoard {
 		 */
 		if ($action == 'delete') {
 			$this->db()->delete($this->table->attachment)->where('idx',$idx)->execute();
+		}
+	}
+	
+	/**
+	 * 회원모듈과 동기화한다.
+	 *
+	 * @param string $action 동기화작업
+	 * @param any[] $data 정보
+	 */
+	function syncMember($action,$data) {
+		if ($action == 'point_history') {
+			switch ($data->code) {
+				case 'post' :
+					$idx = $data->content->idx;
+					$post = $this->getPost($idx,true);
+					
+					return '<a href="'.$post->link.'" target="_blank">['.$post->title.']</a> 게시물 작성';
+			}
+			
+			return json_encode($data);
 		}
 	}
 	
