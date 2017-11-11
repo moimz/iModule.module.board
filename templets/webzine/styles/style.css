@@ -23,6 +23,8 @@ div[data-module=board] ul[data-role=table] > li.tbody > span.hit {text-align:rig
 div[data-module=board] div.list {border-top:2px solid #222; padding-bottom:10px; border-bottom:1px solid #e3e4e5;}
 div[data-module=board] ul[data-role=table] + div.list {border-top:1px solid #eee;}
 
+div[data-module=board] div.empty {border:1px solid #e3e4e5; text-align:center; height:100px; line-height:100px; color:#666; font-size:13px;}
+div[data-module=board] ul[data-role=table] + div.empty {border-top:0px; border-left:0px; border-right:0px;}
 div[data-module=board] ul[data-role=webzine] {list-style:none; width:calc(100% + 10px); font-size:0; margin-left:-10px;}
 div[data-module=board] ul[data-role=webzine] > li {padding:10px 0px 0px 10px; display:inline-block; box-sizing:border-box;}
 div[data-module=board] ul[data-role=webzine] > li > div {width:100%; height:0; position:relative; box-sizing:border-box;}

@@ -55,6 +55,12 @@ if (defined('__IM__') == false) exit;
 		<span class="hit"><?php echo number_format($data->hit); ?></span>
 	</li>
 	<?php } ?>
+	
+	<?php if (count($notices) + count($lists) == 0) { ?>
+	<li class="empty">
+		게시물이 없습니다.
+	</li>
+	<?php } ?>
 </ul>
 
 <div class="searchbar">

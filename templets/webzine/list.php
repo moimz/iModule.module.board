@@ -37,6 +37,11 @@ if (defined('__IM__') == false) exit;
 </ul>
 <?php } ?>
 
+<?php if (count($lists) == 0) { ?>
+<div class="empty">
+	게시물이 없습니다.
+</div>
+<?php } else { ?>
 <div class="list">
 	<ul data-role="webzine">
 		<?php foreach ($lists as $data) { ?>
@@ -55,6 +60,7 @@ if (defined('__IM__') == false) exit;
 		<?php } ?>
 	</ul>
 </div>
+<?php } ?>
 
 <div class="searchbar">
 	<?php if ($me->checkPermission($bid,'post_write') == true) { ?><a href="<?php echo $link->write; ?>"><i class="xi xi-marquee-add"></i><span>게시물등록</span></a><?php } ?>

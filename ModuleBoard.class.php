@@ -758,12 +758,27 @@ class ModuleBoard {
 		/**
 		 * 현재 게시물이 속한 페이지를 구한다.
 		 */
-		$sort = Request('sort') ? Request('sort') : 'idx';
-		$dir = Request('dir') ? Request('dir') : 'asc';
-		$previous = $this->db()->select($this->table->post.' p','p.*')->where('p.bid',$post->bid)->where('p.'.$sort,$post->{$sort},$dir == 'desc' ? '<=' : '>=');
-		$previous = $previous->count();
-		
-		$p = ceil($previous/$board->post_limit);
+		if ($post->is_notice == true && $board->view_notice_page == 'FIRST') {
+			$p = 1;
+		} else {
+			$sort = Request('sort') ? Request('sort') : 'idx';
+			$dir = Request('dir') ? Request('dir') : 'asc';
+			$previous = $this->db()->select($this->table->post.' p','p.*')->where('p.bid',$post->bid)->where('p.'.$sort,$post->{$sort},$dir == 'desc' ? '<=' : '>=');
+			if (Request('keyword')) $this->IM->getModule('keyword')->getWhere($previous,array('title','search'),Request('keyword'));
+			$previous = $previous->count();
+			
+			$notice = $this->db()->select($this->table->post)->where('bid',$post->bid)->where('is_notice','TRUE')->count();
+			
+			if ($board->view_notice_count == 'INCLUDE') {
+				if ($board->view_notice_page == 'FIRST') {
+					$p = ceil(($previous + $notice)/$board->post_limit);
+				} elseif ($board->view_notice_page == 'ALL') {
+					$p = ceil($previous/($board->post_limit - $notice));
+				}
+			} else {
+				$p = ceil($previous/$board->post_limit);
+			}
+		}
 		
 		$link = new stdClass();
 		$link->list = $this->getUrl('list',($category == null ? '' : $category.'/').$p);
