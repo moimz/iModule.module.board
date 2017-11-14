@@ -1590,7 +1590,12 @@ class ModuleBoard {
 					$idx = $data->content->idx;
 					$post = $this->getPost($idx,true);
 					
-					return '<a href="'.$post->link.'" target="_blank">['.$post->title.']</a> 게시물 작성';
+					if ($post == null) {
+						return '[삭제된 게시물] 게시물 작성';
+					} else {
+						return '<a href="'.$post->link.'" target="_blank">['.$post->title.']</a> 게시물 작성';
+					}
+					break;
 			}
 			
 			return json_encode($data);
