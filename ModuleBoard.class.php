@@ -7,7 +7,8 @@
  * @file /modules/board/ModuleBoard.class.php
  * @author Arzz (arzz@arzz.com)
  * @license MIT License
- * @version 3.0.0.161211
+ * @version 3.0.0
+ * @modified 2017. 11. 22.
  */
 class ModuleBoard {
 	/**
@@ -120,9 +121,10 @@ class ModuleBoard {
 	 *
 	 * @param string $view
 	 * @param string $idx
+	 * @return string $url
 	 */
 	function getUrl($view=null,$idx=null) {
-		$url = $this->baseUrl ? $this->baseUrl : $this->IM->getUrl(null,null,false);
+		$url = $this->IM->getUrl(null,null,false);
 		if ($view == null || $view == false) return $url;
 		$url.= '/'.$view;
 		
@@ -133,89 +135,60 @@ class ModuleBoard {
 	/**
 	 * view 값을 가져온다.
 	 *
-	 * @param string $view
+	 * @return string $view
 	 */
 	function getView() {
-		return $this->IM->getView($this->baseUrl);
+		return $this->IM->getView();
+	}
+	
+	/**
+	 * view 값을 변경한다.
+	 *
+	 * @param string $view
+	 */
+	function setView($view) {
+		return $this->IM->setView($view);
 	}
 	
 	/**
 	 * idx 값을 가져온다.
 	 *
-	 * @param string $idx
+	 * @return string $idx
 	 */
 	function getIdx() {
-		return $this->IM->getIdx($this->baseUrl);
+		return $this->IM->getIdx();
 	}
 	
 	/**
 	 * [코어] 사이트 외부에서 현재 모듈의 API를 호출하였을 경우, API 요청을 처리하기 위한 함수로 API 실행결과를 반환한다.
 	 * 소스코드 관리를 편하게 하기 위해 각 요쳥별로 별도의 PHP 파일로 관리한다.
 	 *
+	 * @param string $protocol API 호출 프로토콜 (get, post, put, delete)
 	 * @param string $api API명
+	 * @param any $idx API 호출대상 고유값
+	 * @param object $params API 호출시 전달된 파라메터
 	 * @return object $datas API처리후 반환 데이터 (해당 데이터는 /api/index.php 를 통해 API호출자에게 전달된다.)
 	 * @see /api/index.php
 	 */
-	function getApi($api) {
+	function getApi($protocol,$api,$idx=null,$params=null) {
 		$data = new stdClass();
 		
-		/**
-		 * 이벤트를 호출한다.
-		 */
-		$this->IM->fireEvent('beforeGetApi','board',$api,$values);
+		$values = (object)get_defined_vars();
+		$this->IM->fireEvent('beforeGetApi',$this->getModule()->getName(),$api,$values);
 		
 		/**
 		 * 모듈의 api 폴더에 $api 에 해당하는 파일이 있을 경우 불러온다.
 		 */
-		if (is_file($this->getModule()->getPath().'/api/'.$api.'.php') == true) {
-			INCLUDE $this->getModule()->getPath().'/api/'.$api.'.php';
+		if (is_file($this->getModule()->getPath().'/api/'.$api.'.'.$protocol.'.php') == true) {
+			INCLUDE $this->getModule()->getPath().'/api/'.$api.'.'.$protocol.'.php';
 		}
+		
+		unset($values);
+		$values = (object)get_defined_vars();
+		$this->IM->fireEvent('afterGetApi',$this->getModule()->getName(),$api,$values,$data);
 		
 		return $data;
 	}
-	
-	/**
-	 * [코어] 알림메세지를 구성한다.
-	 *
-	 * @param string $code 알림코드
-	 * @param int $fromcode 알림이 발생한 대상의 고유값
-	 * @param array $content 알림데이터
-	 * @return string $push 알림메세지
-	 */
-	function getPush($code,$fromcode,$content) {
-		
-	}
-	
-	/**
-	 * [코어] 포인트내역 메세지를 구성한다.
-	 *
-	 * @param string $code 포인트코드
-	 * @param array $content 포인트데이터
-	 * @return string $point 포인트메세지
-	 */
-	function getPoint($code,$content) {
-		
-	}
-	
-	/**
-	 * [사이트관리자] 모듈 설정패널을 구성한다.
-	 *
-	 * @return string $panel 설정패널 HTML
-	 *
-	function getConfigPanel() {
-		/**
-		 * 설정패널 PHP에서 iModule 코어클래스와 모듈코어클래스에 접근하기 위한 변수 선언
-		 *
-		$IM = $this->IM;
-		$Module = $this->getModule();
-		
-		ob_start();
-		INCLUDE $this->getModule()->getPath().'/admin/configs.php';
-		$panel = ob_get_contents();
-		ob_end_clean();
-		
-		return $panel;
-	}*/
 	
 	/**
 	 * [사이트관리자] 모듈 관리자패널 구성한다.
@@ -250,6 +223,18 @@ class ModuleBoard {
 		}
 		
 		return $lists;
+	}
+	
+	/**
+	 * 특정 컨텍스트에 대한 제목을 반환한다.
+	 *
+	 * @param string $context 컨텍스트명
+	 * @return string $title 컨텍스트 제목
+	 */
+	function getContextTitle($context) {
+		$board = $this->getBoard($context);
+		if ($board == null) return '삭제된 게시판';
+		return $board->title.'('.$board->bid.')';
 	}
 	
 	/**
@@ -295,6 +280,21 @@ class ModuleBoard {
 		$configs[] = $category;
 		
 		return $configs;
+	}
+	
+	/**
+	 * 사이트맵에 나타날 뱃지데이터를 생성한다.
+	 *
+	 * @param string $context 컨텍스트종류
+	 * @param object $configs 사이트맵 관리를 통해 설정된 페이지 컨텍스트 설정
+	 * @return object $badge 뱃지데이터 ($badge->count : 뱃지숫자, $badge->latest : 뱃지업데이트 시각(UNIXTIME), $badge->text : 뱃지텍스트)
+	 * @todo check count information
+	 */
+	function getContextBadge($context,$config) {
+		/**
+		 * null 일 경우 뱃지를 표시하지 않는다.
+		 */
+		return null;
 	}
 	
 	/**
@@ -349,6 +349,8 @@ class ModuleBoard {
 			if ($string != null) $returnString = $string;
 		}
 		
+		$this->IM->fireEvent('afterGetText',$this->getModule()->getName(),$code,$returnString);
+		
 		/**
 		 * 언어셋 텍스트가 없는경우 iModule 코어에서 불러온다.
 		 */
@@ -394,33 +396,6 @@ class ModuleBoard {
 		
 		if ($isRawData === true) return $error;
 		else return $this->IM->getErrorText($error);
-	}
-	
-	/**
-	 * 특정 컨텍스트에 대한 제목을 반환한다.
-	 *
-	 * @param string $context 컨텍스트명
-	 * @return string $title 컨텍스트 제목
-	 */
-	function getContextTitle($context) {
-		$board = $this->getBoard($context);
-		if ($board == null) return '삭제된 게시판';
-		return $board->title.'('.$board->bid.')';
-	}
-	
-	/**
-	 * 사이트맵에 나타날 뱃지데이터를 생성한다.
-	 *
-	 * @param string $context 컨텍스트종류
-	 * @param object $configs 사이트맵 관리를 통해 설정된 페이지 컨텍스트 설정
-	 * @return object $badge 뱃지데이터 ($badge->count : 뱃지숫자, $badge->latest : 뱃지업데이트 시각(UNIXTIME), $badge->text : 뱃지텍스트)
-	 * @todo check count information
-	 */
-	function getContextBadge($context,$config) {
-		/**
-		 * null 일 경우 뱃지를 표시하지 않는다.
-		 */
-		return null;
 	}
 	
 	/**
@@ -1550,6 +1525,9 @@ class ModuleBoard {
 	function doProcess($action) {
 		$results = new stdClass();
 		
+		$values = (object)get_defined_vars();
+		$this->IM->fireEvent('beforeDoProcess',$this->getModule()->getName(),$action,$values);
+		
 		/**
 		 * 모듈의 process 폴더에 $action 에 해당하는 파일이 있을 경우 불러온다.
 		 */
@@ -1557,8 +1535,9 @@ class ModuleBoard {
 			INCLUDE $this->getModule()->getPath().'/process/'.$action.'.php';
 		}
 		
+		unset($values);
 		$values = (object)get_defined_vars();
-		$this->IM->fireEvent('afterDoProcess','member',$action,$values,$results);
+		$this->IM->fireEvent('afterDoProcess',$this->getModule()->getName(),$action,$values,$results);
 		
 		return $results;
 	}
