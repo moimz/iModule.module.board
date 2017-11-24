@@ -124,11 +124,15 @@ class ModuleBoard {
 	 * @return string $url
 	 */
 	function getUrl($view=null,$idx=null) {
-		$url = $this->IM->getUrl(null,null,false);
+		$url = $this->baseUrl ? $this->baseUrl : $this->IM->getUrl(null,null,false);
+		
+		$view = $view === null ? $this->getView($this->baseUrl) : $view;
 		if ($view == null || $view == false) return $url;
 		$url.= '/'.$view;
 		
+		$idx = $idx === null ? $this->getIdx($this->baseUrl) : $idx;
 		if ($idx == null || $idx == false) return $url;
+		
 		return $url.'/'.$idx;
 	}
 	
@@ -138,16 +142,7 @@ class ModuleBoard {
 	 * @return string $view
 	 */
 	function getView() {
-		return $this->IM->getView();
-	}
-	
-	/**
-	 * view 값을 변경한다.
-	 *
-	 * @param string $view
-	 */
-	function setView($view) {
-		return $this->IM->setView($view);
+		return $this->IM->getView($this->baseUrl);
 	}
 	
 	/**
@@ -156,7 +151,7 @@ class ModuleBoard {
 	 * @return string $idx
 	 */
 	function getIdx() {
-		return $this->IM->getIdx();
+		return $this->IM->getIdx($this->baseUrl);
 	}
 	
 	/**
@@ -568,10 +563,10 @@ class ModuleBoard {
 			$categories = array();
 		}
 		
-		$idx = $this->getIdx() ? explode('/',$this->getIdx()) : array(1);
+		$idxes = $this->getIdx() ? explode('/',$this->getIdx()) : array(1);
 		$category = null;
-		if (count($idx) == 2) list($category,$p) = $idx;
-		elseif (count($idx) == 1) list($p) = $idx;
+		if (count($idxes) == 2) list($category,$p) = $idxes;
+		elseif (count($idxes) == 1) list($p) = $idxes;
 		
 		if ($configs != null && isset($configs->category) == true && $configs->category != 0) {
 			$category = $configs->category;
@@ -673,21 +668,20 @@ class ModuleBoard {
 	 */
 	function getViewContext($bid,$configs=null) {
 		if ($this->checkPermission($bid,'view') == false) return $this->getTemplet($configs)->getError('FORBIDDEN');
-		
 		$this->IM->addHeadResource('meta',array('name'=>'robots','content'=>'idx,nofollow'));
 		
 		$board = $this->getBoard($bid);
-		$idx = $this->getIdx() ? explode('/',$this->getIdx()) : array(0);
+		$idxes = $this->getIdx() ? explode('/',$this->getIdx()) : array(0);
 		$category = null;
 		$page = 1;
 		
 		if ($board->use_category == 'NONE') {
-			if (count($idx) == 2) list($idx,$page) = $idx;
-			elseif (count($idx) == 1) list($idx) = $idx;
+			if (count($idxes) == 2) list($idx,$page) = $idxes;
+			elseif (count($idxes) == 1) list($idx) = $idxes;
 		} else {
-			if (count($idx) == 3) list($category,$idx,$page) = $idx;
-			elseif (count($idx) == 2) list($category,$idx) = $idx;
-			elseif (count($idx) == 1) list($idx) = $idx;
+			if (count($idxes) == 3) list($category,$idx,$page) = $idxes;
+			elseif (count($idxes) == 2) list($category,$idx) = $idxes;
+			elseif (count($idxes) == 1) list($idx) = $idxes;
 		}
 		
 		$post = $this->getPost($idx);
