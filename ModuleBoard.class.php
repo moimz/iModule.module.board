@@ -8,7 +8,7 @@
  * @author Arzz (arzz@arzz.com)
  * @license MIT License
  * @version 3.0.0
- * @modified 2017. 11. 22.
+ * @modified 2018. 1. 15.
  */
 class ModuleBoard {
 	/**
@@ -635,6 +635,9 @@ class ModuleBoard {
 			$notices[$i]->link = $this->getUrl('view',($board->use_category == 'NONE' ? $notices[$i]->idx : ($category == null ? '0' : $category).'/'.$notices[$i]->idx)).$this->IM->getQueryString().($notices[$i]->is_secret == true ? '#secret-'.$notices[$i]->idx : '');
 		}
 		
+		if ($keyword) $keywords = explode(' ',$keyword);
+		else $keywords = array();
+		
 		$loopnum = $total - $start;
 		for ($i=0, $loop=count($lists);$i<$loop;$i++) {
 			$lists[$i] = $this->getPost($lists[$i]);
@@ -642,6 +645,10 @@ class ModuleBoard {
 			$lists[$i]->category = $lists[$i]->category == 0 ? null : $this->getCategory($lists[$i]->category);
 			$lists[$i]->prefix = $lists[$i]->prefix == 0 ? null : $this->getPrefix($lists[$i]->prefix);
 			$lists[$i]->link = $this->getUrl('view',($board->use_category == 'NONE' ? $lists[$i]->idx : ($category == null ? '0' : $category).'/'.$lists[$i]->idx)).$this->IM->getQueryString().($lists[$i]->is_secret == true ? '#secret-'.$lists[$i]->idx : '');
+			
+			if (count($keywords) > 0) {
+				$lists[$i]->title = preg_replace('/('.GetString(implode('|',$keywords),'reg').')/','<b class="keyword">$1</b>',$lists[$i]->title);
+			}
 		}
 		
 		$pagination = $this->getTemplet($configs)->getPagination($p,ceil(($total + $notice)/$board->post_limit),$board->page_limit,$this->getUrl('list',($category == null ? '' : $category.'/').'{PAGE}'),$board->page_type);

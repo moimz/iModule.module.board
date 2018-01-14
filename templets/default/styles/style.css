@@ -7,6 +7,7 @@ div[data-module=board] ul[data-role=table] > li > span.title > span {display:inl
 div[data-module=board] ul[data-role=table] > li > span.title > span > span.category {color:#666;}
 div[data-module=board] ul[data-role=table] > li > span.title > span > a {text-decoration:none; color:#333;}
 div[data-module=board] ul[data-role=table] > li > span.title > span > a:hover {color:#0370a6;}
+div[data-module=board] ul[data-role=table] > li > span.title > span > a > b.keyword {color:#F44336; background:#FFECB3;}
 div[data-module=board] ul[data-role=table] > li > span.title > span > i.xi {margin-right:3px;}
 div[data-module=board] ul[data-role=table] > li > span.title > span > i.xi-lock {color:#F44336;}
 div[data-module=board] ul[data-role=table] > li > span.title > span > span.ment {display:inline-block; float:right; margin:3px 0px 0px 5px; color:#FF5722; font-size:11px; vertical-align:middle;}

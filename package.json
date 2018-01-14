@@ -4,7 +4,7 @@
 	"title":{
 		"ko":"게시판"
 	},
-	"version":"3.0.0",
+	"version":"3.0.2",
 	"description":{
 		"ko":"일반적인 게시판을 생성하고, 관리할 수 있습니다."
 	},
@@ -35,6 +35,7 @@
 			"columns":{
 				"midx":{
 					"type":"int",
+					"length":11,
 					"comment":"관리자정보"
 				},
 				"bid":{
@@ -448,19 +449,19 @@
 					"type":"int",
 					"length":11,
 					"default":0,
-					"comment":"추가필드4"
+					"comment":"추가필드4(숫자)"
 				},
 				"field5":{
 					"type":"int",
 					"length":11,
 					"default":0,
-					"comment":"추가필드5"
+					"comment":"추가필드5(숫자)"
 				},
 				"field6":{
 					"type":"int",
 					"length":11,
 					"default":0,
-					"comment":"추가필드6"
+					"comment":"추가필드6(숫자)"
 				},
 				"image":{
 					"type":"int",
