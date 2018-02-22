@@ -38,11 +38,11 @@ class ModuleBoard {
 	/**
 	 * DB접근을 줄이기 위해 DB에서 불러온 데이터를 저장할 변수를 정의한다.
 	 *
-	 * @private $members 회원정보
+	 * @private $boards 게시판설정정보
 	 * @private $categories 카테고리정보
 	 * @private $prefixes 말머리정보
-	 * @private $memberPages 회원관련 컨텍스트를 사용하고 있는 사이트메뉴 정보
-	 * @private $logged 현재 로그인한 회원정보
+	 * @private $posts 게시물정보
+	 * @private $ments 댓글정보
 	 */
 	private $boards = array();
 	private $categories = array();
@@ -444,7 +444,7 @@ class ModuleBoard {
 		$view = $this->getView() == null ? 'list' : $this->getView();
 		
 		$board = $this->getBoard($bid);
-		if ($board == null) return $this->getTemplet($configs)->getError('NOT_FOUND_PAGE');
+		if ($board == null) return $this->getError('NOT_FOUND_PAGE');
 		
 		if ($configs == null) $configs = new stdClass();
 		if (isset($configs->templet) == false) $configs->templet = '#';
@@ -551,7 +551,7 @@ class ModuleBoard {
 	 * @return string $html 컨텍스트 HTML
 	 */
 	function getListContext($bid,$configs=null) {
-		if ($this->checkPermission($bid,'list') == false) return $this->getTemplet($configs)->getError('FORBIDDEN');
+		if ($this->checkPermission($bid,'list') == false) return $this->getError('FORBIDDEN');
 		
 		$this->IM->addHeadResource('meta',array('name'=>'robots','content'=>'noidex,follow'));
 		
@@ -603,7 +603,6 @@ class ModuleBoard {
 				$start = ($p - 1) * ($limit - count($notices));
 				$limit = $limit - count($notices);
 				
-				echo $start.'~'.$limit;
 				$lists = $this->db()->select($this->table->post)->where('bid',$bid)->where('is_notice','FALSE');
 			}
 		} else {
@@ -674,7 +673,7 @@ class ModuleBoard {
 	 * @return string $html 컨텍스트 HTML
 	 */
 	function getViewContext($bid,$configs=null) {
-		if ($this->checkPermission($bid,'view') == false) return $this->getTemplet($configs)->getError('FORBIDDEN');
+		if ($this->checkPermission($bid,'view') == false) return $this->getError('FORBIDDEN');
 		$this->IM->addHeadResource('meta',array('name'=>'robots','content'=>'idx,nofollow'));
 		
 		$board = $this->getBoard($bid);
@@ -692,7 +691,7 @@ class ModuleBoard {
 		}
 		
 		$post = $this->getPost($idx);
-		if ($post == null) return $this->getTemplet($configs)->getError('NOT_FOUND_PAGE');
+		if ($post == null) return $this->getError('NOT_FOUND_PAGE');
 		
 		if ($post->is_secret == true && $this->checkPermission($bid,'post_secret') == false) {
 			if ($post->midx != 0 && $post->midx != $this->IM->getModule('member')->getLogged()) {
@@ -784,7 +783,7 @@ class ModuleBoard {
 	 * @return string $html 컨텍스트 HTML
 	 */
 	function getWriteContext($bid,$configs=null) {
-		if ($this->checkPermission($bid,'post_write') == false) return $this->getTemplet($configs)->getError('FORBIDDEN');
+		if ($this->checkPermission($bid,'post_write') == false) return $this->getError('FORBIDDEN');
 		
 		$this->IM->addHeadResource('meta',array('name'=>'robots','content'=>'noidex,nofollow'));
 		
@@ -810,13 +809,12 @@ class ModuleBoard {
 			$post = $this->db()->select($this->table->post)->where('idx',$idx)->getOne();
 			
 			if ($post == null) {
-				header("HTTP/1.1 404 Not Found");
-				return $this->getError($this->getLanguage('error/notFound'));
+				return $this->getError('NOT_FOUND_PAGE');
 			}
 			
 			if ($this->checkPermission($bid,'post_modify') == false) {
 				if ($post->midx != 0 && $post->midx != $this->IM->getModule('member')->getLogged()) {
-					return $this->getError($this->getErrorText('FORBIDDEN'));
+					return $this->getError('FORBIDDEN');
 				} elseif ($post->midx == 0) {
 					$password = Request('password');
 					$mHash = new Hash();

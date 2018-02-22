@@ -7,7 +7,8 @@
  * @file /modules/board/templets/default/write.php
  * @author Arzz (arzz@arzz.com)
  * @license MIT License
- * @version 3.0.0.161211
+ * @version 3.0.0
+ * @modified 2018. 2. 18.
  */
 if (defined('__IM__') == false) exit;
 ?>
