@@ -7,9 +7,8 @@
  * @file /modules/board/process/@saveBoard.php
  * @author Arzz (arzz@arzz.com)
  * @license GPLv3
- * @version 3.0.0.160923
- *
- * @return object $results
+ * @version 3.0.0
+ * @modified 2018. 2. 17.
  */
 if (defined('__IM__') == false) exit;
 
@@ -18,10 +17,10 @@ $errors = array();
 $insert = array();
 $insert['title'] = Request('title') ? Request('title') : $errors['title'] = $this->getErrorText('REQUIRED');
 $insert['templet'] = Request('templet') ? Request('templet') : $errors['templet'] = $this->getErrorText('REQUIRED');
-$insert['post_limit'] = Request('postlimit') && is_numeric(Request('postlimit')) == true ? Request('postlimit') : $errors['postlimit'] = $this->getErrorText('REQUIRED');
-$insert['ment_limit'] = Request('mentlimit') && is_numeric(Request('mentlimit')) == true ? Request('mentlimit') : $errors['mentlimit'] = $this->getErrorText('REQUIRED');
-$insert['page_limit'] = Request('pagelimit') && is_numeric(Request('pagelimit')) == true ? Request('pagelimit') : $errors['pagelimit'] = $this->getErrorText('REQUIRED');
-$insert['page_type'] = Request('pagetype') && in_array(Request('pagetype'),array('FIXED','CENTER')) == true ? Request('pagetype') : $errors['pagetype'] = $this->getErrorText('REQUIRED');
+$insert['post_limit'] = Request('post_limit') && is_numeric(Request('post_limit')) == true ? Request('post_limit') : $errors['post_limit'] = $this->getErrorText('REQUIRED');
+$insert['ment_limit'] = Request('ment_limit') && is_numeric(Request('ment_limit')) == true ? Request('ment_limit') : $errors['ment_limit'] = $this->getErrorText('REQUIRED');
+$insert['page_limit'] = Request('page_limit') && is_numeric(Request('page_limit')) == true ? Request('page_limit') : $errors['page_limit'] = $this->getErrorText('REQUIRED');
+$insert['page_type'] = Request('page_type') && in_array(Request('page_type'),array('FIXED','CENTER')) == true ? Request('page_type') : $errors['page_type'] = $this->getErrorText('REQUIRED');
 
 $insert['allow_secret'] = Request('allow_secret') ? 'TRUE' : 'FALSE';
 $insert['allow_anonymity'] = Request('allow_anonymity') ? 'TRUE' : 'FALSE';

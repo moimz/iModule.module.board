@@ -1,12 +1,13 @@
 /**
  * 이 파일은 iModule 게시판모듈의 일부입니다. (https://www.imodule.kr)
  *
- * 게시판과 관련된 모든 기능을 제어한다.
+ * 게시판 관리자 UI를 처리한다.
  * 
- * @file /modules/board/ModuleBoard.class.php
+ * @file /modules/board/admin/scripts/script.js
  * @author Arzz (arzz@arzz.com)
  * @license MIT License
- * @version 3.0.0.161211
+ * @version 3.0.0
+ * @modified 2018. 2. 17.
  */
 var Board = {
 	/**
@@ -65,14 +66,14 @@ var Board = {
 										layout:"hbox",
 										items:[
 											new Ext.form.NumberField({
-												fieldLabel:Board.getText("admin/list/form/postlimit"),
-												name:"postlimit",
+												fieldLabel:Board.getText("admin/list/form/post_limit"),
+												name:"post_limit",
 												value:20,
 												flex:1
 											}),
 											new Ext.form.NumberField({
-												fieldLabel:Board.getText("admin/list/form/mentlimit"),
-												name:"mentlimit",
+												fieldLabel:Board.getText("admin/list/form/ment_limit"),
+												name:"ment_limit",
 												value:50,
 												flex:1
 											})
@@ -82,11 +83,11 @@ var Board = {
 										layout:"hbox",
 										items:[
 											new Ext.form.ComboBox({
-												fieldLabel:Board.getText("admin/list/form/pagetype"),
-												name:"pagetype",
+												fieldLabel:Board.getText("admin/list/form/page_type"),
+												name:"page_type",
 												store:new Ext.data.ArrayStore({
 													fields:["display","value"],
-													data:[[Board.getText("admin/list/pagetype/FIXED"),"FIXED"],[Board.getText("admin/list/pagetype/CENTER"),"CENTER"]]
+													data:[[Board.getText("admin/list/page_type/FIXED"),"FIXED"],[Board.getText("admin/list/page_type/CENTER"),"CENTER"]]
 												}),
 												editable:false,
 												displayField:"display",
@@ -96,17 +97,17 @@ var Board = {
 												listeners:{
 													change:function(form,value) {
 														var form = Ext.getCmp("ModuleBoardAddBoardForm").getForm();
-														if (value == "CENTER" && form.findField("pagelimit").getValue() % 2 == 0) {
-															form.findField("pagelimit").setValue(form.findField("pagelimit").getValue() + 1);
+														if (value == "CENTER" && form.findField("page_limit").getValue() % 2 == 0) {
+															form.findField("page_limit").setValue(form.findField("page_limit").getValue() + 1);
 															
-															Ext.Msg.show({title:Admin.getText("alert/info"),msg:Board.getText("admin/list/pagetype/help"),buttons:Ext.Msg.OK,icon:Ext.Msg.INFO});
+															Ext.Msg.show({title:Admin.getText("alert/info"),msg:Board.getText("admin/list/page_type/help"),buttons:Ext.Msg.OK,icon:Ext.Msg.INFO});
 														}
 													}
 												}
 											}),
 											new Ext.form.NumberField({
-												fieldLabel:Board.getText("admin/list/form/pagelimit"),
-												name:"pagelimit",
+												fieldLabel:Board.getText("admin/list/form/page_limit"),
+												name:"page_limit",
 												value:10,
 												flex:1
 											})
@@ -147,7 +148,7 @@ var Board = {
 										name:"view_notice_page",
 										store:new Ext.data.ArrayStore({
 											fields:["display","value"],
-											data:[[Board.getText("admin/list/noticetype/FIRST"),"FIRST"],[Board.getText("admin/list/noticetype/ALL"),"ALL"]]
+											data:[[Board.getText("admin/list/notice_type/FIRST"),"FIRST"],[Board.getText("admin/list/notice_type/ALL"),"ALL"]]
 										}),
 										editable:false,
 										displayField:"display",
@@ -158,7 +159,7 @@ var Board = {
 											change:function(form,value) {
 												var form = Ext.getCmp("ModuleBoardAddBoardForm").getForm();
 												if (form.findField("view_notice_page").getValue() == "ALL" && form.findField("view_notice_count").getValue() == "INCLUDE") {
-													Ext.Msg.show({title:Admin.getText("alert/info"),msg:Board.getText("admin/list/noticetype/help"),buttons:Ext.Msg.OK,icon:Ext.Msg.INFO});
+													Ext.Msg.show({title:Admin.getText("alert/info"),msg:Board.getText("admin/list/notice_type/help"),buttons:Ext.Msg.OK,icon:Ext.Msg.INFO});
 												}
 											}
 										}
@@ -167,7 +168,7 @@ var Board = {
 										name:"view_notice_count",
 										store:new Ext.data.ArrayStore({
 											fields:["display","value"],
-											data:[[Board.getText("admin/list/noticetype/INCLUDE"),"INCLUDE"],[Board.getText("admin/list/noticetype/EXCLUDE"),"EXCLUDE"]]
+											data:[[Board.getText("admin/list/notice_type/INCLUDE"),"INCLUDE"],[Board.getText("admin/list/notice_type/EXCLUDE"),"EXCLUDE"]]
 										}),
 										editable:false,
 										displayField:"display",
@@ -178,7 +179,7 @@ var Board = {
 											change:function(form,value) {
 												var form = Ext.getCmp("ModuleBoardAddBoardForm").getForm();
 												if (form.findField("view_notice_page").getValue() == "ALL" && form.findField("view_notice_count").getValue() == "INCLUDE") {
-													Ext.Msg.show({title:Admin.getText("alert/info"),msg:Board.getText("admin/list/noticetype/help"),buttons:Ext.Msg.OK,icon:Ext.Msg.INFO});
+													Ext.Msg.show({title:Admin.getText("alert/info"),msg:Board.getText("admin/list/notice_type/help"),buttons:Ext.Msg.OK,icon:Ext.Msg.INFO});
 												}
 											}
 										}
