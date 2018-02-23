@@ -28,10 +28,17 @@ var Board = {
 				else location.href = Board.getUrl("list",$(this).val()+"/1");
 			});
 			
+			$("input[name=keyword]",$form).on("change",function() {
+				$("input[name=keyword]",$form).val($(this).val());
+			});
+			
 			$form.on("submit",function() {
 				var category = $("select[name=category]",$form).length > 0 ? $("select[name=category]",$form).val() : 0;
 				if (category == 0) $form.attr("action",Board.getUrl("list",1));
 				else $form.attr("action",Board.getUrl("list",category+"/"+1));
+				
+				$("input[name=keyword]",$form).disable();
+				$("input[name=keyword]",$form).first().enable();
 				
 				$("select[name=category]",$form).disable();
 			});
