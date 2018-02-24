@@ -7,7 +7,8 @@
  * @file /modules/board/process/getMents.php
  * @author Arzz (arzz@arzz.com)
  * @license GPLv3
- * @version 3.0.0.160923
+ * @version 3.0.0
+ * @modified 2018. 2. 24.
  */
 if (defined('__IM__') == false) exit;
 
@@ -18,6 +19,12 @@ $post = $this->getPost($parent);
 if ($post == null) {
 	$results->success = false;
 	$results->message = $this->getErrorText('NOT_FOUND');
+	return;
+}
+
+if ($this->checkPermission($post->bid,'view') == false) {
+	$results->success = false;
+	$results->message = $this->getErrorText('FORBIDDEN');
 	return;
 }
 
