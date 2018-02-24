@@ -443,7 +443,7 @@ class ModuleBoard {
 			$configs->templet_configs = isset($configs->templet_configs) == true ? $configs->templet_configs : null;
 		}
 
-		$html = PHP_EOL.'<!-- BOARD MODULE -->'.PHP_EOL.'<div data-role="context" data-type="module" data-module="board" data-base-url="'.($configs == null || isset($configs->baseUrl) == false ? '' : $configs->baseUrl).'" data-bid="'.$bid.'" data-view="'.$view.'">'.PHP_EOL;
+		$html = PHP_EOL.'<!-- BOARD MODULE -->'.PHP_EOL.'<div data-role="context" data-type="module" data-module="board" data-base-url="'.($configs == null || isset($configs->baseUrl) == false ? '' : $configs->baseUrl).'" data-bid="'.$bid.'" data-view="'.$view.'" data-configs="'.$configs->templet.'">'.PHP_EOL;
 		$html.= $this->getHeader($bid,$configs);
 		
 		switch ($view) {
