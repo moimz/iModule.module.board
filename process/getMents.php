@@ -6,7 +6,7 @@
  *
  * @file /modules/board/process/getMents.php
  * @author Arzz (arzz@arzz.com)
- * @license GPLv3
+ * @license MIT License
  * @version 3.0.0
  * @modified 2018. 2. 24.
  */
@@ -28,14 +28,10 @@ if ($this->checkPermission($post->bid,'view') == false) {
 	return;
 }
 
-$board = $this->getBoard($post->bid);
-$configs = new stdClass();
-$configs->templet = $board->templet;
-$configs->templet_configs = $board->templet_configs;
-
 $results->success = true;
 $results->parent = $parent;
 
+$configs = json_decode(Request('configs'));
 $results->lists = $this->getMentListComponent($parent,$page,$configs);
 $results->total = $post->ment;
 $results->pagination = $this->getMentPagination($parent,$page,$configs);

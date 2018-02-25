@@ -6,7 +6,8 @@
  * @file /modules/board/scripts/script.js
  * @author Arzz (arzz@arzz.com)
  * @license MIT License
- * @version 3.0.0.161211
+ * @version 3.0.0
+ * @modified 2018. 2. 25.
  */
 var Board = {
 	getUrl:function(view,idx) {
@@ -59,14 +60,19 @@ var Board = {
 	 */
 	view:{
 		init:function() {
-			var $context = $("#ModuleBoardView");
+			var $container = $("#ModuleBoardView");
 			
-			$("button[data-action=modify]",$context).on("click",function() {
-				Board.view.modify($context.attr("data-idx"));
-			});
-			
-			$("button[data-action=delete]",$context).on("click",function() {
-				Board.view.delete($context.attr("data-idx"));
+			$("button[data-action][data-type=post]",$container).on("click",function() {
+				var action = $(this).attr("data-action");
+				var idx = $(this).attr("data-idx");
+				
+				if (action == "modify") {
+					Board.view.modify(idx);
+				}
+				
+				if (action == "delete") {
+					Board.view.delete(idx);
+				}
 			});
 		},
 		/**
@@ -190,8 +196,8 @@ var Board = {
 				var $container = id;
 				
 				if ($container.attr("data-role") == "list" || $container.attr("data-role") == "item") {
-					$("button[data-ment-action]",$container).on("click",function(e) {
-						var action = $(this).attr("data-ment-action");
+					$("button[data-action][data-type=ment]",$container).on("click",function(e) {
+						var action = $(this).attr("data-action");
 						var $parent = $(this).parents("div[data-role=item]");
 						var parent = $parent.attr("data-parent");
 						
@@ -201,7 +207,7 @@ var Board = {
 							return;
 						}
 						
-						if ($parent.attr("data-ment-action") == action) {
+						if ($parent.attr("data-action") == action) {
 							Board.ment.reset(parent);
 							return;
 						}
@@ -211,7 +217,7 @@ var Board = {
 							
 							Board.ment.reset(parent,source);
 							var $form = $("#ModuleBoardMentForm-"+parent);
-							$parent.attr("data-ment-action","reply");
+							$parent.attr("data-action","reply");
 							$("input[name=source]",$form).val(source);
 						}
 						
@@ -288,7 +294,9 @@ var Board = {
 		},
 		page:function(parent,page,callback) {
 			iModule.disable(true);
-			$.send(ENV.getProcessUrl("board","getMents"),{parent:parent,page:page},function(result) {
+			
+			var configs = JSON.parse($("div[data-module=board]").attr("data-configs"));
+			$.send(ENV.getProcessUrl("board","getMents"),{parent:parent,page:page,configs:JSON.stringify(configs)},function(result) {
 				if (result.success == true) {
 					var $container = $("div[data-role=ment][data-parent="+result.parent+"]",$("div[data-module=board]"));
 					var $lists = $(result.lists);
@@ -311,7 +319,7 @@ var Board = {
 			var $form = $("#ModuleBoardMentForm-"+parent);
 			var $container = $("div[data-module=board] div[data-role=ment][data-parent="+parent+"]");
 			
-			$("div[data-role=item]",$container).attr("data-ment-action","");
+			$("div[data-role=item]",$container).attr("data-action","");
 			$("input[name=idx]",$form).val("");
 			$("input[name=source]",$form).val("");
 			
@@ -342,7 +350,8 @@ var Board = {
 		},
 		get:function(idx,type,password) {
 			iModule.disable(true);
-			$.send(ENV.getProcessUrl("board","getMent"),{idx:idx,type:type,password:password},function(result) {
+			var configs = JSON.parse($("div[data-module=board]").attr("data-configs"));
+			$.send(ENV.getProcessUrl("board","getMent"),{idx:idx,type:type,password:password,configs:JSON.stringify(configs)},function(result) {
 				if (result.success == true) {
 					var $container = $("div[data-module=board] div[data-role=ment][data-parent="+result.data.parent+"]");
 					var $item = $("div[data-role=item][data-idx="+result.data.idx+"]",$container);
@@ -352,7 +361,7 @@ var Board = {
 						
 						var $form = $("#ModuleBoardMentForm-"+result.data.parent);
 						
-						$item.attr("data-ment-action","modify");
+						$item.attr("data-action","modify");
 						
 						$("input[name=idx]",$form).val(result.data.idx);
 						$("input[name=name]",$form).val(result.data.name);
@@ -431,6 +440,6 @@ var Board = {
 
 $(document).ready(function() {
 	$(document).on("click",function() {
-		$("button[data-ment-action=action]",$("div[data-module=board]")).removeClass("opened");
+		$("button[data-action=action][data-type=ment]",$("div[data-module=board]")).removeClass("opened");
 	});
 })

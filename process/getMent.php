@@ -7,7 +7,8 @@
  * @file /modules/board/process/getMent.php
  * @author Arzz (arzz@arzz.com)
  * @license GPLv3
- * @version 3.0.0.160923
+ * @version 3.0.0
+ * @modified 2018. 2. 25.
  */
 if (defined('__IM__') == false) exit;
 
@@ -23,9 +24,13 @@ if ($ment == null) {
 
 if ($type == 'view') {
 	$board = $this->getBoard($ment->bid);
-	$configs = new stdClass();
-	$configs->templet = $board->templet;
-	$configs->templet_configs = $board->templet_configs;
+	$configs = json_decode(Request('configs'));
+	
+	if ($this->checkPermission($ment->bid,'view') == false) {
+		$results->success = false;
+		$results->message = $this->getErrorText('FORBIDDEN');
+		return;
+	}
 	
 	$item = $this->getMentItemComponent($ment,$configs);
 

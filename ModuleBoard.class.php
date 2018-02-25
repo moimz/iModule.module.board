@@ -443,7 +443,7 @@ class ModuleBoard {
 			$configs->templet_configs = isset($configs->templet_configs) == true ? $configs->templet_configs : null;
 		}
 
-		$html = PHP_EOL.'<!-- BOARD MODULE -->'.PHP_EOL.'<div data-role="context" data-type="module" data-module="board" data-base-url="'.($configs == null || isset($configs->baseUrl) == false ? '' : $configs->baseUrl).'" data-bid="'.$bid.'" data-view="'.$view.'" data-configs="'.$configs->templet.'">'.PHP_EOL;
+		$html = PHP_EOL.'<!-- BOARD MODULE -->'.PHP_EOL.'<div data-role="context" data-type="module" data-module="board" data-base-url="'.($configs == null || isset($configs->baseUrl) == false ? '' : $configs->baseUrl).'" data-bid="'.$bid.'" data-view="'.$view.'" data-configs="'.GetString(json_encode($configs),'input').'">'.PHP_EOL;
 		$html.= $this->getHeader($bid,$configs);
 		
 		switch ($view) {
@@ -605,7 +605,10 @@ class ModuleBoard {
 		if ($category != null && $category != 0) $lists->where('category',$category);
 		
 		$keyword = Request('keyword');
-		if ($keyword) $lists = $this->IM->getModule('keyword')->getWhere($lists,array('title','search'),$keyword);
+		if ($keyword) {
+			$lists = $this->IM->getModule('keyword')->getWhere($lists,array('title','search'),$keyword);
+			$this->IM->getModule('keyword')->mark($keyword,'div[data-module=board] span[data-role=title]');
+		}
 		$total = $lists->copy()->count();
 		
 		$idx = 0;
@@ -622,9 +625,6 @@ class ModuleBoard {
 			$notices[$i]->link = $this->getUrl('view',($board->use_category == 'NONE' ? $notices[$i]->idx : ($category == null ? '0' : $category).'/'.$notices[$i]->idx)).$this->IM->getQueryString().($notices[$i]->is_secret == true ? '#secret-'.$notices[$i]->idx : '');
 		}
 		
-		if ($keyword) $keywords = explode(' ',$keyword);
-		else $keywords = array();
-		
 		$loopnum = $total - $start;
 		for ($i=0, $loop=count($lists);$i<$loop;$i++) {
 			$lists[$i] = $this->getPost($lists[$i]);
@@ -633,8 +633,8 @@ class ModuleBoard {
 			$lists[$i]->prefix = $lists[$i]->prefix == 0 ? null : $this->getPrefix($lists[$i]->prefix);
 			$lists[$i]->link = $this->getUrl('view',($board->use_category == 'NONE' ? $lists[$i]->idx : ($category == null ? '0' : $category).'/'.$lists[$i]->idx)).$this->IM->getQueryString().($lists[$i]->is_secret == true ? '#secret-'.$lists[$i]->idx : '');
 			
-			if (count($keywords) > 0) {
-				$lists[$i]->title = preg_replace('/('.GetString(implode('|',$keywords),'reg').')/','<b class="keyword">$1</b>',$lists[$i]->title);
+			if ($keyword) {
+				$lists[$i]->title = '<span data-role="title">'.$lists[$i]->title.'</span>';
 			}
 		}
 		
@@ -643,6 +643,9 @@ class ModuleBoard {
 		$link = new stdClass();
 		$link->list = $this->getUrl('list',($category == null ? '' : $category.'/').$p);
 		$link->write = $this->getUrl('write',false);
+		
+		$permission = new stdClass();
+		$permission->write = $this->checkPermission($board->bid,'post_write');
 		
 		$header = PHP_EOL.'<form id="ModuleBoardListForm">'.PHP_EOL;
 		$footer = PHP_EOL.'</form>'.PHP_EOL.'<script>Board.list.init("ModuleBoardListForm");</script>'.PHP_EOL;
@@ -698,10 +701,15 @@ class ModuleBoard {
 		
 		/**
 		 * 조회수 증가
-		 * @todo 한번에 하나씩만 올리도록 세션처리
 		 */
-		$this->db()->update($this->table->post,array('hit'=>$this->db()->inc()))->where('idx',$idx)->execute();
-		$post->hit = $post->hit + 1;
+		$readed = is_array(Request('IM_BOARD_READED','session')) == true ? Request('IM_BOARD_READED','session') : array();
+		if (in_array($idx,$readed) == false) {
+			$readed[] = $idx;
+			$this->db()->update($this->table->post,array('hit'=>$this->db()->inc()))->where('idx',$idx)->execute();
+			$post->hit = $post->hit + 1;
+			
+			$_SESSION['IM_BOARD_READED'] = $readed;
+		}
 		
 		$post->prefix = $post->prefix == 0 ? null : $this->getPrefix($post->prefix);
 		
@@ -747,6 +755,16 @@ class ModuleBoard {
 		$link->list = $this->getUrl('list',($category == null ? '' : $category.'/').$p);
 		if (Request('keyword')) $link->list.= '?keyword='.urlencode(Request('keyword'));
 		$link->write = $this->getUrl('write',false);
+		
+		$permission = new stdClass();
+		$permission->modify = $post->midx == $this->IM->getModule('member')->getLogged() || $this->checkPermission($post->bid,'post_modify') == true;
+		$permission->delete = $post->midx == $this->IM->getModule('member')->getLogged() || $this->checkPermission($post->bid,'post_delete') == true;
+		
+		$keyword = Request('keyword');
+		if ($keyword) {
+			$post->title = '<span data-role="title">'.$post->title.'</span>';
+			$this->IM->getModule('keyword')->mark($keyword,'div[data-module=board] span[data-role=title], div[data-module=board] div[data-role=wysiwyg-content]');
+		}
 		
 		$header = PHP_EOL.'<div id="ModuleBoardView" data-idx="'.$idx.'">'.PHP_EOL;
 		$footer = PHP_EOL.'</div>'.PHP_EOL.'<script>Board.view.init("ModuleBoardView");</script>';

@@ -2,12 +2,13 @@
 /**
  * 이 파일은 iModule 게시판모듈의 일부입니다. (https://www.imodule.kr)
  *
- * 게시판 댓글 템플릿
+ * 게시판 기본템플릿 - 댓글보기
  * 
  * @file /modules/board/templets/default/ment.item.php
  * @author Arzz (arzz@arzz.com)
  * @license MIT License
- * @version 3.0.0.161211
+ * @version 3.0.0
+ * @modified 2018. 2. 25.
  */
 if (defined('__IM__') == false) exit;
 ?>
@@ -24,17 +25,17 @@ if (defined('__IM__') == false) exit;
 	<div class="info">
 		<?php echo $ment->name; ?><?php echo GetTime('Y-m-d H:i:s',$ment->reg_date); ?>
 		
-		<button type="button" data-ment-action="action"><i class="fa fa-caret-down"></i></button>
+		<button type="button" data-action="action" data-type="ment" data-idx="<?php echo $ment->idx; ?>"><i class="fa fa-caret-down"></i></button>
 		<ul>
-			<?php if ($me->checkPermission($ment->bid,'ment_write') == true) { ?><li><button type="button" data-ment-action="reply"><i class="xi xi-reply-all xi-rotate-180"></i>답변</button></li><?php } ?>
-			<?php if ($me->checkPermission($ment->bid,'ment_modify') == true || $ment->midx == $IM->getModule('member')->getLogged()) { ?><li><button type="button" data-ment-action="modify"><i class="xi xi-pen"></i>수정</button></li><?php } ?>
-			<?php if ($me->checkPermission($ment->bid,'ment_delete') == true || $ment->midx == $IM->getModule('member')->getLogged()) { ?><li><button type="button" data-ment-action="delete"><i class="xi xi-trash"></i>삭제</button></li><?php } ?>
+			<?php if ($me->checkPermission($ment->bid,'ment_write') == true) { ?><li><button type="button" data-action="reply" data-type="ment" data-idx="<?php echo $ment->idx; ?>"><i class="xi xi-reply-all xi-rotate-180"></i>답변</button></li><?php } ?>
+			<?php if ($me->checkPermission($ment->bid,'ment_modify') == true || $ment->midx == $IM->getModule('member')->getLogged()) { ?><li><button type="button" data-action="modify" data-type="ment" data-idx="<?php echo $ment->idx; ?>"><i class="xi xi-pen"></i>수정</button></li><?php } ?>
+			<?php if ($me->checkPermission($ment->bid,'ment_delete') == true || $ment->midx == $IM->getModule('member')->getLogged()) { ?><li><button type="button" data-action="delete" data-type="ment" data-idx="<?php echo $ment->idx; ?>"><i class="xi xi-trash"></i>삭제</button></li><?php } ?>
 		</ul>
 	</div>
 	
 	<?php echo $ment->content; ?>
 	
-	<?php if (count($attachments) > 0) { $IM->addHeadResource('style',$IM->getModule('attachment')->getModule()->getDir().'/styles/style.css'); ?>
+	<?php if (count($attachments) > 0) { ?>
 	<div data-module="attachment">
 		<h5><i class="xi xi-clip"></i>첨부파일</h5>
 		

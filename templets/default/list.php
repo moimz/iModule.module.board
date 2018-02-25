@@ -2,12 +2,13 @@
 /**
  * 이 파일은 iModule 게시판모듈의 일부입니다. (https://www.imodule.kr)
  *
- * 게시판 목록 템플릿
+ * 게시판 기본템플릿 - 목록
  * 
  * @file /modules/board/templets/default/list.php
  * @author Arzz (arzz@arzz.com)
  * @license MIT License
- * @version 3.0.0.161211
+ * @version 3.0.0
+ * @modified 2018. 2. 25.
  */
 if (defined('__IM__') == false) exit;
 ?>
@@ -64,7 +65,7 @@ if (defined('__IM__') == false) exit;
 </ul>
 
 <div class="searchbar">
-	<?php if ($me->checkPermission($bid,'post_write') == true) { ?><a href="<?php echo $link->write; ?>"><i class="xi xi-marquee-add"></i><span>게시물등록</span></a><?php } ?>
+	<?php if ($permission->write == true) { ?><a href="<?php echo $link->write; ?>"><i class="xi xi-marquee-add"></i><span>게시물등록</span></a><?php } ?>
 	
 	<div class="search">
 		<div data-role="input">

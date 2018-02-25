@@ -1,3 +1,14 @@
+/**
+ * 이 파일은 iModule 게시판모듈의 일부입니다. (https://www.imodule.kr)
+ *
+ * 게시판 기본템플릿 - 스타일시트
+ * 
+ * @file /modules/board/templets/default/styles/style.css
+ * @author Arzz (arzz@arzz.com)
+ * @license MIT License
+ * @version 3.0.0
+ * @modified 2018. 2. 25.
+ */
 div[data-module=board] div[data-role=toolbar] {margin-bottom:10px;}
 div[data-module=board] div[data-role=toolbar] > div[data-role=input][data-type=select] {width:160px;}
 div[data-module=board] ul[data-role=table] > li > span.loopnum {width:60px; text-align:center;}
@@ -59,25 +70,25 @@ div[data-module=board] div[data-role=ment] > div[data-role=list] > div[data-role
 div[data-module=board] div[data-role=ment] > div[data-role=list] > div[data-role=item] > div > div.info {height:24px; position:relative;}
 div[data-module=board] div[data-role=ment] > div[data-role=list] > div[data-role=item] > div > div.info > span[data-role=name] {height:20px; line-height:20px; vertical-align:top;}
 div[data-module=board] div[data-role=ment] > div[data-role=list] > div[data-role=item] > div > div.info > time {display:inline-block; height:12px; line-height:12px; margin:6px 0px 2px 10px; padding-left:10px; font-size:12px; color:#666; border-left:1px solid #ccc; vertical-align:top;}
-div[data-module=board] div[data-role=ment] > div[data-role=list] > div[data-role=item] > div > div.info > button[data-ment-action=action] {width:30px; height:30px; background:#b5b7c0; color:#fff; border:0; float:right; font-size:16px; position:absolute; top:0; right:0; cursor:pointer; display:none;}
-div[data-module=board] div[data-role=ment] > div[data-role=list] > div[data-role=item] > div > div.info > button[data-ment-action=action]:hover {background:#828595;}
+div[data-module=board] div[data-role=ment] > div[data-role=list] > div[data-role=item] > div > div.info > button[data-action=action] {width:30px; height:30px; background:#b5b7c0; color:#fff; border:0; float:right; font-size:16px; position:absolute; top:0; right:0; cursor:pointer; display:none;}
+div[data-module=board] div[data-role=ment] > div[data-role=list] > div[data-role=item] > div > div.info > button[data-action=action]:hover {background:#828595;}
 div[data-module=board] div[data-role=ment] > div[data-role=list] > div[data-role=item] > div > div.info > ul {list-style:none; position:relative; float:right; font-size:0;}
 div[data-module=board] div[data-role=ment] > div[data-role=list] > div[data-role=item] > div > div.info > ul > li {display:inline-block;}
 div[data-module=board] div[data-role=ment] > div[data-role=list] > div[data-role=item] > div > div.info > ul > li > button {background:#fff; padding:0px 8px 0px 0px; height:24px; line-height:24px; cursor:pointer; vertical-align:middle; border:0; font-size:12px; margin-left:2px;}
 div[data-module=board] div[data-role=ment] > div[data-role=list] > div[data-role=item] > div > div.info > ul > li > button > i {width:24px; height:24px; text-align:center; float:left;}
-div[data-module=board] div[data-role=ment] > div[data-role=list] > div[data-role=item] > div > div.info > ul > li > button[data-ment-action=reply] {background:#b5b7c0; color:#fff;}
-div[data-module=board] div[data-role=ment] > div[data-role=list] > div[data-role=item] > div > div.info > ul > li > button[data-ment-action=reply]:hover {background:#828595;}
-div[data-module=board] div[data-role=ment] > div[data-role=list] > div[data-role=item][data-ment-action=reply] > div > div.info > ul > li > button[data-ment-action=reply] {background:#828595;}
-div[data-module=board] div[data-role=ment] > div[data-role=list] > div[data-role=item][data-ment-action=reply] > div > div.info > ul > li > button[data-ment-action=reply] > i:before {content:"\e616";}
-div[data-module=board] div[data-role=ment] > div[data-role=list] > div[data-role=item] > div > div.info > ul > li > button[data-ment-action=modify] {background:#2196f3; color:#fff;}
-div[data-module=board] div[data-role=ment] > div[data-role=list] > div[data-role=item] > div > div.info > ul > li > button[data-ment-action=modify]:hover {background:#1e88e5;}
-div[data-module=board] div[data-role=ment] > div[data-role=list] > div[data-role=item][data-ment-action=modify] > div > div.info > ul > li > button[data-ment-action=modify] {background:#1e88e5;}
-div[data-module=board] div[data-role=ment] > div[data-role=list] > div[data-role=item][data-ment-action=modify] > div > div.info > ul > li > button[data-ment-action=modify] > i:before {content:"\e616";}
-div[data-module=board] div[data-role=ment] > div[data-role=list] > div[data-role=item][data-ment-action=modify] > div > div[data-role=wysiwyg-content] {display:none;}
-div[data-module=board] div[data-role=ment] > div[data-role=list] > div[data-role=item][data-ment-action=modify] > div > div[data-module=attachment] {display:none;}
-div[data-module=board] div[data-role=ment] > div[data-role=list] > div[data-role=item][data-ment-action=modify] form {margin-top:10px;}
-div[data-module=board] div[data-role=ment] > div[data-role=list] > div[data-role=item] > div > div.info > ul > li > button[data-ment-action=delete] {background:#F44336; color:#fff;}
-div[data-module=board] div[data-role=ment] > div[data-role=list] > div[data-role=item] > div > div.info > ul > li > button[data-ment-action=delete]:hover {background:#E53935;}
+div[data-module=board] div[data-role=ment] > div[data-role=list] > div[data-role=item] > div > div.info > ul > li > button[data-action=reply] {background:#b5b7c0; color:#fff;}
+div[data-module=board] div[data-role=ment] > div[data-role=list] > div[data-role=item] > div > div.info > ul > li > button[data-action=reply]:hover {background:#828595;}
+div[data-module=board] div[data-role=ment] > div[data-role=list] > div[data-role=item][data-action=reply] > div > div.info > ul > li > button[data-action=reply] {background:#828595;}
+div[data-module=board] div[data-role=ment] > div[data-role=list] > div[data-role=item][data-action=reply] > div > div.info > ul > li > button[data-action=reply] > i:before {content:"\e616";}
+div[data-module=board] div[data-role=ment] > div[data-role=list] > div[data-role=item] > div > div.info > ul > li > button[data-action=modify] {background:#2196f3; color:#fff;}
+div[data-module=board] div[data-role=ment] > div[data-role=list] > div[data-role=item] > div > div.info > ul > li > button[data-action=modify]:hover {background:#1e88e5;}
+div[data-module=board] div[data-role=ment] > div[data-role=list] > div[data-role=item][data-action=modify] > div > div.info > ul > li > button[data-action=modify] {background:#1e88e5;}
+div[data-module=board] div[data-role=ment] > div[data-role=list] > div[data-role=item][data-action=modify] > div > div.info > ul > li > button[data-action=modify] > i:before {content:"\e616";}
+div[data-module=board] div[data-role=ment] > div[data-role=list] > div[data-role=item][data-action=modify] > div > div[data-role=wysiwyg-content] {display:none;}
+div[data-module=board] div[data-role=ment] > div[data-role=list] > div[data-role=item][data-action=modify] > div > div[data-module=attachment] {display:none;}
+div[data-module=board] div[data-role=ment] > div[data-role=list] > div[data-role=item][data-action=modify] form {margin-top:10px;}
+div[data-module=board] div[data-role=ment] > div[data-role=list] > div[data-role=item] > div > div.info > ul > li > button[data-action=delete] {background:#F44336; color:#fff;}
+div[data-module=board] div[data-role=ment] > div[data-role=list] > div[data-role=item] > div > div.info > ul > li > button[data-action=delete]:hover {background:#E53935;}
 
 div[data-module=board] div[data-role=ment] > div[data-role=list] > div[data-role=item] > div > div[data-role=wysiwyg-content] {padding-top:10px;}
 div[data-module=board] div[data-role=ment] > div[data-role=list] > div[data-role=item] > div > div[data-module=attachment] {margin-top:10px;}
@@ -151,15 +162,15 @@ div[data-module=board] ul[data-role=form] div[data-module=attachment] {padding-t
 	div[data-module=board] div[data-role=ment] > div[data-role=list] > div[data-role=item] > div > div.info > span[data-role=name] {width:calc(100% - 35px); height:20px; line-height:18px; display:block; font-size:13px;}
 	div[data-module=board] div[data-role=ment] > div[data-role=list] > div[data-role=item] > div > div.info > time {display:block; width:calc(100% - 35px); height:12px; line-height:12px; border:0px; margin:0px; padding:0px;}
 	
-	div[data-module=board] div[data-role=ment] > div[data-role=list] > div[data-role=item] > div > div.info > button[data-ment-action=action] {display:block;}
+	div[data-module=board] div[data-role=ment] > div[data-role=list] > div[data-role=item] > div > div.info > button[data-action=action] {display:block;}
 	div[data-module=board] div[data-role=ment] > div[data-role=list] > div[data-role=item] > div > div.info > ul {position:absolute; top:30px; right:0; border:1px solid #e5e5e5; background:#fff; width:auto; z-index:10; display:none;}
 	div[data-module=board] div[data-role=ment] > div[data-role=list] > div[data-role=item] > div > div.info > ul > li {display:block; height:30px; border-bottom:1px solid #e5e5e5;}
 	div[data-module=board] div[data-role=ment] > div[data-role=list] > div[data-role=item] > div > div.info > ul > li > button {height:30px; line-height:30px; background:#fff !important; color:#666 !important;}
 	div[data-module=board] div[data-role=ment] > div[data-role=list] > div[data-role=item] > div > div.info > ul > li:last-child {border-bottom:0px;}
 	div[data-module=board] div[data-role=ment] > div[data-role=list] > div[data-role=item] > div > div.info > ul > li > button:hover {background:#f4f4f4;}
 	div[data-module=board] div[data-role=ment] > div[data-role=list] > div[data-role=item] > div > div.info > ul > li > button > i {width:30px; height:30px; line-height:30px;}
-	div[data-module=board] div[data-role=ment] > div[data-role=list] > div[data-role=item] > div > div.info > button[data-ment-action=action].opened > i:before {content:"\f0d8";}
-	div[data-module=board] div[data-role=ment] > div[data-role=list] > div[data-role=item] > div > div.info > button[data-ment-action=action].opened + ul {display:block;}
+	div[data-module=board] div[data-role=ment] > div[data-role=list] > div[data-role=item] > div > div.info > button[data-action=action].opened > i:before {content:"\f0d8";}
+	div[data-module=board] div[data-role=ment] > div[data-role=list] > div[data-role=item] > div > div.info > button[data-action=action].opened + ul {display:block;}
 	
 	div[data-module=board] ul[data-role=form] div[data-role=inputset].flex {display:block;}
 	div[data-module=board] ul[data-role=form] div[data-role=inputset].flex > div {display:block; margin:5px 0px 0px 0px; border-left:0px;}

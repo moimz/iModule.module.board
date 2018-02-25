@@ -2,25 +2,13 @@
 /**
  * 이 파일은 iModule 게시판모듈의 일부입니다. (https://www.imodule.kr)
  * 
- * 게시판정보를 저장한다.
+ * 게시물을 저장한다.
  *
- * @file /modules/board/process/@saveBoard.php
+ * @file /modules/board/process/saveBoard.php
  * @author Arzz (arzz@arzz.com)
- * @license GPLv3
- * @version 3.0.0.160923
- *
- * @post string $bid board id
- * @post int $category category idx
- * @post string $title post title
- * @post string $content post content
- * @post string $name author name (posted by guest)
- * @post string $password post password (posted by guest)
- * @post string $email author email (posted by guest)
- * @post string $is_notice set notice (TRUE or FALSE)
- * @post string $is_html_title using html tag in post title (TRUE or FALSE)
- * @post string $is_secret set secret post (TRUE or FALSE)
- * @post string $is_anonymity set hide author name (TRUE or FALSE)
- * @return object $results
+ * @license MIT License
+ * @version 3.0.0
+ * @modified 2018. 2. 25.
  */
 if (defined('__IM__') == false) exit;
 
@@ -29,6 +17,12 @@ $errors = array();
 $idx = Request('idx');
 $bid = Request('bid');
 $board = $this->getBoard($bid);
+
+if ($this->checkPermission($bid,'post_write') == false) {
+	$results->success = false;
+	$results->message = $this->getErrorText('FORBIDDEN');
+	return;
+}
 
 $category = Request('category');
 $prefix = Request('prefix');
@@ -113,9 +107,12 @@ if (empty($errors) == true) {
 		
 		$idx = $this->db()->insert($this->table->post,$insert)->execute();
 		
+		/**
+		 * 포인트 및 활동내역을 기록한다.
+		 */
 		if ($this->IM->getModule('member')->isLogged() == true) {
-			$this->IM->getModule('member')->sendPoint(null,$board->post_point,'board','post',array('idx'=>$idx));
-			$this->IM->getModule('member')->addActivity(null,$board->post_exp,'board','post',array('idx'=>$idx));
+			$this->IM->getModule('member')->sendPoint($this->IM->getModule('member')->getLogged(),$qna->post_point,$this->getModule()->getName(),'POST',array('idx'=>$idx));
+			$this->IM->getModule('member')->addActivity($this->IM->getModule('member')->getLogged(),$qna->post_exp,$this->getModule()->getName(),'POST',array('idx'=>$idx));
 		}
 	} else {
 		$post = $this->getPost($idx);
@@ -155,12 +152,18 @@ if (empty($errors) == true) {
 			$this->updatePrefix($post->prefix);
 		}
 		
+		/**
+		 * 글작성자와 수정한 사람이 다를 경우 알림메세지를 전송한다.
+		 */
 		if ($post->midx != 0 && $post->midx != $this->IM->getModule('member')->getLogged()) {
-			$this->IM->getModule('push')->sendPush($post->midx,'board','post_modify',$idx,array('from'=>$name));
+			$this->IM->getModule('push')->sendPush($post->midx,$this->getModule()->getName(),'POST',$idx,'MODIFY',array('from'=>$this->IM->getModule('member')->getLogged()));
 		}
 		
+		/**
+		 * 회원의 경우
+		 */
 		if ($this->IM->getModule('member')->isLogged() == true) {
-			$this->IM->getModule('member')->addActivity(null,0,'board','post_modify',array('idx'=>$idx));
+			$this->IM->getModule('member')->addActivity($this->IM->getModule('member')->getLogged(),0,$this->getModule()->getName(),'POST_MODIFY',array('idx'=>$idx));
 		}
 	}
 	
