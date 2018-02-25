@@ -2,12 +2,13 @@
 /**
  * 이 파일은 iModule 게시판모듈의 일부입니다. (https://www.imodule.kr)
  *
- * 게시물 보기 템플릿
+ * 게시판 웹진템플릿 - 게시물보기
  * 
  * @file /modules/board/templets/webzine/view.php
  * @author Arzz (arzz@arzz.com)
  * @license MIT License
- * @version 3.0.0.161211
+ * @version 3.0.0
+ * @modified 2018. 2. 25.
  */
 if (defined('__IM__') == false) exit;
 ?>
@@ -54,8 +55,8 @@ if (defined('__IM__') == false) exit;
 	</li>
 	<li>
 		<div data-role="button">
-			<?php if ($me->checkPermission($bid,'post_modify') == true || $post->midx == $IM->getModule('member')->getLogged()) { ?><button type="button" data-action="modify">수정하기</button><?php } ?>
-			<?php if ($me->checkPermission($bid,'post_delete') == true || $post->midx == $IM->getModule('member')->getLogged()) { ?><button type="button" data-action="delete" class="danger">삭제하기</button><?php } ?>
+			<?php if ($permission->modify == true) { ?><button type="button" data-action="modify" data-type="post" data-idx="<?php echo $post->idx; ?>">수정하기</button><?php } ?>
+			<?php if ($permission->delete == true) { ?><button type="button" data-action="delete" data-type="post" data-idx="<?php echo $post->idx; ?>" class="danger">삭제하기</button><?php } ?>
 		</div>
 	</li>
 </ul>

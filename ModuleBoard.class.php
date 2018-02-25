@@ -1007,6 +1007,11 @@ class ModuleBoard {
 			$attachments = array();
 		}
 		
+		$permission = new stdClass();
+		$permission->modify = $this->checkPermission($ment->bid,'ment_modify') || $ment->midx == $this->IM->getModule('member')->getLogged();
+		$permission->delete = $this->checkPermission($ment->bid,'ment_delete') || $ment->midx == $this->IM->getModule('member')->getLogged();
+		$permission->write = $this->checkPermission($ment->bid,'ment_write');
+		
 		$header = PHP_EOL.'<div data-role="item" data-idx="'.$ment->idx.'" data-parent="'.$ment->parent.'" data-depth="'.$ment->depth.'" style="margin-left:'.($ment->depth * 20).'px;">'.PHP_EOL;
 		$footer = PHP_EOL.'</div>'.PHP_EOL;
 		

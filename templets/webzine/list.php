@@ -1,4 +1,15 @@
 <?php
+/**
+ * 이 파일은 iModule 게시판모듈의 일부입니다. (https://www.imodule.kr)
+ *
+ * 게시판 웹진템플릿 - 목록보기
+ * 
+ * @file /modules/board/templets/webzine/list.php
+ * @author Arzz (arzz@arzz.com)
+ * @license MIT License
+ * @version 3.0.0
+ * @modified 2018. 2. 25.
+ */
 if (defined('__IM__') == false) exit;
 ?>
 <?php if (count($categories) > 0) { ?>
@@ -49,7 +60,7 @@ if (defined('__IM__') == false) exit;
 			<div>
 				<div class="item"<?php echo $data->image != null ? ' data-cover="TRUE" style="background-image:url('.$data->image->path.');"' : 'data-cover="FALSE"'; ?>>
 					<a href="<?php echo $data->link; ?>" class="box">
-						<?php if (count($categories) > 0) { ?><label><?php echo $data->category->title; ?></label><?php } ?>
+						<?php if ($data->category != null) { ?><label><?php echo $data->category->title; ?></label><?php } ?>
 						
 						<h4><?php echo $data->title; ?></h4>
 						<time data-moment="YYYY-MM-DD" data-time="<?php echo $data->reg_date; ?>"></time>
@@ -63,7 +74,7 @@ if (defined('__IM__') == false) exit;
 <?php } ?>
 
 <div class="searchbar">
-	<?php if ($me->checkPermission($bid,'post_write') == true) { ?><a href="<?php echo $link->write; ?>"><i class="xi xi-marquee-add"></i><span>게시물등록</span></a><?php } ?>
+	<?php if ($permission->write == true) { ?><a href="<?php echo $link->write; ?>"><i class="xi xi-marquee-add"></i><span>게시물등록</span></a><?php } ?>
 	
 	<div class="search">
 		<div data-role="input">
