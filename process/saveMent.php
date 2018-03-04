@@ -7,7 +7,8 @@
  * @file /modules/board/process/saveMent.php
  * @author Arzz (arzz@arzz.com)
  * @license MIT License
- * @version 3.0.0.160923
+ * @version 3.0.0
+ * @modified 2018. 2. 27.
  */
 if (defined('__IM__') == false) exit;
 
