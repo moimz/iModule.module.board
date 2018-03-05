@@ -111,8 +111,8 @@ if (empty($errors) == true) {
 		 * 포인트 및 활동내역을 기록한다.
 		 */
 		if ($this->IM->getModule('member')->isLogged() == true) {
-			$this->IM->getModule('member')->sendPoint($this->IM->getModule('member')->getLogged(),$qna->post_point,$this->getModule()->getName(),'POST',array('idx'=>$idx));
-			$this->IM->getModule('member')->addActivity($this->IM->getModule('member')->getLogged(),$qna->post_exp,$this->getModule()->getName(),'POST',array('idx'=>$idx));
+			$this->IM->getModule('member')->sendPoint($this->IM->getModule('member')->getLogged(),$board->post_point,$this->getModule()->getName(),'POST',array('idx'=>$idx));
+			$this->IM->getModule('member')->addActivity($this->IM->getModule('member')->getLogged(),$board->post_exp,$this->getModule()->getName(),'POST',array('idx'=>$idx));
 		}
 	} else {
 		$post = $this->getPost($idx);
