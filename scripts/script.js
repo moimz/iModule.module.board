@@ -141,7 +141,7 @@ var Board = {
 						$form.on("submit",function() {
 							$form.send(ENV.getProcessUrl("board","delete"),function(result) {
 								if (result.success == true) {
-									location.href = Board.getUrl("list",1);
+									location.replace(Board.getUrl("list",1));
 								}
 							});
 							return false;
@@ -170,7 +170,7 @@ var Board = {
 		submit:function($form) {
 			$form.send(ENV.getProcessUrl("board","savePost"),function(result) {
 				if (result.success == true) {
-					location.href = Board.getUrl("view",result.idx);
+					location.replace(Board.getUrl("view",result.idx));
 				}
 			});
 		}
