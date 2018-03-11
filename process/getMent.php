@@ -6,7 +6,7 @@
  *
  * @file /modules/board/process/getMent.php
  * @author Arzz (arzz@arzz.com)
- * @license GPLv3
+ * @license MIT License
  * @version 3.0.0
  * @modified 2018. 2. 25.
  */
