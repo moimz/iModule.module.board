@@ -838,7 +838,7 @@ class ModuleBoard {
 			$post = null;
 		}
 		
-		$header = PHP_EOL.'<form id="ModuleBoardWriteForm-'.$bid.'" data-autosave="true">'.PHP_EOL;
+		$header = PHP_EOL.'<form id="ModuleBoardWriteForm" data-autosave="true" data-autosave-value="'.$bid.'">'.PHP_EOL;
 		$header.= '<input type="hidden" name="templet" value="'.$this->getTemplet($configs)->getName().'">'.PHP_EOL;
 		$header.= '<input type="hidden" name="bid" value="'.$bid.'">'.PHP_EOL;
 		if ($post !== null) $header.= '<input type="hidden" name="idx" value="'.$post->idx.'">'.PHP_EOL;
@@ -846,7 +846,7 @@ class ModuleBoard {
 			$categories = array();
 			$header.= '<input type="hidden" name="category" value="'.$configs->category.'">'.PHP_EOL;
 		}
-		$footer = PHP_EOL.'</form>'.PHP_EOL.'<script>Board.write.init("ModuleBoardWriteForm-'.$bid.'");</script>'.PHP_EOL;
+		$footer = PHP_EOL.'</form>'.PHP_EOL.'<script>Board.write.init("ModuleBoardWriteForm");</script>'.PHP_EOL;
 		
 		$wysiwyg = $this->IM->getModule('wysiwyg')->setModule('board')->setName('content')->setRequired(true)->setContent($post == null ? '' : $post->content);
 		$uploader = $this->IM->getModule('attachment');
