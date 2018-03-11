@@ -711,6 +711,7 @@ class ModuleBoard {
 			$_SESSION['IM_BOARD_READED'] = $readed;
 		}
 		
+		$post->category = $post->category == 0 ? null : $this->getCategory($post->category);
 		$post->prefix = $post->prefix == 0 ? null : $this->getPrefix($post->prefix);
 		
 		/**
