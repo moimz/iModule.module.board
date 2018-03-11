@@ -1201,7 +1201,7 @@ class ModuleBoard {
 	 * @return object $post
 	 */
 	function getPost($idx,$is_link=false) {
-		if (is_null($idx) == true) return null;
+		if (empty($idx) == true || (is_numeric($idx) == false && is_object($idx) == false)) return null;
 		
 		if (is_numeric($idx) == true) {
 			if (isset($this->posts[$idx]) == true) return $this->posts[$idx];
@@ -1248,7 +1248,7 @@ class ModuleBoard {
 	 * @return object $ment
 	 */
 	function getMent($idx,$is_link=false) {
-		if (is_null($idx) == true) return null;
+		if (empty($idx) == true || (is_numeric($idx) == false && is_object($idx) == false)) return null;
 		
 		if (is_numeric($idx) == true) {
 			if (isset($this->ments[$idx]) == true) return $this->ments[$idx];
