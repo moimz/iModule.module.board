@@ -30,6 +30,7 @@
 		"post_write":"게시물 등록하기"
 	},
 	"error":{
+		"FORBIDDEN_SECRET":"비밀글을 열람할 수 있는 권한이 없습니다."
 	},
 	"admin":{
 		"list":{
