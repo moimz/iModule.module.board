@@ -62,9 +62,19 @@ var Board = {
 		init:function() {
 			var $container = $("#ModuleBoardView");
 			
-			$("button[data-action][data-type=post]",$container).on("click",function() {
+			$("button[data-action][data-type=post]",$container).on("click",function(e) {
 				var action = $(this).attr("data-action");
 				var idx = $(this).attr("data-idx");
+				
+				if (action == "action") {
+					$("ul[data-role=action][data-type=post]",$container).removeClass("opened");
+					var $action = $("ul[data-role=action][data-type=post][data-idx="+idx+"]",$container);
+					$(this).toggleClass("opened");
+					if ($(this).hasClass("opened") == true) $action.addClass("opened");
+					else $action.removeClass("opened");
+					
+					e.stopPropagation();
+				}
 				
 				if (action == "modify") {
 					Board.view.modify(idx);
@@ -200,11 +210,16 @@ var Board = {
 						var action = $(this).attr("data-action");
 						var $parent = $(this).parents("div[data-role=item]");
 						var parent = $parent.attr("data-parent");
+						var idx = $(this).attr("data-idx");
 						
 						if (action == "action") {
+							$("ul[data-role=action][data-type=ment]",$container).removeClass("opened");
+							var $action = $("ul[data-role=action][data-type=ment][data-idx="+idx+"]",$container);
 							$(this).toggleClass("opened");
+							if ($(this).hasClass("opened") == true) $action.addClass("opened");
+							else $action.removeClass("opened");
+							
 							e.stopPropagation();
-							return;
 						}
 						
 						if ($parent.attr("data-action") == action) {
@@ -440,6 +455,8 @@ var Board = {
 
 $(document).ready(function() {
 	$(document).on("click",function() {
-		$("button[data-action=action][data-type=ment]",$("div[data-module=board]")).removeClass("opened");
+		var $container = $("div[data-module=board]");
+		$("button[data-action=action]",$container).removeClass("opened");
+		$("ul[data-role=action]",$container).removeClass("opened");
 	});
-})
+});
