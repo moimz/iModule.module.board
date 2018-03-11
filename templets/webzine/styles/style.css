@@ -1,61 +1,129 @@
-div[data-module=board] div[data-role=toolbar] {margin-bottom:10px;}
-div[data-module=board] div[data-role=toolbar] > div[data-role=input][data-type=select] {width:160px;}
+/**
+ * 이 파일은 iModule 게시판모듈의 일부입니다. (https://www.imodule.kr)
+ *
+ * 게시판 웹진템플릿 - 스타일시트
+ * 
+ * @file /modules/board/templets/webzine/styles/style.css
+ * @author Arzz (arzz@arzz.com)
+ * @license MIT License
+ * @version 3.0.0
+ * @modified 2018. 3. 11.
+ */
+div[data-module=board] div[data-role=cover] {background-repeat:no-repeat; background-size:cover; background-position:50% 50%;}
+div[data-module=board] div[data-role=toolbar] {margin-bottom:10px; text-align:right; font-size:0;}
+div[data-module=board] div[data-role=toolbar] > div[data-role=input] {width:160px; font-size:14px; float:left;}
+div[data-module=board] div[data-role=toolbar] > div[data-role=search] {width:50%; max-width:300px; display:inline-block; font-size:0; vertical-align:middle;}
+div[data-module=board] div[data-role=toolbar] > div[data-role=search] > div[data-role=input] {display:inline-block; width:calc(100% - 45px); vertical-align:middle; font-size:14px;}
+div[data-module=board] div[data-role=toolbar] > div[data-role=search] > button {width:40px; height:40px; background:#b5b7c0; border:0px; cursor:pointer; vertical-align:middle; margin-left:5px;}
+div[data-module=board] div[data-role=toolbar] > div[data-role=search] > button > i {font-size:14px; color:#fff;}
+div[data-module=board] div[data-role=toolbar] > div[data-role=search] > button:hover {background:#828595;}
+div[data-module=board] div[data-role=toolbar] > a {display:inline-block; height:40px; line-height:40px; padding:0px; box-sizing:border-box; vertical-align:middle; margin-left:5px; text-decoration:none; cursor:pointer; background:#2196f3; color:#fff; font-size:14px;}
+div[data-module=board] div[data-role=toolbar] > a > i {width:40px; height:40px; line-height:40px; vertical-align:middle; text-align:center;}
+div[data-module=board] div[data-role=toolbar] > a > span {height:40px; line-height:40px; display:inline-block; vertical-align:middle; padding-right:15px;}
+div[data-module=board] div[data-role=toolbar] > a:hover {background:#1e88e5;}
+
+div[data-module=board] ul[data-role=table] > li.notice {background:#FFFDE7;}
 div[data-module=board] ul[data-role=table] > li > span.loopnum {width:60px; text-align:center;}
 div[data-module=board] ul[data-role=table] > li > span.loopnum > i.fa-caret-right {color:#f44336;}
+div[data-module=board] ul[data-role=table] > li.notice > span.loopnum {text-align:center; font-weight:bold; color:#F44336;}
+
 div[data-module=board] ul[data-role=table] > li > span.title {width:100%;}
-div[data-module=board] ul[data-role=table] > li > span.title > span {max-width:100%; text-overflow:ellipsis; overflow:hidden; white-space:nowrap;}
-div[data-module=board] ul[data-role=table] > li > span.title > span > span.category {color:#666;}
-div[data-module=board] ul[data-role=table] > li > span.title > span > a {text-decoration:none; color:#333;}
-div[data-module=board] ul[data-role=table] > li > span.title > span > a:hover {color:#0370a6;}
-div[data-module=board] ul[data-role=table] > li > span.title > span > i.xi {margin-right:3px;}
-div[data-module=board] ul[data-role=table] > li > span.title > span > i.xi-lock {color:#F44336;}
-div[data-module=board] ul[data-role=table] > li > span.title > span > span.ment {display:inline-block; float:right; margin:3px 0px 0px 5px; color:#FF5722; font-size:11px; vertical-align:middle;}
+div[data-module=board] ul[data-role=table] > li > span.title > a {text-decoration:none; color:#222; display:inline-block; max-width:100%; text-overflow:ellipsis; overflow:hidden; white-space:nowrap; vertical-align:middle;}
+div[data-module=board] ul[data-role=table] > li > span.title > a:hover {color:#0370a6;}
+div[data-module=board] ul[data-role=table] > li > span.title > a > span.category {color:#666;}
+div[data-module=board] ul[data-role=table] > li > span.title > a > i.xi {margin-right:3px;}
+div[data-module=board] ul[data-role=table] > li > span.title > a > i.xi-lock {color:#F44336;}
+div[data-module=board] ul[data-role=table] > li > span.title > a > span.ment {display:inline-block; float:right; margin:2px 0px 0px 5px; color:#FF9800; font-size:12px; vertical-align:middle;}
+div[data-module=board] ul[data-role=table] > li > span.title > a > span.ment:before {content:"[";}
+div[data-module=board] ul[data-role=table] > li > span.title > a > span.ment:after {content:"]";}
 div[data-module=board] ul[data-role=table] > li > span.name {width:140px; text-align:center;}
-div[data-module=board] ul[data-role=table] > li.tbody > span.notice {width:60px; text-align:center; font-weight:bold; color:#F44336;}
+
 div[data-module=board] ul[data-role=table] > li.tbody > span.name {text-align:left;}
 div[data-module=board] ul[data-role=table] > li.tbody > span.name > i[data-role=photo] {width:24px; height:24px; margin-right:5px;}
 div[data-module=board] ul[data-role=table] > li.tbody > span.name > span[data-role=name] {width:calc(100% - 30px); height:24px; line-height:24px;}
-div[data-module=board] ul[data-role=table] > li > span.reg_date {width:100px; text-align:center;}
+div[data-module=board] ul[data-role=table] > li > span.reg_date {width:110px; text-align:center;}
+div[data-module=board] ul[data-role=table] > li > span.reg_date > i.xi {display:none;}
 div[data-module=board] ul[data-role=table] > li > span.hit {width:60px;}
+div[data-module=board] ul[data-role=table] > li > span.hit > i.xi {display:none;}
 div[data-module=board] ul[data-role=table] > li.tbody > span.hit {text-align:right;}
-
 
 div[data-module=board] div.list {border-top:2px solid #222; padding-bottom:10px; border-bottom:1px solid #e3e4e5;}
 div[data-module=board] ul[data-role=table] + div.list {border-top:1px solid #eee;}
 
-div[data-module=board] div.empty {border:1px solid #e3e4e5; text-align:center; height:100px; line-height:100px; color:#666; font-size:13px;}
+div[data-module=board] div.empty {border:1px solid #e3e4e5; text-align:center; height:100px; line-height:100px; color:#666; font-size:14px;}
 div[data-module=board] ul[data-role=table] + div.empty {border-top:0px; border-left:0px; border-right:0px;}
+
 div[data-module=board] ul[data-role=webzine] {list-style:none; width:calc(100% + 10px); font-size:0; margin-left:-10px;}
 div[data-module=board] ul[data-role=webzine] > li {padding:10px 0px 0px 10px; display:inline-block; box-sizing:border-box;}
 div[data-module=board] ul[data-role=webzine] > li > div {width:100%; height:0; position:relative; box-sizing:border-box;}
+div[data-module=board] ul[data-role=webzine] > li > div > div.item {width:100%; height:100%; position:absolute; top:0; left:0; border:1px solid #ccc; box-sizing:border-box; background-size:cover; background-position:50% 50%;}
+div[data-module=board] ul[data-role=webzine] > li > div .box {display:block; width:100%; height:100%; position:relative; text-decoration:none; background:rgba(0,0,0,0.1);}
+div[data-module=board] ul[data-role=webzine] > li > div .box > label {display:block; position:absolute; top:15px; left:15px; border:1px solid #fff; height:28px; line-height:28px; padding:0px 14px; border-radius:14px; font-size:14px; max-width:70%; text-overflow:ellipsis; overflow:hidden; white-space:nowrap; color:#fff; background:rgba(0,0,0,0.5);}
 
-div[data-module=board] ul[data-role=webzine] > li > div > div.item {width:100%; height:100%; position:absolute; top:0; left:0; border:1px solid rgba(0,0,0,0.1); box-sizing:border-box; background-size:cover; background-position:50% 50%;}
+div[data-module=board] ul[data-role=webzine] > li > div .box > div.title {background:linear-gradient(to bottom, rgba(0,0,0,0) 0%,rgba(0,0,0,0.65) 100%); padding:30px 20px 20px 20px; width:100%; position:absolute; bottom:0; left:0; box-sizing:border-box;}
+div[data-module=board] ul[data-role=webzine] > li > div .box > div.title > h4 {display:block; font-size:16px; color:#fff; line-height:20px; max-height:60px; font-weight:bold;}
+div[data-module=board] ul[data-role=webzine] > li > div .box > div.title > time {display:block; font-size:14px; color:rgba(255,255,255,0.6); height:15px; margin-top:8px;}
 
-div[data-module=board] ul[data-role=webzine] > li > div .box {display:block; background:rgba(0,0,0,0.3); width:100%; height:100%; position:relative; text-decoration:none;}
-div[data-module=board] ul[data-role=webzine] > li > div .box > label {display:block; position:absolute; top:15px; left:15px; border:1px solid #fff; height:20px; line-height:20px; padding:0px 10px; border-radius:10px; font-size:12px; max-width:70%; text-overflow:ellipsis; overflow:hidden; white-space:nowrap; color:#fff;}
 
-div[data-module=board] ul[data-role=webzine] > li > div .box > h4 {display:block; font-size:16px; color:#fff; position:absolute; left:15px; bottom:40px; line-height:20px; width:calc(100% - 30px); max-height:60px; font-weight:normal;}
-div[data-module=board] ul[data-role=webzine] > li > div .box > time {display:block; font-size:13px; color:#fff; position:absolute; left:15px; bottom:15px; height:15px;}
 
-div[data-module=board] ul[data-role=webzine] > li > div > div.item[data-cover=FALSE] .box {background:#eff9fe;}
-div[data-module=board] ul[data-role=webzine] > li > div > div.item[data-cover=FALSE] .box > label {border-color:#329fb8; color:#329fb8;}
-div[data-module=board] ul[data-role=webzine] > li > div > div.item[data-cover=FALSE] .box > h4 {color:#333;}
-div[data-module=board] ul[data-role=webzine] > li > div > div.item[data-cover=FALSE] .box > time {color:#999;}
+div[data-module=board] div[data-role=searchbar] {margin-top:10px; font-size:0;}
+div[data-module=board] div[data-role=searchbar] > div[data-role=search] {display:inline-block; width:300px; vertical-align:middle; font-size:0;}
+div[data-module=board] div[data-role=searchbar] > div[data-role=search] > div[data-role=input] {width:calc(100% - 45px); vertical-align:middle; display:inline-block; font-size:1rem; margin-right:5px;}
+div[data-module=board] div[data-role=searchbar] > div[data-role=search] > button {width:40px; height:40px; background:#b5b7c0; border:0px; cursor:pointer; vertical-align:middle;}
+div[data-module=board] div[data-role=searchbar] > div[data-role=search] > button > i {font-size:14px; color:#fff;}
+div[data-module=board] div[data-role=searchbar] > div[data-role=search] > button:hover {background:#828595;}
+div[data-module=board] div[data-role=searchbar] > a {display:inline-block; height:40px; line-height:40px; padding:0px; box-sizing:border-box; vertical-align:middle; margin-left:5px; text-decoration:none; cursor:pointer; background:#2196f3; color:#fff; font-size:14px; float:right;}
+div[data-module=board] div[data-role=searchbar] > a > i {width:40px; height:40px; line-height:40px; vertical-align:middle; text-align:center;}
+div[data-module=board] div[data-role=searchbar] > a > span {height:40px; line-height:40px; display:inline-block; vertical-align:middle; padding-right:15px;}
+div[data-module=board] div[data-role=searchbar] > a:hover {background:#1e88e5;}
+
+div[data-module=board] div.pagination {margin-top:20px; text-align:center;}
+
+
 
 div[data-module=board] article[data-role=post] {border-bottom:2px solid #222;}
-div[data-module=board] article[data-role=post] > header {display:block; margin:0; padding:15px; background:#f4f4f4; border-top:2px solid #222; line-height:1.6; border-bottom:1px solid #e3e4e5; margin-bottom:20px; font-size:0;}
-div[data-module=board] article[data-role=post] > header > h5 {font-size:15px; line-height:1.6; padding:5px 0px 15px 0px; margin:0; border-bottom:1px solid #e3e4e5;}
-div[data-module=board] article[data-role=post] > header > i[data-role=photo] {width:48px; height:48px; margin-top:15px; margin-right:10px;}
-div[data-module=board] article[data-role=post] > header > ul {list-style:none; width:calc(100% - 58px); display:inline-block; margin-top:15px; font-size:0; vertical-align:middle;}
-div[data-module=board] article[data-role=post] > header > ul > li {font-size:13px; color:#666;}
-div[data-module=board] article[data-role=post] > header > ul > li > b {display:inline-block; width:60px;}
-div[data-module=board] article[data-role=post] > header > ul > li.name {display:block; height:24px; line-height:24px; font-size:13px;}
-div[data-module=board] article[data-role=post] > header > ul > li.date {display:inline-block; width:70%; height:24px; line-height:24px; vertical-align:middle;}
-div[data-module=board] article[data-role=post] > header > ul > li.hit {display:inline-block; width:30%; height:24px; line-height:24px; vertical-align:middle; text-align:right;}
-div[data-module=board] article[data-role=post] > header > ul > li.hit > b {margin-right:10px;}
+div[data-module=board] article[data-role=post] > header {display:table; width:100%; table-layout:fixed; margin:0; background:#f4f4f4; border-top:2px solid #222; line-height:1.6; border-bottom:1px solid #e3e4e5; margin-bottom:20px; font-size:0;}
+div[data-module=board] article[data-role=post] > header > div {display:table-cell; vertical-align:top;}
+div[data-module=board] article[data-role=post] > header > div.image {width:240px; padding:10px;}
+div[data-module=board] article[data-role=post] > header > div.image > div {width:100%; height:0;}
+
+div[data-module=board] article[data-role=post] > header > div.title {width:100%; padding:15px 15px 15px 5px; position:relative;}
+div[data-module=board] article[data-role=post] > header > div.title > h5 {font-size:16px; line-height:24px; min-height:24px; max-height:48px; margin:0; overflow:hidden;}
+div[data-module=board] article[data-role=post] > header > div.title > small {display:block; color:#666; font-size:14px; margin-top:10px;}
+
+div[data-module=board] article[data-role=post] > header > div.title > div.author {position:absolute; width:calc(100% - 20px); bottom:15px; left:5px;}
+div[data-module=board] article[data-role=post] > header > div.title > div.author > i[data-role=photo] {width:48px; height:48px; margin-top:15px; margin-right:10px;}
+div[data-module=board] article[data-role=post] > header > div.title > div.author > ul {list-style:none; width:calc(100% - 58px); display:inline-block; margin-top:15px; font-size:0; vertical-align:middle;}
+div[data-module=board] article[data-role=post] > header > div.title > div.author > ul > li {font-size:14px; color:#666;}
+div[data-module=board] article[data-role=post] > header > div.title > div.author > ul > li > b {display:inline-block; width:65px;}
+div[data-module=board] article[data-role=post] > header > div.title > div.author > ul > li > i.xi {display:none; height:24px; line-height:24px; margin-right:8px; vertical-align:middle;}
+div[data-module=board] article[data-role=post] > header > div.title > div.author > ul > li.name {display:block; height:24px; line-height:24px; font-size:14px;}
+div[data-module=board] article[data-role=post] > header > div.title > div.author > ul > li.date {display:inline-block; width:70%; height:24px; line-height:24px; vertical-align:middle;}
+div[data-module=board] article[data-role=post] > header > div.title > div.author > ul > li.hit {display:inline-block; width:30%; height:24px; line-height:24px; vertical-align:middle; text-align:right;}
+div[data-module=board] article[data-role=post] > header > div.title > div.author > ul > li.hit > b {margin-right:10px;}
+
 div[data-module=board] article[data-role=post] > div.content {padding-bottom:20px;}
 
-div[data-module=board] article[data-role=post] div[data-role=wysiwyg-content] {font-size:13px; line-height:1.6;}
+div[data-module=board] article[data-role=post] > div[data-role=button] {text-align:right; padding-right:0; position:relative;}
+div[data-module=board] article[data-role=post] > div[data-role=button] > div.author {display:inline-block; width:160px; height:30px; padding:4px; background:#E3F2FD; vertical-align:middle; border:1px solid #BBDEFB; text-align:left;}
+div[data-module=board] article[data-role=post] > div[data-role=button] > div.author > i[data-role=photo] {width:28px; height:28px; border:1px solid #ccc; background-size:cover; background-position:50% 50%; background-repeat:no-repeat; float:left; margin-right:8px;}
+div[data-module=board] article[data-role=post] > div[data-role=button] > div.author > span[data-role=name] {display:block; width:calc(100% - 40px); height:18px; font-size:12px; line-height:18px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
+div[data-module=board] article[data-role=post] > div[data-role=button] > div.author > div.level {display:inline-block; width:calc(100% - 40px); height:12px; font-size:0;}
+div[data-module=board] article[data-role=post] > div[data-role=button] > div.author > div.level > div.level {width:35px; height:12px; font-size:11px; display:inline-block; vertical-align:middle; line-height:12px; font-family:Roboto; color:#666;}
+div[data-module=board] article[data-role=post] > div[data-role=button] > div.author > div.level > div.level > b {color:#0288D1;}
+div[data-module=board] article[data-role=post] > div[data-role=button] > div.author > div.level > div.progress {width:calc(100% - 35px); height:10px; margin:1px 0px; background:#ccc; display:inline-block; vertical-align:middle; border-radius:5px;}
+div[data-module=board] article[data-role=post] > div[data-role=button] > div.author > div.level > div.progress > div.on {background:#4FC3F7; min-width:10px; height:10px; border-radius:5px;}
+
+
+div[data-module=board] article[data-role=post] > div[data-role=button] > button[data-action=action] {background:#b5b7c0; color:#fff; border:0; font-size:16px; width:40px; height:40px; margin-left:5px; margin-right:0; display:none;}
+div[data-module=board] article[data-role=post] > div[data-role=button] > ul[data-role=action] {list-style:none; display:inline-block; vertical-align:middle; white-space:nowrap;}
+div[data-module=board] article[data-role=post] > div[data-role=button] > ul[data-role=action] > li {display:inline-block; margin-left:5px;}
+div[data-module=board] article[data-role=post] > div[data-role=button] > ul[data-role=action] > li > button {display:inline-block; height:40px; line-height:38px; padding:0px 15px; box-sizing:border-box; border:1px solid rgba(0,0,0,0.1); color:#666; background:#fff; vertical-align:middle; text-decoration:none; cursor:pointer; font-size:14px;}
+div[data-module=board] article[data-role=post] > div[data-role=button] > ul[data-role=action] > li > button:hover {background:#f4f4f4; color:#333;}
+div[data-module=board] article[data-role=post] > div[data-role=button] > ul[data-role=action] > li > button[data-action=delete] {background:#f44336; color:#fff;}
+div[data-module=board] article[data-role=post] > div[data-role=button] > ul[data-role=action] > li > button[data-action=delete]:hover {background:#e53935; color:#fff;}
+div[data-module=board] article[data-role=post] > div[data-role=button] > ul[data-role=action] > li > button[data-action=adopt] {background:#2196f3; color:#fff;}
+div[data-module=board] article[data-role=post] > div[data-role=button] > ul[data-role=action] > li > button[data-action=adopt]:hover {background:#1e88e5; color:#fff;}
 
 div[data-module=board] article[data-role=post] > div[data-module=attachment] {padding:20px 0px;}
 div[data-module=board] article[data-role=post] > div[data-module=attachment] > h5 {font-size:14px; height:30px; line-height:30px; border-bottom:1px solid #e3e4e5; margin-bottom:5px;}
@@ -63,106 +131,103 @@ div[data-module=board] article[data-role=post] > div[data-module=attachment] > h
 div[data-module=board] article[data-role=post] > div[data-module=attachment] > ul {list-style:none;}
 div[data-module=board] article[data-role=post] > div[data-module=attachment] > ul > li {height:20px; padding:5px 0px;}
 div[data-module=board] article[data-role=post] > div[data-module=attachment] > ul > li > i.icon {width:20px; height:20px; margin-right:5px; float:left; vertical-align:middle; background-size:contain; background-position:0 50%; vertical-align:middle;}
-div[data-module=board] article[data-role=post] > div[data-module=attachment] > ul > li > a {display:inline-block; max-width:calc(100% - 25px); height:20px; line-height:20px; color:#333; text-decoration:none; font-size:13px; text-overflow:ellipsis; overflow:hidden; white-space:nowrap; vertical-align:middle;}
+div[data-module=board] article[data-role=post] > div[data-module=attachment] > ul > li > a {display:inline-block; max-width:calc(100% - 25px); height:20px; line-height:20px; color:#333; text-decoration:none; font-size:14px; text-overflow:ellipsis; overflow:hidden; white-space:nowrap; vertical-align:middle;}
 div[data-module=board] article[data-role=post] > div[data-module=attachment] > ul > li > a > span.size {color:#999; font-size:12px; float:right; display:inline-block; vertical-align:middle; margin-left:5px; line-height:22px; height:20px;}
 
-div[data-module=board] div[data-role=ment] {background:#f4f4f4;}
-div[data-module=board] div[data-role=ment] > h5 {padding-top:20px; background:#fff; font-size:14px; font-weight:bold; height:30px; line-height:30px; border-bottom:2px solid #222;}
-div[data-module=board] div[data-role=ment] > h5 > span[data-role=count] {color:#F44336;}
+
+
+div[data-module=board] div[data-role=ment] {background:#f4f4f4; margin-top:20px;}
 
 div[data-module=board] div[data-role=ment] > div[data-role=list] {background:url(../images/ment_line_bg.png);}
-div[data-module=board] div[data-role=ment] > div[data-role=list] > div[data-role=item] {background:#f4f4f4; padding:10px 15px; font-size:0; border-top:1px solid #e5e5e5; position:relative;}
+div[data-module=board] div[data-role=ment] > div[data-role=list] > div[data-role=item] {background:#f4f4f4; padding:16px; border-top:1px solid #e5e5e5; position:relative;}
 div[data-module=board] div[data-role=ment] > div[data-role=list] > div[data-role=item]:first-child {border-top:0px;}
-div[data-module=board] div[data-role=ment] > div[data-role=list] > div[data-role=item] > i.xi-reply-all {font-size:12px; color:#F44336; position:absolute; top:15px; left:-10px; width:20px; text-align:center;}
+div[data-module=board] div[data-role=ment] > div[data-role=list] > div[data-role=item] > i.xi-reply-all {font-size:12px; color:#F44336; position:absolute; top:22px; left:-10px; width:20px; text-align:center;}
 div[data-module=board] div[data-role=ment] > div[data-role=list] > div[data-role=item][data-depth="0"] > i.xi-reply-all {display:none;}
-div[data-module=board] div[data-role=ment] > div[data-role=list] > div[data-role=item] > i.xi-lock {font-size:12px; color:#fff; position:absolute; top:30px; left:40px; width:20px; height:20px; background:#F44336; line-height:20px; border-radius:50%; text-align:center;}
-div[data-module=board] div[data-role=ment] > div[data-role=list] > div[data-role=item] > i[data-role=photo] {width:40px; height:40px; vertical-align:top; margin-right:10px;}
-div[data-module=board] div[data-role=ment] > div[data-role=list] > div[data-role=item] > div {width:calc(100% - 50px); display:inline-block; vertical-align:top; font-size:13px; padding:5px 0px;}
-div[data-module=board] div[data-role=ment] > div[data-role=list] > div[data-role=item] > div > div.info {height:24px; position:relative;}
-div[data-module=board] div[data-role=ment] > div[data-role=list] > div[data-role=item] > div > div.info > span[data-role=name] {height:20px; line-height:20px; vertical-align:top;}
-div[data-module=board] div[data-role=ment] > div[data-role=list] > div[data-role=item] > div > div.info > time {display:inline-block; height:12px; line-height:12px; margin:6px 0px 2px 10px; padding-left:10px; font-size:12px; color:#666; border-left:1px solid #ccc; vertical-align:top;}
-div[data-module=board] div[data-role=ment] > div[data-role=list] > div[data-role=item] > div > div.info > button[data-ment-action=action] {width:30px; height:30px; background:#b5b7c0; color:#fff; border:0; float:right; font-size:16px; position:absolute; top:0; right:0; cursor:pointer; display:none;}
-div[data-module=board] div[data-role=ment] > div[data-role=list] > div[data-role=item] > div > div.info > button[data-ment-action=action]:hover {background:#828595;}
-div[data-module=board] div[data-role=ment] > div[data-role=list] > div[data-role=item] > div > div.info > ul {list-style:none; position:relative; float:right; font-size:0;}
-div[data-module=board] div[data-role=ment] > div[data-role=list] > div[data-role=item] > div > div.info > ul > li {display:inline-block;}
-div[data-module=board] div[data-role=ment] > div[data-role=list] > div[data-role=item] > div > div.info > ul > li > button {background:#fff; padding:0px 8px 0px 0px; height:24px; line-height:24px; cursor:pointer; vertical-align:middle; border:0; font-size:12px; margin-left:2px;}
-div[data-module=board] div[data-role=ment] > div[data-role=list] > div[data-role=item] > div > div.info > ul > li > button > i {width:24px; height:24px; text-align:center; float:left;}
-div[data-module=board] div[data-role=ment] > div[data-role=list] > div[data-role=item] > div > div.info > ul > li > button[data-ment-action=reply] {background:#b5b7c0; color:#fff;}
-div[data-module=board] div[data-role=ment] > div[data-role=list] > div[data-role=item] > div > div.info > ul > li > button[data-ment-action=reply]:hover {background:#828595;}
-div[data-module=board] div[data-role=ment] > div[data-role=list] > div[data-role=item][data-ment-action=reply] > div > div.info > ul > li > button[data-ment-action=reply] {background:#828595;}
-div[data-module=board] div[data-role=ment] > div[data-role=list] > div[data-role=item][data-ment-action=reply] > div > div.info > ul > li > button[data-ment-action=reply] > i:before {content:"\e616";}
-div[data-module=board] div[data-role=ment] > div[data-role=list] > div[data-role=item] > div > div.info > ul > li > button[data-ment-action=modify] {background:#2196f3; color:#fff;}
-div[data-module=board] div[data-role=ment] > div[data-role=list] > div[data-role=item] > div > div.info > ul > li > button[data-ment-action=modify]:hover {background:#1e88e5;}
-div[data-module=board] div[data-role=ment] > div[data-role=list] > div[data-role=item][data-ment-action=modify] > div > div.info > ul > li > button[data-ment-action=modify] {background:#1e88e5;}
-div[data-module=board] div[data-role=ment] > div[data-role=list] > div[data-role=item][data-ment-action=modify] > div > div.info > ul > li > button[data-ment-action=modify] > i:before {content:"\e616";}
-div[data-module=board] div[data-role=ment] > div[data-role=list] > div[data-role=item][data-ment-action=modify] > div > div[data-role=wysiwyg-content] {display:none;}
-div[data-module=board] div[data-role=ment] > div[data-role=list] > div[data-role=item][data-ment-action=modify] > div > div[data-module=attachment] {display:none;}
-div[data-module=board] div[data-role=ment] > div[data-role=list] > div[data-role=item][data-ment-action=modify] form {margin-top:10px;}
-div[data-module=board] div[data-role=ment] > div[data-role=list] > div[data-role=item] > div > div.info > ul > li > button[data-ment-action=delete] {background:#F44336; color:#fff;}
-div[data-module=board] div[data-role=ment] > div[data-role=list] > div[data-role=item] > div > div.info > ul > li > button[data-ment-action=delete]:hover {background:#E53935;}
 
-div[data-module=board] div[data-role=ment] > div[data-role=list] > div[data-role=item] > div > div[data-role=wysiwyg-content] {padding-top:10px;}
-div[data-module=board] div[data-role=ment] > div[data-role=list] > div[data-role=item] > div > div[data-module=attachment] {margin-top:10px;}
-div[data-module=board] div[data-role=ment] > div[data-role=list] > div[data-role=item] > form {font-size:13px;}
+div[data-module=board] div[data-role=ment] > div[data-role=list] > div[data-role=item] > div.topbar {height:30px; font-size:0; text-align:right; position:relative;}
+div[data-module=board] div[data-role=ment] > div[data-role=list] > div[data-role=item] > div.topbar > i[data-role=photo] {width:28px; height:28px; border:1px solid #ccc; margin-right:8px; background-repeat:no-repeat; background-size:cover; background-position:50% 50%; display:inline-block; vertical-align:middle; float:left;}
+div[data-module=board] div[data-role=ment] > div[data-role=list] > div[data-role=item] > div.topbar > span[data-role=name] {font-size:14px; height:30px; line-height:30px; display:inline-block; vertical-align:middle; float:left;}
+div[data-module=board] div[data-role=ment] > div[data-role=list] > div[data-role=item] > div.topbar > button[data-action=action] {width:30px; height:30px; background:#b5b7c0; color:#fff; border:0; font-size:16px; cursor:pointer; display:none;}
+div[data-module=board] div[data-role=ment] > div[data-role=list] > div[data-role=item] > div.topbar > button[data-action=action]:hover {background:#828595;}
+div[data-module=board] div[data-role=ment] > div[data-role=list] > div[data-role=item] > div.topbar > ul[data-role=action] {list-style:none; position:relative; float:right; font-size:0;}
+div[data-module=board] div[data-role=ment] > div[data-role=list] > div[data-role=item] > div.topbar > ul[data-role=action] > li {display:inline-block;}
+div[data-module=board] div[data-role=ment] > div[data-role=list] > div[data-role=item] > div.topbar > ul[data-role=action] > li > button {background:#fff; padding:0px 8px 0px 0px; height:24px; line-height:24px; cursor:pointer; vertical-align:middle; border:0; font-size:12px; margin-left:2px;}
+div[data-module=board] div[data-role=ment] > div[data-role=list] > div[data-role=item] > div.topbar > ul[data-role=action] > li > button > i {width:24px; height:24px; text-align:center; float:left;}
+div[data-module=board] div[data-role=ment] > div[data-role=list] > div[data-role=item] > div.topbar > ul[data-role=action] > li > button[data-action=reply] {background:#b5b7c0; color:#fff;}
+div[data-module=board] div[data-role=ment] > div[data-role=list] > div[data-role=item] > div.topbar > ul[data-role=action] > li > button[data-action=reply]:hover {background:#828595;}
+div[data-module=board] div[data-role=ment] > div[data-role=list] > div[data-role=item][data-action=reply] > div.topbar > ul > li > button[data-action=reply] {background:#828595;}
+div[data-module=board] div[data-role=ment] > div[data-role=list] > div[data-role=item][data-action=reply] > div.topbar > ul > li > button[data-action=reply] > i:before {content:"\e616";}
+div[data-module=board] div[data-role=ment] > div[data-role=list] > div[data-role=item] > div.topbar > ul[data-role=action] > li > button[data-action=modify] {background:#2196f3; color:#fff;}
+div[data-module=board] div[data-role=ment] > div[data-role=list] > div[data-role=item] > div.topbar > ul[data-role=action] > li > button[data-action=modify]:hover {background:#1e88e5;}
+div[data-module=board] div[data-role=ment] > div[data-role=list] > div[data-role=item][data-action=modify] > div.topbar > ul > li > button[data-action=modify] {background:#1e88e5;}
+div[data-module=board] div[data-role=ment] > div[data-role=list] > div[data-role=item][data-action=modify] > div.topbar > ul > li > button[data-action=modify] > i:before {content:"\e616";}
+div[data-module=board] div[data-role=ment] > div[data-role=list] > div[data-role=item][data-action=modify] > div.content > div[data-role=wysiwyg-content] {display:none;}
+div[data-module=board] div[data-role=ment] > div[data-role=list] > div[data-role=item][data-action=modify] > div.content > div[data-module=attachment] {display:none;}
+div[data-module=board] div[data-role=ment] > div[data-role=list] > div[data-role=item][data-action=reply] form {margin-top:10px;}
+div[data-module=board] div[data-role=ment] > div[data-role=list] > div[data-role=item] > div.topbar > ul[data-role=action] > li > button[data-action=delete] {background:#F44336; color:#fff;}
+div[data-module=board] div[data-role=ment] > div[data-role=list] > div[data-role=item] > div.topbar > ul[data-role=action] > li > button[data-action=delete]:hover {background:#E53935;}
 
-div[data-module=board] div[data-role=ment] > div[data-role=list] > div[data-role=item] div[data-secret=TRUE] {font-size:13px; text-align:center; width:100%; padding:10px 0px; line-height:1.6; background:#FFEBEE; margin-top:10px; color:#F44336;}
+div[data-module=board] div[data-role=ment] > div[data-role=list] > div[data-role=item] > div.content {padding:10px 0px 10px 38px; position:relative;}
+div[data-module=board] div[data-role=ment] > div[data-role=list] > div[data-role=item] > div.content > i.mi-lock {position:absolute; top:10px; left:20px; color:#F44336; height:22px; line-height:22px;}
+
+div[data-module=board] div[data-role=ment] > div[data-role=list] > div[data-role=item] div[data-secret=TRUE] {font-size:14px; text-align:center; width:100%; padding:10px 0px; line-height:1.6; background:#FFEBEE; color:#F44336;}
 div[data-module=board] div[data-role=ment] > div[data-role=list] > div[data-role=item] div[data-secret=TRUE][data-password=TRUE] {cursor:pointer;}
 div[data-module=board] div[data-role=ment] > div[data-role=list] > div[data-role=item] div[data-secret=TRUE][data-password=TRUE]:hover {background:#FFCDD2;}
-div[data-module=board] div[data-role=ment] > div[data-role=list] > div[data-role=item] div[data-delete=TRUE] {font-size:13px; text-align:center; width:calc(100% + 30px); padding:10px 0px; line-height:1.6; background:#FFECB3; color:#FF8F00; margin:-10px -15px;}
+div[data-module=board] div[data-role=ment] > div[data-role=list] > div[data-role=item] div[data-delete=TRUE] {font-size:14px; text-align:center; width:calc(100% + 30px); padding:10px 0px; line-height:1.6; background:#FFECB3; color:#FF8F00; margin:-15px -15px;}
 
-div[data-module=board] div[data-role=ment] > div[data-role=list] > div[data-role=item] > div > div[data-module=attachment] {padding:20px 0px 10px 0px;}
-div[data-module=board] div[data-role=ment] > div[data-role=list] > div[data-role=item] > div > div[data-module=attachment] > h5 {font-size:14px; height:30px; line-height:30px; border-bottom:1px solid #e3e4e5; margin-bottom:5px;}
-div[data-module=board] div[data-role=ment] > div[data-role=list] > div[data-role=item] > div > div[data-module=attachment] > h5 > i {font-size:12px; width:20px; height:30px; float:left; line-height:30px;}
-div[data-module=board] div[data-role=ment] > div[data-role=list] > div[data-role=item] > div > div[data-module=attachment] > ul {list-style:none;}
-div[data-module=board] div[data-role=ment] > div[data-role=list] > div[data-role=item] > div > div[data-module=attachment] > ul > li {height:20px; padding:5px 0px;}
-div[data-module=board] div[data-role=ment] > div[data-role=list] > div[data-role=item] > div > div[data-module=attachment] > ul > li > i.icon {width:20px; height:20px; margin-right:5px; float:left; vertical-align:middle; background-size:contain; background-position:0 50%; vertical-align:middle;}
-div[data-module=board] div[data-role=ment] > div[data-role=list] > div[data-role=item] > div > div[data-module=attachment] > ul > li > a {display:inline-block; max-width:calc(100% - 25px); height:20px; line-height:20px; color:#333; text-decoration:none; font-size:13px; text-overflow:ellipsis; overflow:hidden; white-space:nowrap; vertical-align:middle;}
-div[data-module=board] div[data-role=ment] > div[data-role=list] > div[data-role=item] > div > div[data-module=attachment] > ul > li > a > span.size {color:#999; font-size:12px; float:right; display:inline-block; vertical-align:middle; margin-left:5px; line-height:22px; height:20px;}
+div[data-module=board] div[data-role=ment] > div[data-role=list] > div[data-role=item] > div.content > div[data-module=attachment] {padding:20px 0px 10px 0px;}
+div[data-module=board] div[data-role=ment] > div[data-role=list] > div[data-role=item] > div.content > div[data-module=attachment] > h5 {font-size:14px; height:30px; line-height:30px; border-bottom:1px solid #e3e4e5; margin-bottom:5px;}
+div[data-module=board] div[data-role=ment] > div[data-role=list] > div[data-role=item] > div.content > div[data-module=attachment] > h5 > i {font-size:12px; width:20px; height:30px; float:left; line-height:30px;}
+div[data-module=board] div[data-role=ment] > div[data-role=list] > div[data-role=item] > div.content > div[data-module=attachment] > ul {list-style:none;}
+div[data-module=board] div[data-role=ment] > div[data-role=list] > div[data-role=item] > div.content > div[data-module=attachment] > ul > li {height:20px; padding:5px 0px;}
+div[data-module=board] div[data-role=ment] > div[data-role=list] > div[data-role=item] > div.content > div[data-module=attachment] > ul > li > i.icon {width:20px; height:20px; margin-right:5px; float:left; vertical-align:middle; background-size:contain; background-position:0 50%; vertical-align:middle;}
+div[data-module=board] div[data-role=ment] > div[data-role=list] > div[data-role=item] > div.content > div[data-module=attachment] > ul > li > a {display:inline-block; max-width:calc(100% - 25px); height:20px; line-height:20px; color:#333; text-decoration:none; font-size:14px; text-overflow:ellipsis; overflow:hidden; white-space:nowrap; vertical-align:middle;}
+div[data-module=board] div[data-role=ment] > div[data-role=list] > div[data-role=item] > div.content > div[data-module=attachment] > ul > li > a > span.size {color:#999; font-size:12px; float:right; display:inline-block; vertical-align:middle; margin-left:5px; line-height:22px; height:20px;}
 
-div[data-module=board] div[data-role=ment] > div[data-role=list] > div.empty {height:100px; line-height:100px; text-align:center; background:#f4f4f4;}
+div[data-module=board] div[data-role=ment] > div[data-role=list] > div[data-role=item] > div.footbar {padding-left:38px; font-size:0;}
+div[data-module=board] div[data-role=ment] > div[data-role=list] > div[data-role=item] > div.footbar > time {display:inline-block; height:20px; line-height:20px; font-size:12px; color:#666; display:inline-block; vertical-align:middle;}
+
+div[data-module=board] div[data-role=ment] > div[data-role=list] > div[data-role=item][data-action=modify] > div.footbar {display:none;}
+
+div[data-module=board] div[data-role=ment] > div[data-role=list] > div.empty {height:100px; line-height:100px; text-align:center; background:#f4f4f4; border:0;}
 
 div[data-module=board] div[data-role=ment] form {background:#fff; padding-bottom:20px;}
 div[data-module=board] div[data-role=ment] div[data-role=item] form {padding:10px; border:1px solid #e5e5e5;}
 div[data-module=board] div[data-role=ment] div[data-role=pagination] {padding:10px 0px; display:block; text-align:center;}
 div[data-module=board] div[data-role=ment] div[data-role=pagination]:empty {display:none;}
 
-div[data-module=board] ul.buttons {list-style:none; padding-bottom:20px; display:table; width:100%; table-layout:fixed;}
-div[data-module=board] ul.buttons > li {display:table-cell; width:100%; vertical-align:middle;}
-div[data-module=board] ul.buttons > li:first-child > div[data-role=button] {text-align:left; padding-left:0px;}
-div[data-module=board] ul.buttons > li:first-child > div[data-role=button] > button, div[data-module=board] ul.buttons > li:first-child > div[data-role=button] > a {margin-left:0px; margin-right:5px;}
-div[data-module=board] ul.buttons > li:last-child > div[data-role=button] {text-align:right; padding-right:0px;}
-div[data-module=board] ul.buttons > li:last-child > div[data-role=button] > button, div[data-module=board] ul.buttons > li:last-child > div[data-role=button] > a {margin-left:5px; margin-right:0px;}
-
-div[data-module=board] div.searchbar {margin-top:10px; font-size:0;}
-div[data-module=board] div.searchbar > div.search {display:inline-block; width:300px; vertical-align:middle; font-size:0;}
-div[data-module=board] div.searchbar > div.search > div[data-role=input] {width:calc(100% - 45px); vertical-align:middle; display:inline-block; font-size:1rem; margin-right:5px;}
-div[data-module=board] div.searchbar > div.search > button {width:40px; height:40px; background:#b5b7c0; border:0px; cursor:pointer; vertical-align:middle;}
-div[data-module=board] div.searchbar > div.search > button > i {font-size:14px; color:#fff;}
-div[data-module=board] div.searchbar > div.search > button:hover {background:#828595;}
-div[data-module=board] div.searchbar > button, div[data-module=board] div.searchbar > a {display:inline-block; background:#b5b7c0; height:40px; line-height:40px; border:0px; cursor:pointer; vertical-align:middle; font-size:13px; color:#fff; padding:0px 12px 0px 2px; float:right; box-sizing:border-box; text-decoration:none;}
-div[data-module=board] div.searchbar > button > i, div[data-module=board] div.searchbar > a > i {width:30px; height:40px; line-height:40px; text-align:center; float:left;}
-div[data-module=board] div.searchbar > button:hover, div[data-module=board] div.searchbar > a:hover {background:#828595;}
-
-div[data-module=board] div.pagination {margin-top:20px; text-align:center;}
-
-div[data-module=board] div[data-role=button] {margin-top:10px;}
 
 div[data-module=board] div.cover {padding-left:10px;}
-div[data-module=board] div.cover ul[data-role=webzine] {width:calc(100% + 170px); padding-bottom:50px;}
-div[data-module=board] div.cover ul[data-role=webzine] > li > div > div.preview {position:absolute; top:0; left:0; width:100%; height:100%;}
-/* div[data-module=board] div.cover ul[data-role=webzine] > li > div > div.preview div.box {background:transparent;} */
-div[data-module=board] div.cover ul[data-role=webzine] > li > div > div.preview div.cropit-image-loaded div.box {cursor:pointer; background:rgba(0,0,0,0.3) !important;}
+div[data-module=board] div.cover ul[data-role=webzine] {width:calc(100% + 170px);}
+div[data-module=board] div.cover ul[data-role=webzine] > li > div > div.preview {position:absolute; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.15);}
+div[data-module=board] div.cover ul[data-role=webzine] > li > div > div.preview div.cropit-image-loaded div.box {cursor:pointer; background:rgba(0,0,0,0.15) !important;}
 div[data-module=board] div.cover ul[data-role=webzine] > li > div > div.preview div.box {cursor:move;}
 div[data-module=board] div.cover ul[data-role=webzine] > li > div > div.preview div.box * {cursor:move;}
 
-div[data-module=board] div.cover > button {width:auto; background:#b5b7c0; border:0px; color:#fff; font-size:13px; line-height:40px; font-size:0; font-size:13px; cursor:pointer; padding:0px;}
-div[data-module=board] div.cover > button > i {display:inline-block; width:40px; height:40px; line-height:38px; vertical-align:top; text-align:center; font-size:16px; margin-top:0px;}
-div[data-module=board] div.cover > button > span {display:inline-block; padding-right:15px; height:38px; line-height:38px;}
-div[data-module=board] div.cover > button[data-loading=TRUE] {background:#b5b7c0 !important; cursor:not-allowed;}
-div[data-module=board] div.cover > button:hover {background:#828595; color:#fff;}
+div[data-module=board] div.cover ul[data-role=webzine] > li > ul[data-role=button] {display:table; width:100%; margin-top:60px; table-layout:fixed;}
+div[data-module=board] div.cover ul[data-role=webzine] > li > ul[data-role=button] > li {display:table-cell; width:50%;}
+div[data-module=board] div.cover ul[data-role=webzine] > li > ul[data-role=button] > li:first-child {padding-right:2.5px;}
+div[data-module=board] div.cover ul[data-role=webzine] > li > ul[data-role=button] > li:last-child {padding-left:2.5px;}
+div[data-module=board] div.cover ul[data-role=webzine] > li > ul[data-role=button] > li > button {width:100%; background:#b5b7c0; border:0px; color:#fff; font-size:14px; line-height:40px; font-size:0; font-size:14px; cursor:pointer; padding:0px; text-align:left;}
+div[data-module=board] div.cover ul[data-role=webzine] > li > ul[data-role=button] > li > button > i {display:inline-block; width:40px; height:40px; line-height:38px; vertical-align:top; text-align:center; font-size:16px; margin-top:0px;}
+div[data-module=board] div.cover ul[data-role=webzine] > li > ul[data-role=button] > li > button > span {display:inline-block; padding-right:15px; width:calc(100% - 55px); height:38px; line-height:38px; text-align:center;}
+div[data-module=board] div.cover ul[data-role=webzine] > li > ul[data-role=button] > li > button[data-loading=TRUE] {background:#b5b7c0 !important; cursor:not-allowed;}
+div[data-module=board] div.cover ul[data-role=webzine] > li > ul[data-role=button] > li > button:hover {background:#828595; color:#fff;}
+
 div[data-module=board] div.cover > p {color:#666; padding-top:10px; line-height:1.6;}
 
 div[data-module=board] ul[data-role=form] div[data-role=input][data-name=prefix] {width:180px;}
+
+div[data-module=board] ul.buttons {list-style:none; padding-bottom:20px; display:table; width:100%; table-layout:fixed;}
+div[data-module=board] ul.buttons > li {display:table-cell; width:100%; vertical-align:middle;}
+div[data-module=board] ul.buttons > li:first-child {width:100px;}
+div[data-module=board] ul.buttons > li:first-child > div[data-role=button] {text-align:left; padding-left:0px;}
+div[data-module=board] ul.buttons > li:first-child > div[data-role=button] > button, div[data-module=board] ul.buttons > li:first-child > div[data-role=button] > a {margin-left:0px; margin-right:5px;}
+div[data-module=board] ul.buttons > li:last-child {width:100%;}
+div[data-module=board] ul.buttons > li:last-child > div[data-role=button] {text-align:right; padding-right:0px;}
+div[data-module=board] ul.buttons > li:last-child > div[data-role=button] > button, div[data-module=board] ul.buttons > li:last-child > div[data-role=button] > a {margin-left:5px; margin-right:0px;}
+
+div[data-module=board] div[data-role=button] {margin-top:10px;}
 
 /**
  * cropit
@@ -194,14 +259,73 @@ div[data-module=board] .photo-editor input.cropit-image-zoom-input:focus::-ms-fi
 
 
 @media (max-width:767px) {
+	div[data-module=board] div[data-role=toolbar] {text-align:left;}
+	div[data-module=board] div[data-role=toolbar] > div[data-role=input] {width:100%; display:block; margin-bottom:10px; float:none;}
+	div[data-module=board] div[data-role=toolbar] > div[data-role=search] {width:calc(100% - 45px); max-width:100%;}
+	div[data-module=board] div[data-role=toolbar] > a > span {display:none;}
+	
+	div[data-module=board] ul[data-role=table] > li.thead > span {display:none;}
+	
+	div[data-module=board] ul[data-role=table] > li.tbody > span.loopnum {display:none;}
+	
+	div[data-module=board] ul[data-role=table] > li.tbody {font-size:0; display:block; padding:10px 0px;}
+	div[data-module=board] ul[data-role=table] > li.tbody > span {display:inline-block; font-size:14px; box-sizing:border-box; vertical-align:middle; padding:0;}
+	div[data-module=board] ul[data-role=table] > li.tbody > span.title {width:100%; padding:0px 5px 6px 5px; height:auto;}
+	div[data-module=board] ul[data-role=table] > li.tbody > span.title > a {display:block; height:24px; line-height:24px;}
+	div[data-module=board] ul[data-role=table] > li.tbody > span.title > a > span.ment {background:#FFA726; min-width:24px; height:24px; line-height:24px; color:#fff; padding:0px 8px; border-radius:12px; margin:0px 0px 0px 5px; position:relative; box-sizing:border-box;}
+	div[data-module=board] ul[data-role=table] > li.tbody > span.title > a > span.ment:before {content:"";}
+	div[data-module=board] ul[data-role=table] > li.tbody > span.title > a > span.ment:after {content:"";}
+	div[data-module=board] ul[data-role=table] > li.tbody > span.name {width:calc(100% - 200px); padding:0px 0px 0px 5px; height:24px;}
+	div[data-module=board] ul[data-role=table] > li.tbody > span.reg_date {width:140px; height:24px; line-height:24px; color:#666;}
+	div[data-module=board] ul[data-role=table] > li.tbody > span.reg_date > i.xi {margin:0px 5px 0px 10px; display:inline-block;}
+	div[data-module=board] ul[data-role=table] > li.tbody > span.hit {width:60px; height:24px; line-height:24px; color:#666; text-align:right;}
+	div[data-module=board] ul[data-role=table] > li.tbody > span.hit > i.xi {display:inline-block; margin:0px 5px 0px 10px;}
+	
+	div[data-module=board] ul[data-role=table] > li.notice > span.loopnum {display:inline-block; height:30px; line-height:30px; vertical-align:middle;}
+	div[data-module=board] ul[data-role=table] > li.notice > span.title {width:calc(100% - 60px); padding:0px 5px;}
+	div[data-module=board] ul[data-role=table] > li.notice > span.title > a {height:30px; line-height:30px;}
+	div[data-module=board] ul[data-role=table] > li.notice > span.title > a > span.ment {margin:3px 0px 3px 5px;}
+	div[data-module=board] ul[data-role=table] > li.notice > span.name {display:none;}
+	div[data-module=board] ul[data-role=table] > li.notice > span.reg_date {display:none;}
+	div[data-module=board] ul[data-role=table] > li.notice > span.hit {display:none;}
+	
 	div[data-module=board] ul[data-role=webzine] {margin:0px !important; width:100%;}
 	div[data-module=board] ul[data-role=webzine] > li {width:100% !important; padding:0px; margin:5px 0px;}
 	
-	div[data-module=board] div.searchbar > div.search {width:100%;}
-	div[data-module=board] div.searchbar > a + div.search {width:calc(100% - 120px);}
+	div[data-module=board] div[data-role=searchbar] > div[data-role=search] {width:calc(100% - 45px); max-width:100%;}
+	div[data-module=board] div[data-role=searchbar] > a > span {display:none;}
+	
+	
+	div[data-module=board] article[data-role=post] > header {display:block; position:relative;}
+	div[data-module=board] article[data-role=post] > header > div {display:block;}
+	div[data-module=board] article[data-role=post] > header > div.image {width:100%; padding:0px;}
+	div[data-module=board] article[data-role=post] > header > div.image > div {width:100%; height:0;}
+	
+	div[data-module=board] article[data-role=post] > header > div.title {padding:0px; height:100%; position:absolute; top:0; left:0; box-sizing:border-box; background:rgba(0,0,0,0.15);}
+	div[data-module=board] article[data-role=post] > header > div.title > h5 {max-height:72px; color:#fff; padding:15px 15px 50px 15px; background:linear-gradient(to top, rgba(0,0,0,0) 0%,rgba(0,0,0,0.65) 100%);}
+	div[data-module=board] article[data-role=post] > header > div.title > small {display:none;}
+	
+	div[data-module=board] article[data-role=post] > header > div.title > div.author {width:calc(100% - 30px); bottom:0; left:0; padding:30px 15px 15px 15px; background:linear-gradient(to bottom, rgba(0,0,0,0) 0%,rgba(0,0,0,0.65) 100%);}
+	div[data-module=board] article[data-role=post] > header > div.title > div.author > ul > li {color:#fff;}
+	div[data-module=board] article[data-role=post] > header > div.title > div.author > ul > li > b {display:none;}
+	div[data-module=board] article[data-role=post] > header > div.title > div.author > ul > li > i.xi {display:inline-block;}
+	
+	div[data-module=board] article[data-role=post] > div[data-role=button] > button[data-action=action] {display:inline-block;}
+	div[data-module=board] article[data-role=post] > div[data-role=button] > button[data-action=action].opened > i:before {content:"\f0d8";}
+	div[data-module=board] article[data-role=post] > div[data-role=button] > ul[data-role=action] {position:absolute; top:40px; right:0px; z-index:10; background:#fff; border:1px solid #ccc; box-shadow:1px 1px 2px rgba(0,0,0,0.1); display:none;}
+	div[data-module=board] article[data-role=post] > div[data-role=button] > ul[data-role=action].opened {display:block;}
+	div[data-module=board] article[data-role=post] > div[data-role=button] > ul[data-role=action] > li {display:block; text-align:left; font-size:0; margin-left:0; border-bottom:1px solid #ddd;}
+	div[data-module=board] article[data-role=post] > div[data-role=button] > ul[data-role=action] > li:hover {background:#f4f4f4;}
+	div[data-module=board] article[data-role=post] > div[data-role=button] > ul[data-role=action] > li:last-child {border-bottom:0;}
+	div[data-module=board] article[data-role=post] > div[data-role=button] > ul[data-role=action] > li > button {width:100%; margin-left:0; margin-right:0; background:transparent !important; color:#222 !important; text-align:left; border:0; padding:0px 16px; display:block;}
+	
 
 	div[data-module=board] ul[data-role=form] div[data-role=inputset].flex {display:block;}
 	div[data-module=board] ul[data-role=form] div[data-role=inputset].flex > div {display:block; margin:5px 0px 0px 0px; border-left:0px;}
 	div[data-module=board] ul[data-role=form] div[data-role=inputset].flex > div:first-child {margin-top:0px;}
 	div[data-module=board] ul[data-role=form] div[data-role=input][data-name=prefix] {width:100%;}
+}
+
+@media (min-width:768px) and (max-width:991px) {
+	div[data-module=board] ul[data-role=webzine] > li {width:50% !important;}
 }

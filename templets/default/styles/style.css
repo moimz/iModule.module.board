@@ -64,7 +64,7 @@ div[data-module=board] div.pagination {margin-top:20px; text-align:center;}
 
 div[data-module=board] article[data-role=post] {border-bottom:2px solid #222;}
 div[data-module=board] article[data-role=post] > header {display:block; margin:0; padding:15px; background:#f4f4f4; border-top:2px solid #222; line-height:1.6; border-bottom:1px solid #e3e4e5; margin-bottom:20px; font-size:0;}
-div[data-module=board] article[data-role=post] > header > h5 {font-size:15px; line-height:1.6; padding:5px 0px 15px 0px; margin:0; border-bottom:1px solid #e3e4e5;}
+div[data-module=board] article[data-role=post] > header > h5 {font-size:16px; line-height:1.6; padding:5px 0px 15px 0px; margin:0; border-bottom:1px solid #e3e4e5;}
 div[data-module=board] article[data-role=post] > header > i[data-role=photo] {width:48px; height:48px; margin-top:15px; margin-right:10px;}
 div[data-module=board] article[data-role=post] > header > ul {list-style:none; width:calc(100% - 58px); display:inline-block; margin-top:15px; font-size:0; vertical-align:middle;}
 div[data-module=board] article[data-role=post] > header > ul > li {font-size:14px; color:#666;}
@@ -171,10 +171,13 @@ div[data-module=board] div[data-role=ment] div[data-role=pagination]:empty {disp
 div[data-module=board] ul[data-role=form] div[data-role=input][data-name=prefix] {width:180px;}
 
 div[data-module=board] div[data-role=button] {margin-top:10px;}
+
 div[data-module=board] ul.buttons {list-style:none; padding-bottom:20px; display:table; width:100%; table-layout:fixed;}
 div[data-module=board] ul.buttons > li {display:table-cell; width:100%; vertical-align:middle;}
+div[data-module=board] ul.buttons > li:first-child {width:100px;}
 div[data-module=board] ul.buttons > li:first-child > div[data-role=button] {text-align:left; padding-left:0px;}
 div[data-module=board] ul.buttons > li:first-child > div[data-role=button] > button, div[data-module=board] ul.buttons > li:first-child > div[data-role=button] > a {margin-left:0px; margin-right:5px;}
+div[data-module=board] ul.buttons > li:last-child {width:100%;}
 div[data-module=board] ul.buttons > li:last-child > div[data-role=button] {text-align:right; padding-right:0px;}
 div[data-module=board] ul.buttons > li:last-child > div[data-role=button] > button, div[data-module=board] ul.buttons > li:last-child > div[data-role=button] > a {margin-left:5px; margin-right:0px;}
 

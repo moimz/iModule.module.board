@@ -8,7 +8,7 @@
  * @author Arzz (arzz@arzz.com)
  * @license MIT License
  * @version 3.0.0
- * @modified 2018. 2. 25.
+ * @modified 2018. 3. 11.
  */
 if (defined('__IM__') == false) exit;
 ?>
@@ -43,8 +43,8 @@ if (defined('__IM__') == false) exit;
 <ul data-role="form" class="inner">
 	<li>
 		<div data-role="input">
-			<?php echo $wysiwyg; ?>
-			<?php echo $uploader; ?>
+			<?php $wysiwyg->doLayout(); ?>
+			<?php $uploader->doLayout(); ?>
 		</div>
 	</li>
 	<?php if ($board->allow_secret == true || $board->allow_anonymity == true) { ?>

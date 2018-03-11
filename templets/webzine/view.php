@@ -8,28 +8,35 @@
  * @author Arzz (arzz@arzz.com)
  * @license MIT License
  * @version 3.0.0
- * @modified 2018. 2. 25.
+ * @modified 2018. 3. 11.
  */
 if (defined('__IM__') == false) exit;
 ?>
 <article data-role="post">
 	<header>
-		<h5><?php echo $post->prefix != null ? '<span class="prefix" style="color:'.$post->prefix->color.';">['.$post->prefix->title.']</span> ' : ''; ?><?php echo $post->title; ?></h5>
+		<div class="image"><div data-role="cover" style="background-image:url(<?php echo $post->image != null ? $post->image->path : $Templet->getDir().'/images/pattern'.($post->idx % 4 + 1).'.png'; ?>);"></div></div>
 		
-		<?php echo $post->photo; ?>
+		<div class="title">
+			<h5><?php echo $post->prefix != null ? '<span class="prefix" style="color:'.$post->prefix->color.';">['.$post->prefix->title.']</span> ' : ''; ?><?php echo $post->title; ?> Vestibulum id ligula porta felis euismod semper. Maecenas faucibus mollis interdum. Nullam quis risus eget urna mollis ornare vel eu leo.</h5>
+			<?php echo $post->category != null ? '<small>'.$post->category->title.'</small>' : ''; ?>
 		
-		<ul>
-			<li class="name"><b>작성자</b> <span rel="author"><?php echo $post->name; ?></span></li>
-			<li class="date"><b>작성일자</b> <?php echo GetTime('Y-m-d H:i:s',$post->reg_date); ?></li>
-			<li class="hit"><b>조회</b> <?php echo number_format($post->hit); ?></li>
-		</ul>
+			<div class="author">
+				<?php echo $post->photo; ?>
+				
+				<ul>
+					<li class="name"><b>작성자</b><i class="xi xi-user"></i><span rel="author"><?php echo $post->name; ?></span></li>
+					<li class="date"><b>작성일자</b><i class="xi xi-time"></i><?php echo GetTime('Y-m-d H:i:s',$post->reg_date); ?></li>
+					<li class="hit"><b>조회</b><i class="xi xi-eye"></i><?php echo number_format($post->hit); ?></li>
+				</ul>
+			</div>
+		</div>
 	</header>
 	
 	<div class="content">
 		<?php echo $post->content; ?>
 	</div>
 	
-	<?php if (count($attachments) > 0) { $IM->addHeadResource('style',$IM->getModule('attachment')->getModule()->getDir().'/styles/style.css'); ?>
+	<?php if (count($attachments) > 0) { ?>
 	<div data-module="attachment">
 		<h5><i class="xi xi-clip"></i>첨부파일</h5>
 		
@@ -43,6 +50,32 @@ if (defined('__IM__') == false) exit;
 		</ul>
 	</div>
 	<?php } ?>
+	
+	<div data-role="button">
+		<div class="author">
+			<?php echo $post->photo; ?>
+			<?php echo $post->name; ?>
+			<div class="level">
+				<div class="level">LV.<b><?php echo $post->member->level->level; ?></b></div>
+				<div class="progress">
+					<div class="on" style="width:<?php echo sprintf('%0.2f',$post->member->level->exp / $post->member->level->next * 100); ?>%;"></div>
+				</div>
+			</div>
+		</div>
+		
+		<?php if ($permission->modify == true || $permission->delete == true) { ?>
+		<button type="button" data-action="action" data-type="post" data-idx="<?php echo $post->idx; ?>"><i class="fa fa-caret-down"></i></button>
+		<ul data-role="action" data-type="post" data-idx="<?php echo $post->idx; ?>">
+			<?php if ($permission->modify == true) { ?>
+			<li><button type="button" data-action="modify" data-type="post" data-idx="<?php echo $post->idx; ?>">수정하기</button></li>
+			<?php } ?>
+			
+			<?php if ($permission->delete == true) { ?>
+			<li><button type="button" data-action="delete" data-type="post" data-idx="<?php echo $post->idx; ?>">삭제하기</button></li>
+			<?php } ?>
+		</ul>
+		<?php } ?>
+	</div>
 	
 	<?php echo $ment; ?>
 </article>
