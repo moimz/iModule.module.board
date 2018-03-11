@@ -28,7 +28,7 @@ div[data-module=board] ul[data-role=table] > li > span.loopnum > i.fa-caret-righ
 div[data-module=board] ul[data-role=table] > li.notice > span.loopnum {text-align:center; font-weight:bold; color:#F44336;}
 
 div[data-module=board] ul[data-role=table] > li > span.title {width:100%;}
-div[data-module=board] ul[data-role=table] > li > span.title > a {text-decoration:none; color:#222; display:inline-block; max-width:100%; text-overflow:ellipsis; overflow:hidden; white-space:nowrap;}
+div[data-module=board] ul[data-role=table] > li > span.title > a {text-decoration:none; color:#222; display:inline-block; max-width:100%; text-overflow:ellipsis; overflow:hidden; white-space:nowrap; vertical-align:middle;}
 div[data-module=board] ul[data-role=table] > li > span.title > a:hover {color:#0370a6;}
 div[data-module=board] ul[data-role=table] > li > span.title > a > span.category {color:#666;}
 div[data-module=board] ul[data-role=table] > li > span.title > a > i.xi {margin-right:3px;}
@@ -85,7 +85,7 @@ div[data-module=board] article[data-role=post] > div[data-role=button] > div.aut
 div[data-module=board] article[data-role=post] > div[data-role=button] > div.author > div.level > div.level {width:35px; height:12px; font-size:11px; display:inline-block; vertical-align:middle; line-height:12px; font-family:Roboto; color:#666;}
 div[data-module=board] article[data-role=post] > div[data-role=button] > div.author > div.level > div.level > b {color:#0288D1;}
 div[data-module=board] article[data-role=post] > div[data-role=button] > div.author > div.level > div.progress {width:calc(100% - 35px); height:10px; margin:1px 0px; background:#ccc; display:inline-block; vertical-align:middle; border-radius:5px;}
-div[data-module=board] article[data-role=post] > div[data-role=button] > div.author > div.level > div.progress > div.on {background:#4FC3F7; height:10px; border-radius:5px;}
+div[data-module=board] article[data-role=post] > div[data-role=button] > div.author > div.level > div.progress > div.on {background:#4FC3F7; min-width:10px; height:10px; border-radius:5px;}
 
 
 div[data-module=board] article[data-role=post] > div[data-role=button] > button[data-action=action] {background:#b5b7c0; color:#fff; border:0; font-size:16px; width:40px; height:40px; margin-left:5px; margin-right:0; display:none;}
