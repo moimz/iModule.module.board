@@ -1148,14 +1148,14 @@ class ModuleBoard {
 		$buttons = array();
 		
 		$button = new stdClass();
-		$button->type = 'submit';
-		$button->text = '삭제하기';
-		$button->class = 'danger';
+		$button->type = 'close';
+		$button->text = '취소';
 		$buttons[] = $button;
 		
 		$button = new stdClass();
-		$button->type = 'close';
-		$button->text = '취소';
+		$button->type = 'submit';
+		$button->text = '삭제하기';
+		$button->class = 'danger';
 		$buttons[] = $button;
 		
 		return $this->getTemplet()->getModal($title,$content,true,array(),$buttons);
