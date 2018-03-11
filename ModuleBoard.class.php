@@ -8,7 +8,7 @@
  * @author Arzz (arzz@arzz.com)
  * @license MIT License
  * @version 3.0.0
- * @modified 2018. 1. 15.
+ * @modified 2018. 3. 11.
  */
 class ModuleBoard {
 	/**
@@ -849,9 +849,8 @@ class ModuleBoard {
 		$footer = PHP_EOL.'</form>'.PHP_EOL.'<script>Board.write.init("ModuleBoardWriteForm-'.$bid.'");</script>'.PHP_EOL;
 		
 		$wysiwyg = $this->IM->getModule('wysiwyg')->setModule('board')->setName('content')->setRequired(true)->setContent($post == null ? '' : $post->content);
-		
+		$uploader = $this->IM->getModule('attachment');
 		if ($board->use_attachment == true) {
-			$uploader = $this->IM->getModule('attachment');
 			if ($configs == null || isset($configs->attachment) == null || $configs->attachment == '#') {
 				$attachment_templet_name = $board->attachment->templet;
 				$attachment_templet_configs = $board->attachment->templet_configs;
@@ -872,11 +871,9 @@ class ModuleBoard {
 			if ($post != null) {
 				$uploader->setLoader($this->IM->getProcessUrl('board','getFiles',array('idx'=>Encoder(json_encode(array('type'=>'POST','idx'=>$post->idx))))));
 			}
-			$uploader = $uploader->get();
 		} else {
-			$uploader = '';
+			$uploader = $uploader->disable();
 		}
-		$wysiwyg = $wysiwyg->get();
 		
 		/**
 		 * 템플릿파일을 호출한다.
@@ -1033,9 +1030,8 @@ class ModuleBoard {
 		$board = $this->getBoard($post->bid);
 		
 		$wysiwyg = $this->IM->getModule('wysiwyg')->setModule('board')->setName('content')->setHeight(100)->setRequired(true);
-		
+		$uploader = $this->IM->getModule('attachment');
 		if ($board->use_attachment == true) {
-			$uploader = $this->IM->getModule('attachment');
 			if ($configs == null || isset($configs->attachment) == null || $configs->attachment == '#') {
 				$attachment_templet_name = $board->attachment->templet;
 				$attachment_templet_configs = $board->attachment->templet_configs;
@@ -1052,11 +1048,10 @@ class ModuleBoard {
 				$attachment_templet = '#';
 			}
 			
-			$uploader = $uploader->setTemplet($attachment_templet)->setModule('board')->setWysiwyg('content')->get();
+			$uploader = $uploader->setTemplet($attachment_templet)->setModule('board')->setWysiwyg('content');
 		} else {
-			$uploader = '';
+			$uploader = $uploader->disable();
 		}
-		$wysiwyg = $wysiwyg->get();
 		
 		$header = PHP_EOL.'<div id="ModuleBoardMentWrite-'.$parent.'">'.PHP_EOL;
 		$header.= '<form id="ModuleBoardMentForm-'.$parent.'">'.PHP_EOL;
