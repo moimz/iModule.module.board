@@ -2,12 +2,13 @@
 /**
  * 이 파일은 iModule 게시판모듈의 일부입니다. (https://www.imodule.kr)
  *
- * 게시판 댓글 작성 템플릿
+ * 게시판 기본템플릿 - 댓글작성
  * 
  * @file /modules/board/templets/default/ment.write.php
  * @author Arzz (arzz@arzz.com)
  * @license MIT License
- * @version 3.0.0.161211
+ * @version 3.0.0
+ * @modified 2018. 3. 11.
  */
 if (defined('__IM__') == false) exit;
 ?>
@@ -42,8 +43,8 @@ if (defined('__IM__') == false) exit;
 <ul data-role="form" class="inner">
 	<li>
 		<div data-role="input">
-			<?php echo $wysiwyg; ?>
-			<?php echo $uploader; ?>
+			<?php $wysiwyg->doLayout(); ?>
+			<?php $uploader->doLayout(); ?>
 		</div>
 	</li>
 	<?php if ($board->allow_secret == true || $board->allow_anonymity == true) { ?>

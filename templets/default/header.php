@@ -13,4 +13,5 @@
 if (defined('__IM__') == false) exit;
 
 $IM->loadWebFont('XEIcon');
+$IM->loadWebFont('Roboto');
 ?>

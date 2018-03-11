@@ -8,7 +8,7 @@
  * @author Arzz (arzz@arzz.com)
  * @license MIT License
  * @version 3.0.0
- * @modified 2018. 2. 25.
+ * @modified 2018. 3. 10.
  */
 if (defined('__IM__') == false) exit;
 ?>
@@ -19,9 +19,9 @@ if (defined('__IM__') == false) exit;
 		<?php echo $post->photo; ?>
 		
 		<ul>
-			<li class="name"><b>작성자</b> <span rel="author"><?php echo $post->name; ?></span></li>
-			<li class="date"><b>작성일자</b> <?php echo GetTime('Y-m-d H:i:s',$post->reg_date); ?></li>
-			<li class="hit"><b>조회</b> <?php echo number_format($post->hit); ?></li>
+			<li class="name"><b>작성자</b><i class="xi xi-user"></i><span rel="author"><?php echo $post->name; ?></span></li>
+			<li class="date"><b>작성일자</b><i class="xi xi-time"></i><?php echo GetTime('Y-m-d H:i:s',$post->reg_date); ?></li>
+			<li class="hit"><b>조회</b><i class="xi xi-eye"></i><?php echo number_format($post->hit); ?></li>
 		</ul>
 	</header>
 	
@@ -43,6 +43,32 @@ if (defined('__IM__') == false) exit;
 		</ul>
 	</div>
 	<?php } ?>
+	
+	<div data-role="button">
+		<div class="author">
+			<?php echo $post->photo; ?>
+			<?php echo $post->name; ?>
+			<div class="level">
+				<div class="level">LV.<b><?php echo $post->member->level->level; ?></b></div>
+				<div class="progress">
+					<div class="on" style="width:<?php echo sprintf('%0.2f',$post->member->level->exp / $post->member->level->next * 100); ?>%;"></div>
+				</div>
+			</div>
+		</div>
+		
+		<?php if ($permission->modify == true || $permission->delete == true) { ?>
+		<button type="button" data-action="action" data-type="post" data-idx="<?php echo $post->idx; ?>"><i class="fa fa-caret-down"></i></button>
+		<ul data-role="action" data-type="post" data-idx="<?php echo $post->idx; ?>">
+			<?php if ($permission->modify == true) { ?>
+			<li><button type="button" data-action="modify" data-type="post" data-idx="<?php echo $post->idx; ?>">수정하기</button></li>
+			<?php } ?>
+			
+			<?php if ($permission->delete == true) { ?>
+			<li><button type="button" data-action="delete" data-type="post" data-idx="<?php echo $post->idx; ?>">삭제하기</button></li>
+			<?php } ?>
+		</ul>
+		<?php } ?>
+	</div>
 	
 	<?php echo $ment; ?>
 </article>
