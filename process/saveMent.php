@@ -8,7 +8,7 @@
  * @author Arzz (arzz@arzz.com)
  * @license MIT License
  * @version 3.0.0
- * @modified 2018. 2. 27.
+ * @modified 2018. 3. 11.
  */
 if (defined('__IM__') == false) exit;
 
@@ -79,6 +79,11 @@ if (empty($errors) == true) {
 		$insert['ip'] = $_SERVER['REMOTE_ADDR'];
 		
 		$idx = $this->db()->insert($this->table->ment,$insert)->execute();
+		if ($idx === false) {
+			$results->success = false;
+			$results->message = $this->getErrorText('DATABASE_INSERT_ERROR');
+			return;
+		}
 		
 		if ($source) {
 			$sourceData = $this->getMent($source);

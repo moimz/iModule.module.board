@@ -4,11 +4,11 @@
  * 
  * 게시물을 저장한다.
  *
- * @file /modules/board/process/saveBoard.php
+ * @file /modules/board/process/savePost.php
  * @author Arzz (arzz@arzz.com)
  * @license MIT License
  * @version 3.0.0
- * @modified 2018. 2. 25.
+ * @modified 2018. 3. 11.
  */
 if (defined('__IM__') == false) exit;
 
@@ -106,6 +106,11 @@ if (empty($errors) == true) {
 		$insert['ip'] = $_SERVER['REMOTE_ADDR'];
 		
 		$idx = $this->db()->insert($this->table->post,$insert)->execute();
+		if ($idx === false) {
+			$results->success = false;
+			$results->message = $this->getErrorText('DATABASE_INSERT_ERROR');
+			return;
+		}
 		
 		/**
 		 * 포인트 및 활동내역을 기록한다.
