@@ -120,6 +120,7 @@ div[data-module=board] div[data-role=ment] > div[data-role=list] > div[data-role
 div[data-module=board] div[data-role=ment] > div[data-role=list] > div[data-role=item] > div.topbar > i[data-role=photo] {width:28px; height:28px; border:1px solid #ccc; margin-right:8px; background-repeat:no-repeat; background-size:cover; background-position:50% 50%; display:inline-block; vertical-align:middle; float:left;}
 div[data-module=board] div[data-role=ment] > div[data-role=list] > div[data-role=item] > div.topbar > span[data-role=name] {font-size:14px; height:30px; line-height:30px; display:inline-block; vertical-align:middle; float:left;}
 div[data-module=board] div[data-role=ment] > div[data-role=list] > div[data-role=item] > div.topbar > button[data-action=action] {width:30px; height:30px; background:#b5b7c0; color:#fff; border:0; font-size:16px; cursor:pointer; display:none;}
+div[data-module=board] div[data-role=ment] > div[data-role=list] > div[data-role=item] > div.topbar > button[data-action=action] > i {width:30px; height:30px; line-height:30px;}
 div[data-module=board] div[data-role=ment] > div[data-role=list] > div[data-role=item] > div.topbar > button[data-action=action]:hover {background:#828595;}
 div[data-module=board] div[data-role=ment] > div[data-role=list] > div[data-role=item] > div.topbar > ul[data-role=action] {list-style:none; position:relative; float:right; font-size:0;}
 div[data-module=board] div[data-role=ment] > div[data-role=list] > div[data-role=item] > div.topbar > ul[data-role=action] > li {display:inline-block;}
