@@ -75,9 +75,9 @@ div[data-module=board] article[data-role=post] > header > ul > li.date {display:
 div[data-module=board] article[data-role=post] > header > ul > li.hit {display:inline-block; width:30%; height:24px; line-height:24px; vertical-align:middle; text-align:right;}
 div[data-module=board] article[data-role=post] > header > ul > li.hit > b {margin-right:10px;}
 
-div[data-module=board] article[data-role=post] > div.content {padding-bottom:20px;}
+div[data-module=board] article[data-role=post] > div.content {padding-bottom:20px; font-size:14px;}
 
-div[data-module=board] article[data-role=post] > div[data-role=button] {text-align:right; padding-right:0; position:relative;}
+div[data-module=board] article[data-role=post] > div[data-role=button] {text-align:right; padding-right:0; position:relative; margin-bottom:20px;}
 div[data-module=board] article[data-role=post] > div[data-role=button] > div.author {display:inline-block; width:160px; height:30px; padding:4px; background:#E3F2FD; vertical-align:middle; border:1px solid #BBDEFB; text-align:left;}
 div[data-module=board] article[data-role=post] > div[data-role=button] > div.author > i[data-role=photo] {width:28px; height:28px; border:1px solid #ccc; background-size:cover; background-position:50% 50%; background-repeat:no-repeat; float:left; margin-right:8px;}
 div[data-module=board] article[data-role=post] > div[data-role=button] > div.author > span[data-role=name] {display:block; width:calc(100% - 40px); height:18px; font-size:12px; line-height:18px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
