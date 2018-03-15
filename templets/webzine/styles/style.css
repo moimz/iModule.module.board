@@ -168,7 +168,7 @@ div[data-module=board] div[data-role=ment] > div[data-role=list] > div[data-role
 div[data-module=board] div[data-role=ment] > div[data-role=list] > div[data-role=item] > div.topbar > ul[data-role=action] > li > button[data-action=delete] {background:#F44336; color:#fff;}
 div[data-module=board] div[data-role=ment] > div[data-role=list] > div[data-role=item] > div.topbar > ul[data-role=action] > li > button[data-action=delete]:hover {background:#E53935;}
 
-div[data-module=board] div[data-role=ment] > div[data-role=list] > div[data-role=item] > div.content {padding:10px 0px 10px 38px; position:relative;}
+div[data-module=board] div[data-role=ment] > div[data-role=list] > div[data-role=item] > div.content {padding:10px 0px 10px 38px; position:relative; font-size:14px;}
 div[data-module=board] div[data-role=ment] > div[data-role=list] > div[data-role=item] > div.content > i.mi-lock {position:absolute; top:10px; left:20px; color:#F44336; height:22px; line-height:22px;}
 
 div[data-module=board] div[data-role=ment] > div[data-role=list] > div[data-role=item] div[data-secret=TRUE] {font-size:14px; text-align:center; width:100%; padding:10px 0px; line-height:1.6; background:#FFEBEE; color:#F44336;}
