@@ -17,7 +17,7 @@ if (defined('__IM__') == false) exit;
 		<div class="image"><div data-role="cover" style="background-image:url(<?php echo $post->image != null ? $post->image->path : $Templet->getDir().'/images/pattern'.($post->idx % 4 + 1).'.png'; ?>);"></div></div>
 		
 		<div class="title">
-			<h5><?php echo $post->prefix != null ? '<span class="prefix" style="color:'.$post->prefix->color.';">['.$post->prefix->title.']</span> ' : ''; ?><?php echo $post->title; ?> Vestibulum id ligula porta felis euismod semper. Maecenas faucibus mollis interdum. Nullam quis risus eget urna mollis ornare vel eu leo.</h5>
+			<h5><?php echo $post->prefix != null ? '<span class="prefix" style="color:'.$post->prefix->color.';">['.$post->prefix->title.']</span> ' : ''; ?><?php echo $post->title; ?></h5>
 			<?php echo $post->category != null ? '<small>'.$post->category->title.'</small>' : ''; ?>
 		
 			<div class="author">
