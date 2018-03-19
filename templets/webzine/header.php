@@ -17,5 +17,5 @@ $IM->loadWebFont('XEIcon');
 <style>
 div[data-module=board] ul[data-role=webzine] > li {width:<?php echo sprintf('%.010f',100 / $Templet->getConfig('columns')); ?>%;}
 div[data-module=board] ul[data-role=webzine] > li > div {padding-bottom:<?php echo $Templet->getConfig("height"); ?>%;}
-div[data-module=board] div[data-role=cover] {padding-bottom:<?php echo $Templet->getConfig("height"); ?>%;}
+div[data-module=board] div[data-role=cover] {padding:0; padding-bottom:<?php echo $Templet->getConfig("height"); ?>%;}
 </style>
