@@ -607,6 +607,9 @@ class ModuleBoard {
 		$keyword = Request('keyword');
 		if ($keyword) {
 			$lists = $this->IM->getModule('keyword')->getWhere($lists,array('title','search'),$keyword);
+			$midxes = $this->IM->getModule('member')->getSearchResults($keyword);
+			if (count($midxes) > 0) $lists->orWhere('midx',$midxes,'IN');
+			$lists->orWhere('name',$keyword);
 			$this->IM->getModule('keyword')->mark($keyword,'div[data-module=board] span[data-role=title]');
 		}
 		$total = $lists->copy()->count();
