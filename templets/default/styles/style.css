@@ -41,7 +41,7 @@ div[data-module=board] ul[data-role=table] > li > span.name {width:140px; text-a
 div[data-module=board] ul[data-role=table] > li.tbody > span.name {text-align:left;}
 div[data-module=board] ul[data-role=table] > li.tbody > span.name > i[data-role=photo] {width:24px; height:24px; margin-right:5px;}
 div[data-module=board] ul[data-role=table] > li.tbody > span.name > span[data-role=name] {width:calc(100% - 30px); height:24px; line-height:24px;}
-div[data-module=board] ul[data-role=table] > li > span.reg_date {width:110px; text-align:center;}
+div[data-module=board] ul[data-role=table] > li > span.reg_date {width:110px; text-align:center; padding:0px;}
 div[data-module=board] ul[data-role=table] > li > span.reg_date > i.xi {display:none;}
 div[data-module=board] ul[data-role=table] > li > span.hit {width:60px;}
 div[data-module=board] ul[data-role=table] > li > span.hit > i.xi {display:none;}
@@ -118,7 +118,7 @@ div[data-module=board] div[data-role=ment] > div[data-role=list] > div[data-role
 
 div[data-module=board] div[data-role=ment] > div[data-role=list] > div[data-role=item] > div.topbar {height:30px; font-size:0; text-align:right; position:relative;}
 div[data-module=board] div[data-role=ment] > div[data-role=list] > div[data-role=item] > div.topbar > i[data-role=photo] {width:28px; height:28px; border:1px solid #ccc; margin-right:8px; background-repeat:no-repeat; background-size:cover; background-position:50% 50%; display:inline-block; vertical-align:middle; float:left;}
-div[data-module=board] div[data-role=ment] > div[data-role=list] > div[data-role=item] > div.topbar > span[data-role=name] {font-size:14px; height:30px; line-height:30px; display:inline-block; vertical-align:middle; float:left;}
+div[data-module=board] div[data-role=ment] > div[data-role=list] > div[data-role=item] > div.topbar > span[data-role=name] {font-size:14px; height:28px; line-height:28px; display:inline-block; vertical-align:middle; float:left;}
 div[data-module=board] div[data-role=ment] > div[data-role=list] > div[data-role=item] > div.topbar > button[data-action=action] {width:30px; height:30px; background:#b5b7c0; color:#fff; border:0; font-size:16px; cursor:pointer; display:none;}
 div[data-module=board] div[data-role=ment] > div[data-role=list] > div[data-role=item] > div.topbar > button[data-action=action] > i {width:30px; height:30px; line-height:30px;}
 div[data-module=board] div[data-role=ment] > div[data-role=list] > div[data-role=item] > div.topbar > button[data-action=action]:hover {background:#828595;}
@@ -200,9 +200,9 @@ div[data-module=board] ul.buttons > li:last-child > div[data-role=button] > butt
 	div[data-module=board] ul[data-role=table] > li.tbody > span.title > a > span.ment:before {content:"";}
 	div[data-module=board] ul[data-role=table] > li.tbody > span.title > a > span.ment:after {content:"";}
 	div[data-module=board] ul[data-role=table] > li.tbody > span.name {width:calc(100% - 200px); padding:0px 0px 0px 5px; height:24px;}
-	div[data-module=board] ul[data-role=table] > li.tbody > span.reg_date {width:140px; height:24px; line-height:24px; color:#666;}
+	div[data-module=board] ul[data-role=table] > li.tbody > span.reg_date {width:120px; height:24px; line-height:24px; color:#666;}
 	div[data-module=board] ul[data-role=table] > li.tbody > span.reg_date > i.xi {margin:0px 5px 0px 10px; display:inline-block;}
-	div[data-module=board] ul[data-role=table] > li.tbody > span.hit {width:60px; height:24px; line-height:24px; color:#666; text-align:right;}
+	div[data-module=board] ul[data-role=table] > li.tbody > span.hit {width:80px; height:24px; line-height:24px; color:#666; text-align:right;}
 	div[data-module=board] ul[data-role=table] > li.tbody > span.hit > i.xi {display:inline-block; margin:0px 5px 0px 10px;}
 	
 	div[data-module=board] ul[data-role=table] > li.notice > span.loopnum {display:inline-block; height:30px; line-height:30px; vertical-align:middle;}

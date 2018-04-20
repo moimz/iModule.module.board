@@ -19,7 +19,7 @@ if (defined('__IM__') == false) exit;
 		<?php echo $post->photo; ?>
 		
 		<ul>
-			<li class="name"><b>작성자</b><i class="xi xi-user"></i><span rel="author"><?php echo $post->name; ?></span></li>
+			<li class="name"><b>작성자</b><i class="xi xi-user"></i><span rel="author"><?php echo $post->nickname; ?></span></li>
 			<li class="date"><b>작성일자</b><i class="xi xi-time"></i><?php echo GetTime('Y-m-d H:i:s',$post->reg_date); ?></li>
 			<li class="hit"><b>조회</b><i class="xi xi-eye"></i><?php echo number_format($post->hit); ?></li>
 		</ul>
@@ -37,7 +37,7 @@ if (defined('__IM__') == false) exit;
 			<?php for ($i=0, $loop=count($attachments);$i<$loop;$i++) { ?>
 			<li>
 				<i class="icon" data-type="<?php echo $attachments[$i]->type; ?>"></i>
-				<a href="<?php echo $attachments[$i]->download; ?>"><span class="size">(<?php echo GetFileSize($attachments[$i]->size); ?>)</span><?php echo $attachments[$i]->name; ?></a>
+				<a href="<?php echo $attachments[$i]->download; ?>"><span class="size">(<?php echo GetFileSize($attachments[$i]->size); ?>)</span><?php echo $attachments[$i]->nickname; ?></a>
 			</li>
 			<?php } ?>
 		</ul>
@@ -47,7 +47,7 @@ if (defined('__IM__') == false) exit;
 	<div data-role="button">
 		<div class="author">
 			<?php echo $post->photo; ?>
-			<?php echo $post->name; ?>
+			<?php echo $post->nickname; ?>
 			<div class="level">
 				<div class="level">LV.<b><?php echo $post->member->level->level; ?></b></div>
 				<div class="progress">

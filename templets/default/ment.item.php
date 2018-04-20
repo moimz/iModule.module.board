@@ -20,7 +20,7 @@ if (defined('__IM__') == false) exit;
 
 <div class="topbar">
 	<?php echo $ment->photo; ?>
-	<?php echo $ment->name; ?>
+	<?php echo $ment->nickname; ?>
 	
 	<?php if ($permission->write == true || $permission->modify == true || $permission->delete == true) { ?>
 	<button type="button" data-action="action" data-type="ment" data-idx="<?php echo $ment->idx; ?>"><i class="fa fa-caret-down"></i></button>
@@ -44,7 +44,7 @@ if (defined('__IM__') == false) exit;
 			<?php for ($i=0, $loop=count($attachments);$i<$loop;$i++) { ?>
 			<li>
 				<i class="icon" data-type="<?php echo $attachments[$i]->type; ?>"></i>
-				<a href="<?php echo $attachments[$i]->download; ?>"><span class="size">(<?php echo GetFileSize($attachments[$i]->size); ?>)</span><?php echo $attachments[$i]->name; ?></a>
+				<a href="<?php echo $attachments[$i]->download; ?>"><span class="size">(<?php echo GetFileSize($attachments[$i]->size); ?>)</span><?php echo $attachments[$i]->nickname; ?></a>
 			</li>
 			<?php } ?>
 		</ul>
