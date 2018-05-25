@@ -137,6 +137,17 @@ class ModuleBoard {
 	}
 	
 	/**
+	 * 다른모듈에서 호출된 경우 baseUrl 을 설정한다.
+	 *
+	 * @param string $url
+	 * @return $this
+	 */
+	function setUrl($url) {
+		$this->baseUrl = $this->IM->getUrl(null,null,$url,false);
+		return $this;
+	}
+	
+	/**
 	 * view 값을 가져온다.
 	 *
 	 * @return string $view
@@ -425,10 +436,6 @@ class ModuleBoard {
 		$this->IM->addHeadResource('style',$this->getModule()->getDir().'/styles/style.css');
 		$this->IM->addHeadResource('script',$this->getModule()->getDir().'/scripts/script.js');
 		
-		$values = new stdClass();
-		
-		if ($configs != null && isset($configs->baseUrl) == true) $this->baseUrl = $configs->baseUrl;
-		
 		$view = $this->getView() == null ? 'list' : $this->getView();
 		
 		$board = $this->getBoard($bid);
@@ -443,7 +450,8 @@ class ModuleBoard {
 			$configs->templet_configs = isset($configs->templet_configs) == true ? $configs->templet_configs : null;
 		}
 
-		$html = PHP_EOL.'<!-- BOARD MODULE -->'.PHP_EOL.'<div data-role="context" data-type="module" data-module="board" data-base-url="'.($configs == null || isset($configs->baseUrl) == false ? '' : $configs->baseUrl).'" data-bid="'.$bid.'" data-view="'.$view.'" data-configs="'.GetString(json_encode($configs),'input').'">'.PHP_EOL;
+		$html = PHP_EOL.'<!-- BOARD MODULE -->'.PHP_EOL.'<div data-role="context" data-type="module" data-module="'.$this->getModule()->getName().'" data-base-url="'.($this->baseUrl == null ? $this->IM->getUrl(null,null,false) : $this->baseUrl).'" data-bid="'.$bid.'" data-view="'.$view.'" data-configs="'.GetString(json_encode($configs),'input').'">'.PHP_EOL;
+		
 		$html.= $this->getHeader($bid,$configs);
 		
 		switch ($view) {

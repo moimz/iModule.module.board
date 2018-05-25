@@ -29,7 +29,6 @@
 	"global":false,
 	"article":true,
 	"widget":true,
-	"include":true,
 	"databases":{
 		"board_admin_table":{
 			"columns":{
