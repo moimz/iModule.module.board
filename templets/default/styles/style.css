@@ -23,7 +23,7 @@ div[data-module=board] div[data-role=toolbar] > a:hover {background:#1e88e5;}
 
 
 div[data-module=board] ul[data-role=table] > li.notice {background:#FFFDE7;}
-div[data-module=board] ul[data-role=table] > li > span.loopnum {width:60px; text-align:center;}
+div[data-module=board] ul[data-role=table] > li > span.loopnum {width:65px; text-align:center;}
 div[data-module=board] ul[data-role=table] > li > span.loopnum > i.fa-caret-right {color:#f44336;}
 div[data-module=board] ul[data-role=table] > li.notice > span.loopnum {text-align:center; font-weight:bold; color:#F44336;}
 
