@@ -1,0 +1,40 @@
+{
+	"title":{
+		"ko":"게시판 갤러리 템플릿"
+	},
+	"version":"1.0.0",
+	"author":{
+		"name":"Arzz",
+		"email":"arzz@arzz.com"
+	},
+	"homepage":"https://www.imodule.kr",
+	"language":"ko",
+	"styles":[
+		"/styles/style.css"
+	],
+	"scripts":[
+		"/scripts/script.js"
+	],
+	"configs":{
+		"height":{
+			"title":{
+				"ko":"세로비율"
+			},
+			"type":"int",
+			"default":70,
+			"help":{
+				"ko":"목록화면 이미지의 세로비율을 가로크기 대비 퍼센트(%)로 지정하여 주십시오."
+			}
+		},
+		"columns":{
+			"title":{
+				"ko":"목록가로수"
+			},
+			"type":"int",
+			"default":3,
+			"help":{
+				"ko":"목록화면에서 한줄당 이미지 갯수를 지정하여 주십시오."
+			}
+		}
+	}
+}
