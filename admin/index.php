@@ -80,7 +80,7 @@ Ext.onReady(function () { Ext.getCmp("iModuleAdminPanel").add(
 					align:"right",
 					dataIndex:"category",
 					renderer:function(value,p) {
-						if (value == 0) {
+						if (value <= 0) {
 							p.style = "text-align:center;";
 							return "-";
 						}
@@ -93,7 +93,7 @@ Ext.onReady(function () { Ext.getCmp("iModuleAdminPanel").add(
 					dataIndex:"post",
 					sortable:true,
 					renderer:function(value,p) {
-						if (value == 0) {
+						if (value <= 0) {
 							p.style = "text-align:center;";
 							return "-";
 						}
@@ -115,7 +115,7 @@ Ext.onReady(function () { Ext.getCmp("iModuleAdminPanel").add(
 					dataIndex:"ment",
 					sortable:true,
 					renderer:function(value,p) {
-						if (value == 0) {
+						if (value <= 0) {
 							p.style = "text-align:center;";
 							return "-";
 						}
@@ -136,7 +136,7 @@ Ext.onReady(function () { Ext.getCmp("iModuleAdminPanel").add(
 					align:"right",
 					dataIndex:"file",
 					renderer:function(value,p) {
-						if (value == 0) {
+						if (value <= 0) {
 							p.style = "text-align:center;";
 							return "-";
 						}
