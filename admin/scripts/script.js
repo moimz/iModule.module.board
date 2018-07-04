@@ -26,7 +26,7 @@ var Board = {
 				modal:true,
 				width:750,
 				border:false,
-				autoScroll:true,
+				scrollable:true,
 				items:[
 					new Ext.form.Panel({
 						id:"ModuleBoardAddBoardForm",
@@ -520,7 +520,7 @@ var Board = {
 				modal:true,
 				width:600,
 				border:false,
-				autoScroll:true,
+				scrollable:true,
 				items:[
 					new Ext.form.Panel({
 						id:"ModuleBoardAddCategoryForm",
