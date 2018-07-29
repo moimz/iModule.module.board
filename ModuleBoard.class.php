@@ -1229,7 +1229,7 @@ class ModuleBoard {
 			
 			if ($is_link == true) {
 				$page = $this->IM->getContextUrl('board',$post->bid,array(),array('category'=>$post->category),true);
-				$post->link = $page == null ? '#' : $this->IM->getUrl($page->menu,$page->page,'view',$post->idx);
+				$post->link = $page == null ? '#' : $page.'/view/'.$post->idx;
 			}
 			
 			$post->image = $post->image > 0 ? $this->IM->getModule('attachment')->getFileInfo($post->image) : null;
@@ -1275,8 +1275,8 @@ class ModuleBoard {
 			$ment->photo = $this->IM->getModule('member')->getMemberPhoto($ment->midx);
 			
 			if ($is_link == true) {
-//				$page = $this->IM->getContextUrl('board',$ment->bid,array(),array('category'=>$post->category),true);
-//				$post->link = $page == null ? '#' : $this->IM->getUrl($page->menu,$page->page,'view',$post->idx);
+				$page = $this->IM->getContextUrl('board',$ment->bid,array(),array(),true);
+				$ment->link = $page == null ? '#' : $page.'/view/'.$post->idx;
 			}
 			
 //			$post->image = $post->image > 0 ? $this->IM->getModule('attachment')->getFileInfo($post->image) : null;

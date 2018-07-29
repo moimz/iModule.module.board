@@ -41,8 +41,7 @@ if ($Widget->checkCache() < time() - $cache) {
 
 if (count($bid) == 1) {
 	$options = count($category) == 1 ? array('category'=>$category[0]) : array();
-	$page = $IM->getContextUrl('board',$bid[0],array(),$options,true);
-	$more = $page == null ? null : $IM->getUrl($page->menu,$page->page,false);
+	$more = $IM->getContextUrl('board',$bid[0],array(),$options,true);
 } else {
 	$more = null;
 }
