@@ -82,25 +82,25 @@ div[data-module=board] div.pagination {margin-top:20px; text-align:center;}
 
 
 div[data-module=board] article[data-role=post] {border-bottom:2px solid #222;}
-div[data-module=board] article[data-role=post] > header {display:table; width:100%; table-layout:fixed; margin:0; background:#f4f4f4; border-top:2px solid #222; line-height:1.6; border-bottom:1px solid #e3e4e5; margin-bottom:20px; font-size:0;}
-div[data-module=board] article[data-role=post] > header > div {display:table-cell; vertical-align:top;}
-div[data-module=board] article[data-role=post] > header > div.image {width:240px; padding:10px;}
-div[data-module=board] article[data-role=post] > header > div.image > div {width:100%; height:0;}
+div[data-module=board] article[data-role=post] > div[data-module=board] article[data-role=post] > div.header {display:table; width:100%; table-layout:fixed; margin:0; background:#f4f4f4; border-top:2px solid #222; line-height:1.6; border-bottom:1px solid #e3e4e5; margin-bottom:20px; font-size:0;}
+div[data-module=board] article[data-role=post] > div[data-module=board] article[data-role=post] > div.header > div {display:table-cell; vertical-align:top;}
+div[data-module=board] article[data-role=post] > div[data-module=board] article[data-role=post] > div.header > div.image {width:240px; padding:10px;}
+div[data-module=board] article[data-role=post] > div[data-module=board] article[data-role=post] > div.header > div.image > div {width:100%; height:0;}
 
-div[data-module=board] article[data-role=post] > header > div.title {width:100%; padding:15px 15px 15px 5px; position:relative;}
-div[data-module=board] article[data-role=post] > header > div.title > h5 {font-size:16px; line-height:24px; min-height:24px; max-height:48px; margin:0; overflow:hidden;}
-div[data-module=board] article[data-role=post] > header > div.title > small {display:block; color:#666; font-size:14px; margin-top:10px;}
+div[data-module=board] article[data-role=post] > div[data-module=board] article[data-role=post] > div.header > div.title {width:100%; padding:15px 15px 15px 5px; position:relative;}
+div[data-module=board] article[data-role=post] > div[data-module=board] article[data-role=post] > div.header > div.title > h5 {font-size:16px; line-height:24px; min-height:24px; max-height:48px; margin:0; overflow:hidden;}
+div[data-module=board] article[data-role=post] > div[data-module=board] article[data-role=post] > div.header > div.title > small {display:block; color:#666; font-size:14px; margin-top:10px;}
 
-div[data-module=board] article[data-role=post] > header > div.title > div.author {position:absolute; width:calc(100% - 20px); bottom:15px; left:5px;}
-div[data-module=board] article[data-role=post] > header > div.title > div.author > i[data-role=photo] {width:48px; height:48px; margin-top:15px; margin-right:10px;}
-div[data-module=board] article[data-role=post] > header > div.title > div.author > ul {list-style:none; width:calc(100% - 58px); display:inline-block; margin-top:15px; font-size:0; vertical-align:middle;}
-div[data-module=board] article[data-role=post] > header > div.title > div.author > ul > li {font-size:14px; color:#666;}
-div[data-module=board] article[data-role=post] > header > div.title > div.author > ul > li > b {display:inline-block; width:65px;}
-div[data-module=board] article[data-role=post] > header > div.title > div.author > ul > li > i.xi {display:none; height:24px; line-height:24px; margin-right:8px; vertical-align:middle;}
-div[data-module=board] article[data-role=post] > header > div.title > div.author > ul > li.name {display:block; height:24px; line-height:24px; font-size:14px;}
-div[data-module=board] article[data-role=post] > header > div.title > div.author > ul > li.date {display:inline-block; width:70%; height:24px; line-height:24px; vertical-align:middle;}
-div[data-module=board] article[data-role=post] > header > div.title > div.author > ul > li.hit {display:inline-block; width:30%; height:24px; line-height:24px; vertical-align:middle; text-align:right;}
-div[data-module=board] article[data-role=post] > header > div.title > div.author > ul > li.hit > b {margin-right:10px;}
+div[data-module=board] article[data-role=post] > div[data-module=board] article[data-role=post] > div.header > div.title > div.author {position:absolute; width:calc(100% - 20px); bottom:15px; left:5px;}
+div[data-module=board] article[data-role=post] > div[data-module=board] article[data-role=post] > div.header > div.title > div.author > i[data-role=photo] {width:48px; height:48px; margin-top:15px; margin-right:10px;}
+div[data-module=board] article[data-role=post] > div[data-module=board] article[data-role=post] > div.header > div.title > div.author > ul {list-style:none; width:calc(100% - 58px); display:inline-block; margin-top:15px; font-size:0; vertical-align:middle;}
+div[data-module=board] article[data-role=post] > div[data-module=board] article[data-role=post] > div.header > div.title > div.author > ul > li {font-size:14px; color:#666;}
+div[data-module=board] article[data-role=post] > div[data-module=board] article[data-role=post] > div.header > div.title > div.author > ul > li > b {display:inline-block; width:65px;}
+div[data-module=board] article[data-role=post] > div[data-module=board] article[data-role=post] > div.header > div.title > div.author > ul > li > i.xi {display:none; height:24px; line-height:24px; margin-right:8px; vertical-align:middle;}
+div[data-module=board] article[data-role=post] > div[data-module=board] article[data-role=post] > div.header > div.title > div.author > ul > li.name {display:block; height:24px; line-height:24px; font-size:14px;}
+div[data-module=board] article[data-role=post] > div[data-module=board] article[data-role=post] > div.header > div.title > div.author > ul > li.date {display:inline-block; width:70%; height:24px; line-height:24px; vertical-align:middle;}
+div[data-module=board] article[data-role=post] > div[data-module=board] article[data-role=post] > div.header > div.title > div.author > ul > li.hit {display:inline-block; width:30%; height:24px; line-height:24px; vertical-align:middle; text-align:right;}
+div[data-module=board] article[data-role=post] > div[data-module=board] article[data-role=post] > div.header > div.title > div.author > ul > li.hit > b {margin-right:10px;}
 
 div[data-module=board] article[data-role=post] > div.content {padding-bottom:20px; font-size:14px;}
 
@@ -297,19 +297,19 @@ div[data-module=board] .photo-editor input.cropit-image-zoom-input:focus::-ms-fi
 	div[data-module=board] div[data-role=searchbar] > a > span {display:none;}
 	
 	
-	div[data-module=board] article[data-role=post] > header {display:block; position:relative;}
-	div[data-module=board] article[data-role=post] > header > div {display:block;}
-	div[data-module=board] article[data-role=post] > header > div.image {width:100%; padding:0px;}
-	div[data-module=board] article[data-role=post] > header > div.image > div {width:100%; height:0;}
+	div[data-module=board] article[data-role=post] > div[data-module=board] article[data-role=post] > div.header {display:block; position:relative;}
+	div[data-module=board] article[data-role=post] > div[data-module=board] article[data-role=post] > div.header > div {display:block;}
+	div[data-module=board] article[data-role=post] > div[data-module=board] article[data-role=post] > div.header > div.image {width:100%; padding:0px;}
+	div[data-module=board] article[data-role=post] > div[data-module=board] article[data-role=post] > div.header > div.image > div {width:100%; height:0;}
 	
-	div[data-module=board] article[data-role=post] > header > div.title {padding:0px; height:100%; position:absolute; top:0; left:0; box-sizing:border-box; background:rgba(0,0,0,0.15);}
-	div[data-module=board] article[data-role=post] > header > div.title > h5 {max-height:72px; color:#fff; padding:15px 15px 50px 15px; background:linear-gradient(to top, rgba(0,0,0,0) 0%,rgba(0,0,0,0.65) 100%);}
-	div[data-module=board] article[data-role=post] > header > div.title > small {display:none;}
+	div[data-module=board] article[data-role=post] > div[data-module=board] article[data-role=post] > div.header > div.title {padding:0px; height:100%; position:absolute; top:0; left:0; box-sizing:border-box; background:rgba(0,0,0,0.15);}
+	div[data-module=board] article[data-role=post] > div[data-module=board] article[data-role=post] > div.header > div.title > h5 {max-height:72px; color:#fff; padding:15px 15px 50px 15px; background:linear-gradient(to top, rgba(0,0,0,0) 0%,rgba(0,0,0,0.65) 100%);}
+	div[data-module=board] article[data-role=post] > div[data-module=board] article[data-role=post] > div.header > div.title > small {display:none;}
 	
-	div[data-module=board] article[data-role=post] > header > div.title > div.author {width:calc(100% - 30px); bottom:0; left:0; padding:30px 15px 15px 15px; background:linear-gradient(to bottom, rgba(0,0,0,0) 0%,rgba(0,0,0,0.65) 100%);}
-	div[data-module=board] article[data-role=post] > header > div.title > div.author > ul > li {color:#fff;}
-	div[data-module=board] article[data-role=post] > header > div.title > div.author > ul > li > b {display:none;}
-	div[data-module=board] article[data-role=post] > header > div.title > div.author > ul > li > i.xi {display:inline-block;}
+	div[data-module=board] article[data-role=post] > div[data-module=board] article[data-role=post] > div.header > div.title > div.author {width:calc(100% - 30px); bottom:0; left:0; padding:30px 15px 15px 15px; background:linear-gradient(to bottom, rgba(0,0,0,0) 0%,rgba(0,0,0,0.65) 100%);}
+	div[data-module=board] article[data-role=post] > div[data-module=board] article[data-role=post] > div.header > div.title > div.author > ul > li {color:#fff;}
+	div[data-module=board] article[data-role=post] > div[data-module=board] article[data-role=post] > div.header > div.title > div.author > ul > li > b {display:none;}
+	div[data-module=board] article[data-role=post] > div[data-module=board] article[data-role=post] > div.header > div.title > div.author > ul > li > i.xi {display:inline-block;}
 	
 	div[data-module=board] article[data-role=post] > div[data-role=button] > button[data-action=action] {display:inline-block;}
 	div[data-module=board] article[data-role=post] > div[data-role=button] > button[data-action=action].opened > i:before {content:"\f0d8";}

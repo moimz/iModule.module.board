@@ -13,7 +13,7 @@
 if (defined('__IM__') == false) exit;
 ?>
 <article data-role="post">
-	<header>
+	<div class="header">
 		<div class="image"><div data-role="cover" style="background-image:url(<?php echo $post->image != null ? $post->image->path : $Templet->getDir().'/images/pattern'.($post->idx % 4 + 1).'.png'; ?>);"></div></div>
 		
 		<div class="title">
@@ -30,7 +30,7 @@ if (defined('__IM__') == false) exit;
 				</ul>
 			</div>
 		</div>
-	</header>
+	</div>
 	
 	<div class="content">
 		<?php echo $post->content; ?>

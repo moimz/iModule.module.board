@@ -63,17 +63,17 @@ div[data-module=board] div.pagination {margin-top:20px; text-align:center;}
 
 
 div[data-module=board] article[data-role=post] {border-bottom:2px solid #222;}
-div[data-module=board] article[data-role=post] > header {display:block; margin:0; padding:15px; background:#f4f4f4; border-top:2px solid #222; line-height:1.6; border-bottom:1px solid #e3e4e5; margin-bottom:20px; font-size:0;}
-div[data-module=board] article[data-role=post] > header > h5 {font-size:16px; line-height:1.6; padding:5px 0px 15px 0px; margin:0; border-bottom:1px solid #e3e4e5;}
-div[data-module=board] article[data-role=post] > header > i[data-role=photo] {width:48px; height:48px; margin-top:15px; margin-right:10px;}
-div[data-module=board] article[data-role=post] > header > ul {list-style:none; width:calc(100% - 58px); display:inline-block; margin-top:15px; font-size:0; vertical-align:middle;}
-div[data-module=board] article[data-role=post] > header > ul > li {font-size:14px; color:#666;}
-div[data-module=board] article[data-role=post] > header > ul > li > b {display:inline-block; width:65px;}
-div[data-module=board] article[data-role=post] > header > ul > li > i.xi {display:none; height:24px; line-height:24px; margin-right:8px; vertical-align:middle;}
-div[data-module=board] article[data-role=post] > header > ul > li.name {display:block; height:24px; line-height:24px; font-size:14px;}
-div[data-module=board] article[data-role=post] > header > ul > li.date {display:inline-block; width:70%; height:24px; line-height:24px; vertical-align:middle;}
-div[data-module=board] article[data-role=post] > header > ul > li.hit {display:inline-block; width:30%; height:24px; line-height:24px; vertical-align:middle; text-align:right;}
-div[data-module=board] article[data-role=post] > header > ul > li.hit > b {margin-right:10px;}
+div[data-module=board] article[data-role=post] > div.header {display:block; margin:0; padding:15px; background:#f4f4f4; border-top:2px solid #222; line-height:1.6; border-bottom:1px solid #e3e4e5; margin-bottom:20px; font-size:0;}
+div[data-module=board] article[data-role=post] > div.header > h5 {font-size:16px; line-height:1.6; padding:5px 0px 15px 0px; margin:0; border-bottom:1px solid #e3e4e5;}
+div[data-module=board] article[data-role=post] > div.header > i[data-role=photo] {width:48px; height:48px; margin-top:15px; margin-right:10px;}
+div[data-module=board] article[data-role=post] > div.header > ul {list-style:none; width:calc(100% - 58px); display:inline-block; margin-top:15px; font-size:0; vertical-align:middle;}
+div[data-module=board] article[data-role=post] > div.header > ul > li {font-size:14px; color:#666;}
+div[data-module=board] article[data-role=post] > div.header > ul > li > b {display:inline-block; width:65px;}
+div[data-module=board] article[data-role=post] > div.header > ul > li > i.xi {display:none; height:24px; line-height:24px; margin-right:8px; vertical-align:middle;}
+div[data-module=board] article[data-role=post] > div.header > ul > li.name {display:block; height:24px; line-height:24px; font-size:14px;}
+div[data-module=board] article[data-role=post] > div.header > ul > li.date {display:inline-block; width:70%; height:24px; line-height:24px; vertical-align:middle;}
+div[data-module=board] article[data-role=post] > div.header > ul > li.hit {display:inline-block; width:30%; height:24px; line-height:24px; vertical-align:middle; text-align:right;}
+div[data-module=board] article[data-role=post] > div.header > ul > li.hit > b {margin-right:10px;}
 
 div[data-module=board] article[data-role=post] > div.content {padding-bottom:20px; font-size:14px;}
 
@@ -216,8 +216,8 @@ div[data-module=board] ul.buttons > li:last-child > div[data-role=button] > butt
 	div[data-module=board] div[data-role=searchbar] > div[data-role=search] {width:calc(100% - 45px); max-width:100%;}
 	div[data-module=board] div[data-role=searchbar] > a > span {display:none;}
 	
-	div[data-module=board] article[data-role=post] > header > ul > li > b {display:none;}
-	div[data-module=board] article[data-role=post] > header > ul > li > i.xi {display:inline-block;}
+	div[data-module=board] article[data-role=post] > div.header > ul > li > b {display:none;}
+	div[data-module=board] article[data-role=post] > div.header > ul > li > i.xi {display:inline-block;}
 	
 	div[data-module=board] article[data-role=post] > div[data-role=button] > button[data-action=action] {display:inline-block;}
 	div[data-module=board] article[data-role=post] > div[data-role=button] > button[data-action=action].opened > i:before {content:"\f0d8";}

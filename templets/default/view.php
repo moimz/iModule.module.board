@@ -13,7 +13,7 @@
 if (defined('__IM__') == false) exit;
 ?>
 <article data-role="post">
-	<header>
+	<div class="header">
 		<h5><?php echo $post->prefix != null ? '<span class="prefix" style="color:'.$post->prefix->color.';">['.$post->prefix->title.']</span> ' : ''; ?><?php echo $post->title; ?></h5>
 		
 		<?php echo $post->photo; ?>
@@ -23,7 +23,7 @@ if (defined('__IM__') == false) exit;
 			<li class="date"><b>작성일자</b><i class="xi xi-time"></i><?php echo GetTime('Y-m-d H:i:s',$post->reg_date); ?></li>
 			<li class="hit"><b>조회</b><i class="xi xi-eye"></i><?php echo number_format($post->hit); ?></li>
 		</ul>
-	</header>
+	</div>
 	
 	<div class="content">
 		<?php echo $post->content; ?>
