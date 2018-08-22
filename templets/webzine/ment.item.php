@@ -20,7 +20,7 @@ if (defined('__IM__') == false) exit;
 
 <div class="topbar">
 	<?php echo $ment->photo; ?>
-	<?php echo $ment->name; ?>
+	<?php echo $ment->nickname; ?>
 	
 	<?php if ($permission->write == true || $permission->modify == true || $permission->delete == true) { ?>
 	<button type="button" data-action="action" data-type="ment" data-idx="<?php echo $ment->idx; ?>"><i class="fa fa-caret-down"></i></button>
