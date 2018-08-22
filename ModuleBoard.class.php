@@ -1239,6 +1239,8 @@ class ModuleBoard {
 			$post->is_secret = $post->is_secret == 'TRUE';
 			$post->is_anonymity = $post->is_anonymity == 'TRUE';
 			$post->is_notice = $post->is_notice == 'TRUE';
+			$post->is_file = $post->file > 0;
+			$post->is_image = $post->image != null || $post->image_url;
 			
 			if ($post->is_anonymity == true) {
 				$post->name = $post->nickname = '<span data-module="member" data-role="name">익명-'.strtoupper(substr(base_convert(ip2long($post->ip),10,32),0,6)).'</span>';
@@ -1410,14 +1412,14 @@ class ModuleBoard {
 			if ($post == null) return;
 			
 			if ($post->image == 0) {
-				if (preg_match_all('/<img(.*?)data-idx="([0-9]+)"(.*?)>/',$post->content,$matches,PREG_SET_ORDER) == true) {
-					$updated['image'] = $matches[0][2];
+				if (preg_match_all('/<img[^>]*data-idx="([0-9]+)"[^>]*>/',$post->content,$matches,PREG_SET_ORDER) == true) {
+					$updated['image'] = $matches[0][1];
 				}
 			}
 			
-			if ($post->image_url) {
-				if (preg_match_all('/<img(.*?)src="(.*?)"(.*?)>/',$post->content,$matches,PREG_SET_ORDER) == true) {
-					$updated['image_url'] = $matches[0][2];
+			if (!$post->image_url) {
+				if (preg_match_all('/<img[^>]*src="(.*?)"[^>]*>/',$post->content,$matches,PREG_SET_ORDER) == true) {
+					$updated['image_url'] = $matches[0][1];
 				}
 			}
 			$updated['file'] = $this->db()->select($this->table->attachment)->where('type','POST')->where('parent',$idx)->count();
