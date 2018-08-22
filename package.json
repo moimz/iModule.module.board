@@ -462,11 +462,23 @@
 					"default":0,
 					"comment":"추가필드6(숫자)"
 				},
+				"file":{
+					"type":"int",
+					"length":11,
+					"default":0,
+					"comment":"첨부파일수"
+				},
 				"image":{
 					"type":"int",
 					"length":11,
 					"default":0,
-					"comment":"썸네일이미지"
+					"comment":"대표이미지 고유값"
+				},
+				"image_url":{
+					"type":"varchar",
+					"length":255,
+					"is_null":true,
+					"comment":"메인이미지 경로"
 				},
 				"reg_date":{
 					"type":"int",
@@ -532,6 +544,10 @@
 					"length":"'TRUE','FALSE'",
 					"default":"FALSE",
 					"comment":"익명여부"
+				},
+				"extra":{
+					"type":"text",
+					"is_null":true
 				}
 			},
 			"indexes":{
