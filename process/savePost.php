@@ -15,7 +15,7 @@ if (defined('__IM__') == false) exit;
 $errors = array();
 
 $idx = Request('idx');
-$bid = Request('bid');
+$bid = Param('bid');
 $board = $this->getBoard($bid);
 
 if ($this->checkPermission($bid,'post_write') == false) {
@@ -74,6 +74,7 @@ $field3 = Request('field3');
 $field4 = Request('field4') == null || is_numeric(Request('field4')) == false ? null : Request('field4');
 $field5 = Request('field5') == null || is_numeric(Request('field5')) == false ? null : Request('field5');
 $field6 = Request('field6') == null || is_numeric(Request('field6')) == false ? null : Request('field6');
+$extra = Request('extra') ? Request('extra') : null;
 
 if (empty($errors) == true) {
 	$mHash = new Hash();
@@ -95,6 +96,7 @@ if (empty($errors) == true) {
 	if ($field4) $insert['field4'] = $field4;
 	if ($field5) $insert['field5'] = $field5;
 	if ($field6) $insert['field6'] = $field6;
+	if ($extra) $insert['extra'] = $extra;
 	
 	if ($idx == null) {
 		$insert['midx'] = $midx;
@@ -182,6 +184,19 @@ if (empty($errors) == true) {
 		$mAttachment->filePublish($attachments[$i]);
 	}
 	
+	$deleteds = $this->db()->select($this->table->attachment)->where('bid',$bid)->where('type','POST')->where('parent',$idx);
+	if (count($attachments) > 0) $deleteds->where('idx',$attachments,'NOT IN');
+	$deleteds = $deleteds->get('idx');
+	foreach ($deleteds as $deleted) {
+		$mAttachment->fileDelete($deleted);
+	}
+	
+	$templet = Request('templet');
+	if (is_file($this->getTemplet($templet)->getPath().'/process/savePost.php') == true) {
+		INCLUDE $this->getTemplet($templet)->getPath().'/process/savePost.php';
+	}
+	
+	$this->updatePost($idx,true);
 	$this->updateCategory($category);
 	$this->updatePrefix($prefix);
 	$this->updateBoard($bid);
@@ -192,10 +207,5 @@ if (empty($errors) == true) {
 } else {
 	$results->success = false;
 	$results->errors = $errors;
-}
-
-$templet = Request('templet');
-if (is_file($this->getTemplet($templet)->getPath().'/process/savePost.php') == true) {
-	INCLUDE $this->getTemplet($templet)->getPath().'/process/savePost.php';
 }
 ?>

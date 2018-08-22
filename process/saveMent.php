@@ -15,8 +15,8 @@ if (defined('__IM__') == false) exit;
 $errors = array();
 
 $idx = Request('idx');
-$source = Request('source');
-$parent = Request('parent');
+$source = Param('source');
+$parent = Param('parent');
 $post = $this->getPost($parent);
 $board = $this->getBoard($post->bid);
 $bid = $board->bid;
@@ -178,11 +178,19 @@ if (empty($errors) == true) {
 		$message = '댓글을 성공적으로 수정하였습니다.';
 	}
 	
+	$mAttachment = $this->IM->getModule('attachment');
 	for ($i=0, $loop=count($attachments);$i<$loop;$i++) {
 		if ($this->db()->select($this->table->attachment)->where('idx',$attachments[$i])->count() == 0) {
 			$this->db()->insert($this->table->attachment,array('idx'=>$attachments[$i],'bid'=>$bid,'type'=>'MENT','parent'=>$idx))->execute();
 		}
-		$this->IM->getModule('attachment')->filePublish($attachments[$i]);
+		$mAttachment->filePublish($attachments[$i]);
+	}
+	
+	$deleteds = $this->db()->select($this->table->attachment)->where('bid',$bid)->where('type','MENT')->where('parent',$idx);
+	if (count($attachments) > 0) $deleteds->where('idx',$attachments,'NOT IN');
+	$deleteds = $deleteds->get('idx');
+	foreach ($deleteds as $deleted) {
+		$mAttachment->fileDelete($deleted);
 	}
 	
 	$this->updatePost($parent);
