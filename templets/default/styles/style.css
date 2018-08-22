@@ -36,6 +36,8 @@ div[data-module=board] ul[data-role=table] > li > span.title > a > i.xi-lock {co
 div[data-module=board] ul[data-role=table] > li > span.title > a > span.ment {display:inline-block; float:right; margin:2px 0px 0px 5px; color:#FF9800; font-size:12px; vertical-align:middle;}
 div[data-module=board] ul[data-role=table] > li > span.title > a > span.ment:before {content:"[";}
 div[data-module=board] ul[data-role=table] > li > span.title > a > span.ment:after {content:"]";}
+div[data-module=board] ul[data-role=table] > li > span.title > a > i.fa-floppy-o {float:right; margin-left:5px; color:#F44336;}
+div[data-module=board] ul[data-role=table] > li > span.title > a > i.fa-picture-o {float:right; margin-left:5px; color:#2196F3;}
 div[data-module=board] ul[data-role=table] > li > span.name {width:140px; text-align:center;}
 
 div[data-module=board] ul[data-role=table] > li.tbody > span.name {text-align:left;}
