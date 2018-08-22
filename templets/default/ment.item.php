@@ -44,7 +44,7 @@ if (defined('__IM__') == false) exit;
 			<?php for ($i=0, $loop=count($attachments);$i<$loop;$i++) { ?>
 			<li>
 				<i class="icon" data-type="<?php echo $attachments[$i]->type; ?>"></i>
-				<a href="<?php echo $attachments[$i]->download; ?>"><span class="size">(<?php echo GetFileSize($attachments[$i]->size); ?>)</span><?php echo $attachments[$i]->nickname; ?></a>
+				<a href="<?php echo $attachments[$i]->download; ?>"><span class="size">(<?php echo GetFileSize($attachments[$i]->size); ?>)</span><?php echo $attachments[$i]->name; ?></a>
 			</li>
 			<?php } ?>
 		</ul>
