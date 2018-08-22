@@ -8,7 +8,7 @@
  * @author Arzz (arzz@arzz.com)
  * @license MIT License
  * @version 3.0.0
- * @modified 2018. 3. 11.
+ * @modified 2018. 8. 22.
  */
 class ModuleBoard {
 	/**
@@ -548,8 +548,7 @@ class ModuleBoard {
 	 */
 	function getListContext($bid,$configs=null) {
 		if ($this->checkPermission($bid,'list') == false) return $this->getError('FORBIDDEN');
-		
-		$this->IM->addHeadResource('meta',array('name'=>'robots','content'=>'noidex,follow'));
+		$this->IM->setRobots('noindex, follow');
 		
 		$board = $this->getBoard($bid);
 		
@@ -576,15 +575,12 @@ class ModuleBoard {
 		$limit = $board->post_limit;
 		$start = ($p - 1) * $limit;
 		
-		$sort = Request('sort') ? Request('sort') : 'idx';
-		$dir = Request('dir') ? Request('dir') : (in_array($sort,array('idx')) == true ? 'desc' : 'asc');
-		
 		$notice = $this->db()->select($this->table->post)->where('bid',$bid)->where('is_notice','TRUE')->count();
 		
 		if ($board->view_notice_count == 'INCLUDE') {
 			if ($board->view_notice_page == 'FIRST') {
 				if (ceil($notice / $limit) >= $p) {
-					$notices = $this->db()->select($this->table->post)->where('bid',$bid)->where('is_notice','TRUE')->orderBy('reg_date','desc')->limit($start,$limit)->get();
+					$notices = $this->db()->select($this->table->post)->where('bid',$bid)->where('is_notice','TRUE')->orderBy('idx','desc')->limit($start,$limit)->get();
 					$start = 0;
 					$limit = $limit - count($notices);
 				} else {
@@ -594,7 +590,7 @@ class ModuleBoard {
 				
 				$lists = $this->db()->select($this->table->post)->where('bid',$bid)->where('is_notice','FALSE');
 			} elseif ($board->view_notice_page == 'ALL') {
-				$notices = $this->db()->select($this->table->post)->where('bid',$bid)->where('is_notice','TRUE')->orderBy('reg_date','desc')->limit(0,$limit)->get();
+				$notices = $this->db()->select($this->table->post)->where('bid',$bid)->where('is_notice','TRUE')->orderBy('idx','desc')->limit(0,$limit)->get();
 				
 				$start = ($p - 1) * ($limit - count($notices));
 				$limit = $limit - count($notices);
@@ -603,7 +599,7 @@ class ModuleBoard {
 			}
 		} else {
 			if ($p == 1 || $board->view_notice_page == 'ALL') {
-				$notices = $this->db()->select($this->table->post)->where('bid',$bid)->where('is_notice','TRUE')->orderBy('reg_date','desc')->limit($start,$limit)->get();
+				$notices = $this->db()->select($this->table->post)->where('bid',$bid)->where('is_notice','TRUE')->orderBy('idx','desc')->limit($start,$limit)->get();
 			} else {
 				$notices = array();
 			}
@@ -627,13 +623,13 @@ class ModuleBoard {
 			$idx = $configs->idx;
 		}
 		
-		$lists = $lists->orderBy($sort,$dir)->limit($start,$limit)->get();
+		$lists = $lists->orderBy('idx','desc')->limit($start,$limit)->get();
 		
 		for ($i=0, $loop=count($notices);$i<$loop;$i++) {
 			$notices[$i] = $this->getPost($notices[$i]);
 			$notices[$i]->category = $notices[$i]->category == 0 ? null : $this->getCategory($notices[$i]->category);
 			$notices[$i]->prefix = $notices[$i]->prefix == 0 ? null : $this->getPrefix($notices[$i]->prefix);
-			$notices[$i]->link = $this->getUrl('view',($board->use_category == 'NONE' ? $notices[$i]->idx : ($category == null ? '0' : $category).'/'.$notices[$i]->idx)).$this->IM->getQueryString().($notices[$i]->is_secret == true ? '#secret-'.$notices[$i]->idx : '');
+			$notices[$i]->link = $this->getUrl('view',$notices[$i]->idx).$this->IM->getQueryString(array('p'=>$p,'category'=>count($categories) > 0 ? $category : null)).($notices[$i]->is_secret == true ? '#secret-'.$notices[$i]->idx : '');
 		}
 		
 		$loopnum = $total - $start;
@@ -642,7 +638,7 @@ class ModuleBoard {
 			$lists[$i]->loopnum = $loopnum - $i;
 			$lists[$i]->category = $lists[$i]->category == 0 ? null : $this->getCategory($lists[$i]->category);
 			$lists[$i]->prefix = $lists[$i]->prefix == 0 ? null : $this->getPrefix($lists[$i]->prefix);
-			$lists[$i]->link = $this->getUrl('view',($board->use_category == 'NONE' ? $lists[$i]->idx : ($category == null ? '0' : $category).'/'.$lists[$i]->idx)).$this->IM->getQueryString().($lists[$i]->is_secret == true ? '#secret-'.$lists[$i]->idx : '');
+			$lists[$i]->link = $this->getUrl('view',$lists[$i]->idx).$this->IM->getQueryString(array('p'=>$p,'category'=>count($categories) > 0 ? $category : null)).($lists[$i]->is_secret == true ? '#secret-'.$lists[$i]->idx : '');
 			
 			if ($keyword) {
 				$lists[$i]->title = '<span data-role="title">'.$lists[$i]->title.'</span>';
@@ -676,21 +672,9 @@ class ModuleBoard {
 	 */
 	function getViewContext($bid,$configs=null) {
 		if ($this->checkPermission($bid,'view') == false) return $this->getError('FORBIDDEN');
-		$this->IM->addHeadResource('meta',array('name'=>'robots','content'=>'idx,nofollow'));
 		
 		$board = $this->getBoard($bid);
-		$idxes = $this->getIdx() ? explode('/',$this->getIdx()) : array(0);
-		$category = null;
-		$page = 1;
-		
-		if ($board->use_category == 'NONE') {
-			if (count($idxes) == 2) list($idx,$page) = $idxes;
-			elseif (count($idxes) == 1) list($idx) = $idxes;
-		} else {
-			if (count($idxes) == 3) list($category,$idx,$page) = $idxes;
-			elseif (count($idxes) == 2) list($category,$idx) = $idxes;
-			elseif (count($idxes) == 1) list($idx) = $idxes;
-		}
+		$idx = $this->getIdx();
 		
 		$post = $this->getPost($idx);
 		if ($post == null) return $this->getError('NOT_FOUND_PAGE');
@@ -709,6 +693,13 @@ class ModuleBoard {
 				}
 			}
 		}
+		
+		$this->IM->setRobots('index, nofollow');
+		$this->IM->setCanonical($this->getUrl('view',$idx));
+		$this->IM->setViewTitle($post->title);
+		$this->IM->setViewDescription($post->content);
+		if ($post->image != null) $this->IM->setViewImage($post->image);
+		elseif ($post->image_url != null) $this->IM->setViewImage($post->image_url);
 		
 		/**
 		 * 조회수 증가
@@ -741,38 +732,47 @@ class ModuleBoard {
 		/**
 		 * 현재 게시물이 속한 페이지를 구한다.
 		 */
-		if ($post->is_notice == true && $board->view_notice_page == 'FIRST') {
-			$p = 1;
-		} else {
-			$sort = Request('sort') ? Request('sort') : 'idx';
-			$dir = Request('dir') ? Request('dir') : 'asc';
-			$previous = $this->db()->select($this->table->post.' p','p.*')->where('p.bid',$post->bid)->where('p.'.$sort,$post->{$sort},$dir == 'desc' ? '<=' : '>=');
-			if (Request('keyword')) $this->IM->getModule('keyword')->getWhere($previous,array('title','search'),Request('keyword'));
-			$previous = $previous->count();
-			
-			$notice = $this->db()->select($this->table->post)->where('bid',$post->bid)->where('is_notice','TRUE')->count();
-			
-			if ($board->view_notice_count == 'INCLUDE') {
-				if ($board->view_notice_page == 'FIRST') {
-					$p = ceil(($previous + $notice)/$board->post_limit);
-				} elseif ($board->view_notice_page == 'ALL') {
-					$p = ceil($previous/($board->post_limit - $notice));
-				}
+		$p = Request('p');
+		$keyword = Request('keyword');
+		$category = $board->use_category == 'NONE' ? null : Request('category');
+		if ($configs != null && isset($configs->category) == true && $configs->category != 0) {
+			$category = null;
+		}
+		if ($p == null) {
+			if ($post->is_notice == true && $board->view_notice_page == 'FIRST') {
+				$p = 1;
 			} else {
-				$p = ceil($previous/$board->post_limit);
+				$sort = Request('sort') ? Request('sort') : 'idx';
+				$dir = Request('dir') ? Request('dir') : 'asc';
+				$previous = $this->db()->select($this->table->post.' p','p.*')->where('p.bid',$post->bid)->where('p.'.$sort,$post->{$sort},$dir == 'desc' ? '<=' : '>=');
+				if ($keyword) $this->IM->getModule('keyword')->getWhere($previous,array('title','search'),$keyword);
+				if ($configs != null && isset($configs->category) == true && $configs->category != 0) {
+					$previous->where('category',$configs->category);
+				}
+				$previous = $previous->count();
+				
+				$notice = $this->db()->select($this->table->post)->where('bid',$post->bid)->where('is_notice','TRUE')->count();
+				
+				if ($board->view_notice_count == 'INCLUDE') {
+					if ($board->view_notice_page == 'FIRST') {
+						$p = ceil(($previous + $notice)/$board->post_limit);
+					} elseif ($board->view_notice_page == 'ALL') {
+						$p = ceil($previous/($board->post_limit - $notice));
+					}
+				} else {
+					$p = ceil($previous/$board->post_limit);
+				}
 			}
 		}
 		
 		$link = new stdClass();
-		$link->list = $this->getUrl('list',($category == null ? '' : $category.'/').$p);
-		if (Request('keyword')) $link->list.= '?keyword='.urlencode(Request('keyword'));
+		$link->list = $this->getUrl('list',($category == null ? '' : $category.'/').$p).$this->IM->getQueryString(array('p'=>null,'category'=>null,'keyword'=>($keyword ? urlencode($keyword) : null)));
 		$link->write = $this->getUrl('write',false);
 		
 		$permission = new stdClass();
 		$permission->modify = $post->midx == $this->IM->getModule('member')->getLogged() || $this->checkPermission($post->bid,'post_modify') == true;
 		$permission->delete = $post->midx == $this->IM->getModule('member')->getLogged() || $this->checkPermission($post->bid,'post_delete') == true;
 		
-		$keyword = Request('keyword');
 		if ($keyword) {
 			$post->title = '<span data-role="title">'.$post->title.'</span>';
 			$this->IM->getModule('keyword')->mark($keyword,'div[data-module=board] span[data-role=title], div[data-module=board] div[data-role=wysiwyg-content]');
@@ -785,7 +785,7 @@ class ModuleBoard {
 		$configs->idx = $idx;
 		$configs->p = $p;
 		
-		$footer.= $this->getListContext($bid,$configs);
+//		$footer.= $this->getListContext($bid,$configs);
 		
 		/**
 		 * 템플릿파일을 호출한다.
@@ -879,7 +879,7 @@ class ModuleBoard {
 				$attachment_templet = '#';
 			}
 			
-			$uploader = $uploader->setTemplet($attachment_templet)->setModule('board')->setWysiwyg('content');
+			$uploader = $uploader->setTemplet($attachment_templet)->setModule('board')->setWysiwyg('content')->setDeleteMode('MANUAL');
 			if ($post != null) {
 				$uploader->setLoader($this->IM->getProcessUrl('board','getFiles',array('idx'=>Encoder(json_encode(array('type'=>'POST','idx'=>$post->idx))))));
 			}
@@ -1060,7 +1060,7 @@ class ModuleBoard {
 				$attachment_templet = '#';
 			}
 			
-			$uploader = $uploader->setTemplet($attachment_templet)->setModule('board')->setWysiwyg('content');
+			$uploader = $uploader->setTemplet($attachment_templet)->setModule('board')->setWysiwyg('content')->setDeleteMode('MANUAL');
 		} else {
 			$uploader = $uploader->disable();
 		}
@@ -1181,6 +1181,7 @@ class ModuleBoard {
 	 */
 	function getBoard($bid) {
 		if (isset($this->boards[$bid]) == true) return $this->boards[$bid];
+		
 		$board = $this->db()->select($this->table->board)->where('bid',$bid)->getOne();
 		if ($board == null) {
 			$this->boards[$bid] = null;
@@ -1233,7 +1234,6 @@ class ModuleBoard {
 			}
 			
 			$post->image = $post->image > 0 ? $this->IM->getModule('attachment')->getFileInfo($post->image) : null;
-			
 			$post->content = $this->IM->getModule('wysiwyg')->decodeContent($post->content);
 			
 			$post->is_secret = $post->is_secret == 'TRUE';
@@ -1403,9 +1403,29 @@ class ModuleBoard {
 	 *
 	 * @param int $idx 게시물고유번호
 	 */
-	function updatePost($idx) {
+	function updatePost($idx,$is_file=false) {
+		$updated = array();
+		if ($is_file == true) {
+			$post = $this->db()->select($this->table->post,'image, image_url, content')->where('idx',$idx)->getOne();
+			if ($post == null) return;
+			
+			if ($post->image == 0) {
+				if (preg_match_all('/<img(.*?)data-idx="([0-9]+)"(.*?)>/',$post->content,$matches,PREG_SET_ORDER) == true) {
+					$updated['image'] = $matches[0][2];
+				}
+			}
+			
+			if ($post->image_url) {
+				if (preg_match_all('/<img(.*?)src="(.*?)"(.*?)>/',$post->content,$matches,PREG_SET_ORDER) == true) {
+					$updated['image_url'] = $matches[0][2];
+				}
+			}
+			$updated['file'] = $this->db()->select($this->table->attachment)->where('type','POST')->where('parent',$idx)->count();
+		}
 		$status = $this->db()->select($this->table->ment,'COUNT(*) as total, MAX(reg_date) as latest')->where('parent',$idx)->where('is_delete','FALSE')->getOne();
-		$this->db()->update($this->table->post,array('ment'=>$status->total,'latest_ment'=>($status->latest ? $status->latest : 0)))->where('idx',$idx)->execute();
+		$updated['ment'] = $status->total;
+		$updated['latest_ment'] = ($status->latest ? $status->latest : 0);
+		$this->db()->update($this->table->post,$updated)->where('idx',$idx)->execute();
 	}
 	
 	/**
@@ -1570,7 +1590,17 @@ class ModuleBoard {
 		 * 첨부파일 삭제
 		 */
 		if ($action == 'delete') {
+			$files = $this->db()->select($this->table->attachment,'parent')->where('idx',$idx)->where('type','POST')->get('parent');
+			$images = $this->db()->select($this->table->post)->where('image',$idx)->get('idx');
 			$this->db()->delete($this->table->attachment)->where('idx',$idx)->execute();
+			foreach ($images as $image) {
+				$this->db()->update($this->table->post,array('image'=>0))->where('idx',$image)->execute();
+				$this->updatePost($image,true);
+			}
+			foreach ($posts as $post) {
+				$this->db()->update($this->table->post,array('image'=>0))->where('idx',$post->idx);
+				$this->updatePost($image,true);
+			}
 		}
 	}
 	
