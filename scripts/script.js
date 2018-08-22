@@ -7,7 +7,7 @@
  * @author Arzz (arzz@arzz.com)
  * @license MIT License
  * @version 3.0.0
- * @modified 2018. 2. 25.
+ * @modified 2018. 8. 22.
  */
 var Board = {
 	getUrl:function(view,idx) {
@@ -35,13 +35,21 @@ var Board = {
 			
 			$form.on("submit",function() {
 				var category = $("select[name=category]",$form).length > 0 ? $("select[name=category]",$form).val() : 0;
-				if (category == 0) $form.attr("action",Board.getUrl("list",1));
-				else $form.attr("action",Board.getUrl("list",category+"/1"));
+				if (category == 0) {
+					var url = Board.getUrl("list",1);
+				} else {
+					var url = Board.getUrl("list",category+"/1");
+				}
 				
-				$("input[name=keyword]",$form).disable();
-				$("input[name=keyword]",$form).first().enable();
-				
-				$("select[name=category]",$form).disable();
+				if ($("input[name=keyword]",$form).first().val().length == 0) {
+					location.href = url;
+					return false;
+				} else {
+					$("input[name=keyword]",$form).disable();
+					$("input[name=keyword]",$form).first().enable();
+					$("select[name=category]",$form).disable();
+					$form.attr("action",url);
+				}
 			});
 			
 			$("a",$form).on("click",function(e) {
