@@ -4,10 +4,11 @@
  *
  * 게시판의 최근게시물을 가져온다.
  * 
- * @file /modules/board/widgets/board/index.php
+ * @file /modules/board/widgets/recently/index.php
  * @author Arzz (arzz@arzz.com)
  * @license MIT License
- * @version 3.0.0.160910
+ * @version 3.0.0
+ * @modified 2018. 8. 26.
  */
 if (defined('__IM__') == false) exit;
 

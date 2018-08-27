@@ -7,7 +7,7 @@
  * @author Arzz (arzz@arzz.com)
  * @license MIT License
  * @version 3.0.0
- * @modified 2018. 2. 17.
+ * @modified 2018. 8. 26.
  */
 var Board = {
 	/**
