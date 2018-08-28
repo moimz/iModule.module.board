@@ -61,7 +61,7 @@ var Board = {
 								collapsed:false,
 								title:Board.getText("admin/list/form/designSetting"),
 								items:[
-									Admin.templetField(Board.getText("admin/list/form/templet"),"templet","module","board",false,ENV.getProcessUrl("board","@getTempletConfigs"),["bid"]),
+									Admin.templetField(Board.getText("admin/list/form/templet"),"templet","module","board",false,ENV.getProcessUrl("board","@getTempletConfigs"),{},["bid"]),
 									new Ext.form.FieldContainer({
 										layout:"hbox",
 										items:[
@@ -121,7 +121,7 @@ var Board = {
 								checkboxToggle:true,
 								collapsed:false,
 								items:[
-									Admin.templetField(Board.getText("admin/list/form/attachment_templet"),"attachment","module","attachment",Board.getText("admin/list/form/attachment_templet_default"),ENV.getProcessUrl("board","@getTempletConfigs"),["bid"]),
+									Admin.templetField(Board.getText("admin/list/form/attachment_templet"),"attachment","module","attachment",Board.getText("admin/list/form/attachment_templet_default"),ENV.getProcessUrl("board","@getTempletConfigs"),{},["bid"]),
 								]
 							}),
 							new Ext.form.FieldSet({
@@ -434,6 +434,8 @@ var Board = {
 				listeners:{
 					show:function() {
 						if (bid !== undefined) {
+							Ext.getCmp("ModuleBoardAddBoardForm").getForm().findField("templet").setValue("#");
+							Ext.getCmp("ModuleBoardAddBoardForm").getForm().findField("attachment_templet").setValue("#");
 							Ext.getCmp("ModuleBoardAddBoardForm").getForm().load({
 								url:ENV.getProcessUrl("board","@getBoard"),
 								params:{bid:bid},
