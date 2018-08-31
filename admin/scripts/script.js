@@ -435,7 +435,7 @@ var Board = {
 					show:function() {
 						if (bid !== undefined) {
 							Ext.getCmp("ModuleBoardAddBoardForm").getForm().findField("templet").setValue("#");
-							Ext.getCmp("ModuleBoardAddBoardForm").getForm().findField("attachment_templet").setValue("#");
+							Ext.getCmp("ModuleBoardAddBoardForm").getForm().findField("attachment").setValue("#");
 							Ext.getCmp("ModuleBoardAddBoardForm").getForm().load({
 								url:ENV.getProcessUrl("board","@getBoard"),
 								params:{bid:bid},
