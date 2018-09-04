@@ -1463,6 +1463,8 @@ class ModuleBoard {
 		$post = $this->getPost($idx);
 		if ($post == null) return false;
 		
+		$board = $this->getBoard($post->bid);
+		
 		/**
 		 * 게시물에 첨부된 첨부파일을 삭제한다.
 		 */
@@ -1483,6 +1485,22 @@ class ModuleBoard {
 		 * 게시물을 삭제한다.
 		 */
 		$this->db()->delete($this->table->post)->where('idx',$idx)->execute();
+		
+		/**
+		 * 글작성자와 삭제한 사람이 다를 경우 알림메세지를 전송한다.
+		 */
+		if ($post->midx != 0 && $post->midx != $this->IM->getModule('member')->getLogged()) {
+			$this->IM->getModule('push')->sendPush($post->midx,$this->getModule()->getName(),'post',$idx,'delete',array('from'=>$this->IM->getModule('member')->getLogged(),'title'=>$post->title));
+		}
+		
+		/**
+		 * 회원의 경우
+		 */
+		if ($this->IM->getModule('member')->isLogged() == true) {
+			$this->IM->getModule('member')->sendPoint($this->IM->getModule('member')->getLogged(),$board->post_point * -1,$this->getModule()->getName(),'post_delete',array('title'=>$post->title),true);
+			$this->IM->getModule('member')->addActivity($this->IM->getModule('member')->getLogged(),0,$this->getModule()->getName(),'post_delete',array('title'=>$post->title));
+		}
+		
 		if ($post->category != 0) $this->updateCategory($post->category);
 		$this->updateBoard($post->bid);
 		
@@ -1498,6 +1516,9 @@ class ModuleBoard {
 	function deleteMent($idx) {
 		$ment = $this->getMent($idx);
 		if ($ment == null) return false;
+		
+		$post = $this->getPost($ment->parent);
+		$board = $this->getBoard($post->bid);
 		
 		/**
 		 * 게시물에 첨부된 첨부파일을 삭제한다.
@@ -1520,6 +1541,21 @@ class ModuleBoard {
 					$this->db()->delete($this->table->ment_depth)->where('idx',$ment->idx)->execute();
 				}
 			}
+		}
+		
+		/**
+		 * 댓글작성자와 삭제한 사람이 다를 경우 알림메세지를 전송한다.
+		 */
+		if ($ment->midx != 0 && $ment->midx != $this->IM->getModule('member')->getLogged()) {
+			$this->IM->getModule('push')->sendPush($ment->midx,$this->getModule()->getName(),'ment',$idx,'delete',array('from'=>$this->IM->getModule('member')->getLogged(),'parent'=>$post->idx,'parent_title'=>$post->title));
+		}
+		
+		/**
+		 * 회원의 경우
+		 */
+		if ($this->IM->getModule('member')->isLogged() == true) {
+			$this->IM->getModule('member')->sendPoint($this->IM->getModule('member')->getLogged(),$board->ment_point * -1,$this->getModule()->getName(),'ment_delete',array('parent'=>$post->idx,'parent_title'=>$post->title),true);
+			$this->IM->getModule('member')->addActivity($this->IM->getModule('member')->getLogged(),0,$this->getModule()->getName(),'ment_delete',array('parent'=>$post->idx,'parent_title'=>$post->title));
 		}
 		
 		$this->updatePost($ment->parent);
