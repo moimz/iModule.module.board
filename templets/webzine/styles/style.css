@@ -209,9 +209,9 @@ div[data-module=board] div.cover ul[data-role=webzine] > li > ul[data-role=butto
 div[data-module=board] div.cover ul[data-role=webzine] > li > ul[data-role=button] > li {display:table-cell; width:50%;}
 div[data-module=board] div.cover ul[data-role=webzine] > li > ul[data-role=button] > li:first-child {padding-right:2.5px;}
 div[data-module=board] div.cover ul[data-role=webzine] > li > ul[data-role=button] > li:last-child {padding-left:2.5px;}
-div[data-module=board] div.cover ul[data-role=webzine] > li > ul[data-role=button] > li > button {width:100%; background:#b5b7c0; border:0px; color:#fff; font-size:14px; line-height:40px; font-size:0; font-size:14px; cursor:pointer; padding:0px; text-align:left;}
-div[data-module=board] div.cover ul[data-role=webzine] > li > ul[data-role=button] > li > button > i {display:inline-block; width:40px; height:40px; line-height:38px; vertical-align:top; text-align:center; font-size:16px; margin-top:0px;}
-div[data-module=board] div.cover ul[data-role=webzine] > li > ul[data-role=button] > li > button > span {display:inline-block; padding-right:15px; width:calc(100% - 55px); height:38px; line-height:38px; text-align:center;}
+div[data-module=board] div.cover ul[data-role=webzine] > li > ul[data-role=button] > li > button {width:100%; background:#b5b7c0; border:0px; color:#fff; font-size:0; line-height:40px; font-size:0; font-size:14px; cursor:pointer; padding:0px; text-align:left;}
+div[data-module=board] div.cover ul[data-role=webzine] > li > ul[data-role=button] > li > button > i {display:inline-block; width:36px; height:40px; line-height:38px; vertical-align:top; text-align:center; font-size:14px; margin-top:0px;}
+div[data-module=board] div.cover ul[data-role=webzine] > li > ul[data-role=button] > li > button > span {display:inline-block; padding-right:10px; width:calc(100% - 46px); height:38px; line-height:38px; text-align:left; font-size:13px;}
 div[data-module=board] div.cover ul[data-role=webzine] > li > ul[data-role=button] > li > button[data-loading=TRUE] {background:#b5b7c0 !important; cursor:not-allowed;}
 div[data-module=board] div.cover ul[data-role=webzine] > li > ul[data-role=button] > li > button:hover {background:#828595; color:#fff;}
 
