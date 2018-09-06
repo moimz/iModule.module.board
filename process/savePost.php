@@ -8,7 +8,7 @@
  * @author Arzz (arzz@arzz.com)
  * @license MIT License
  * @version 3.0.0
- * @modified 2018. 3. 11.
+ * @modified 2018. 9. 6.
  */
 if (defined('__IM__') == false) exit;
 
@@ -163,7 +163,7 @@ if (empty($errors) == true) {
 		 * 글작성자와 수정한 사람이 다를 경우 알림메세지를 전송한다.
 		 */
 		if ($post->midx != 0 && $post->midx != $this->IM->getModule('member')->getLogged()) {
-			$this->IM->getModule('push')->sendPush($post->midx,$this->getModule()->getName(),'post',$idx,'modify',array('from'=>$this->IM->getModule('member')->getLogged()));
+			$this->IM->getModule('push')->sendPush($post->midx,$this->getModule()->getName(),'post',$idx,'post_modify',array('from'=>$this->IM->getModule('member')->getLogged()));
 		}
 		
 		/**

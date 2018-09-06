@@ -8,7 +8,7 @@
  * @author Arzz (arzz@arzz.com)
  * @license MIT License
  * @version 3.0.0
- * @modified 2018. 8. 22.
+ * @modified 2018. 9. 6.
  */
 class ModuleBoard {
 	/**
@@ -1490,7 +1490,7 @@ class ModuleBoard {
 		 * 글작성자와 삭제한 사람이 다를 경우 알림메세지를 전송한다.
 		 */
 		if ($post->midx != 0 && $post->midx != $this->IM->getModule('member')->getLogged()) {
-			$this->IM->getModule('push')->sendPush($post->midx,$this->getModule()->getName(),'post',$idx,'delete',array('from'=>$this->IM->getModule('member')->getLogged(),'title'=>$post->title));
+			$this->IM->getModule('push')->sendPush($post->midx,$this->getModule()->getName(),'post',$idx,'post_delete',array('from'=>$this->IM->getModule('member')->getLogged(),'title'=>$post->title));
 		}
 		
 		/**
@@ -1547,7 +1547,7 @@ class ModuleBoard {
 		 * 댓글작성자와 삭제한 사람이 다를 경우 알림메세지를 전송한다.
 		 */
 		if ($ment->midx != 0 && $ment->midx != $this->IM->getModule('member')->getLogged()) {
-			$this->IM->getModule('push')->sendPush($ment->midx,$this->getModule()->getName(),'ment',$idx,'delete',array('from'=>$this->IM->getModule('member')->getLogged(),'parent'=>$post->idx,'parent_title'=>$post->title));
+			$this->IM->getModule('push')->sendPush($ment->midx,$this->getModule()->getName(),'ment',$idx,'ment_delete',array('from'=>$this->IM->getModule('member')->getLogged(),'parent'=>$post->idx,'parent_title'=>$post->title));
 		}
 		
 		/**
