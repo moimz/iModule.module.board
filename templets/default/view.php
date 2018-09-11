@@ -8,7 +8,7 @@
  * @author Arzz (arzz@arzz.com)
  * @license MIT License
  * @version 3.0.0
- * @modified 2018. 3. 10.
+ * @modified 2018. 9. 9.
  */
 if (defined('__IM__') == false) exit;
 ?>

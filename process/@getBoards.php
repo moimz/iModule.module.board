@@ -1,14 +1,14 @@
 <?php
 /**
- * 이 파일은 iModule 게시판모듈의 일부입니다. (https://www.imodule.kr)
+ * 이 파일은 iModule 게시판모듈의 일부입니다. (https://www.imodules.io)
  * 
  * 모든 게시판목록을 불러온다.
  *
  * @file /modules/board/process/@getBoards.php
  * @author Arzz (arzz@arzz.com)
- * @license GPLv3
+ * @license MIT License
  * @version 3.0.0
- * @modified 2018. 2. 18.
+ * @modified 2018. 9. 9.
  */
 if (defined('__IM__') == false) exit;
 

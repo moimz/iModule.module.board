@@ -1,14 +1,14 @@
 <?php
 /**
- * 이 파일은 iModule 게시판모듈의 일부입니다. (https://www.imodule.kr)
+ * 이 파일은 iModule 게시판모듈의 일부입니다. (https://www.imodules.io)
  * 
  * 게시판 정보를 불러온다.
  *
  * @file /modules/board/process/@getBoard.php
  * @author Arzz (arzz@arzz.com)
- * @license GPLv3
+ * @license MIT License
  * @version 3.0.0
- * @modified 2018. 2. 18.
+ * @modified 2018. 9. 9.
  */
 if (defined('__IM__') == false) exit;
 
@@ -37,6 +37,7 @@ if ($data == null) {
 	
 	$data->allow_secret = $data->allow_secret == 'TRUE';
 	$data->allow_anonymity = $data->allow_anonymity == 'TRUE';
+	$data->allow_voting = $data->allow_voting == 'TRUE';
 	
 	$data->use_category = $data->use_category != 'NONE';
 	if ($data->use_category == true) {

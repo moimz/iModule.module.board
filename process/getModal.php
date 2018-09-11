@@ -1,6 +1,6 @@
 <?php
 /**
- * 이 파일은 iModule 게시판모듈의 일부입니다. (https://www.imodule.kr)
+ * 이 파일은 iModule 게시판모듈의 일부입니다. (https://www.imodules.io)
  * 
  * 모달창을 가져온다.
  *
@@ -8,15 +8,15 @@
  * @author Arzz (arzz@arzz.com)
  * @license MIT License
  * @version 3.0.0
- * @modified 2018. 2. 27.
+ * @modified 2018. 9. 9.
  */
 if (defined('__IM__') == false) exit;
 
 $modal = Request('modal');
 
 if ($modal == 'delete') {
-	$type = Request('type');
-	$idx = Request('idx');
+	$type = Param('type');
+	$idx = Param('idx');
 	
 	if ($type == 'post') {
 		$post = $this->getPost($idx);

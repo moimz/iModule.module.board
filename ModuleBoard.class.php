@@ -8,7 +8,7 @@
  * @author Arzz (arzz@arzz.com)
  * @license MIT License
  * @version 3.0.0
- * @modified 2018. 9. 6.
+ * @modified 2018. 9. 9.
  */
 class ModuleBoard {
 	/**
@@ -83,7 +83,7 @@ class ModuleBoard {
 		$this->table->ment = 'board_ment_table';
 		$this->table->ment_depth = 'board_ment_depth_table';
 		$this->table->attachment = 'board_attachment_table';
-		$this->table->history = 'board_history_table';
+		$this->table->activity = 'board_activity_table';
 	}
 	
 	/**
@@ -1199,6 +1199,7 @@ class ModuleBoard {
 			
 			$board->allow_secret = $board->allow_secret == 'TRUE';
 			$board->allow_anonymity = $board->allow_anonymity == 'TRUE';
+			$board->allow_voting = $board->allow_voting == 'TRUE';
 			
 			$this->boards[$bid] = $board;
 		}
@@ -1222,6 +1223,8 @@ class ModuleBoard {
 		} else {
 			$post = $idx;
 			if (isset($post->is_rendered) === true && $post->is_rendered === true) return $post;
+			
+			if ($post->is_html_title == 'FALSE') $post->title = GetString($post->title,'replace');
 			
 			$post->member = $this->IM->getModule('member')->getMember($post->midx);
 			$post->name = $this->IM->getModule('member')->getMemberName($post->midx,$post->name,true);
@@ -1427,7 +1430,23 @@ class ModuleBoard {
 		$status = $this->db()->select($this->table->ment,'COUNT(*) as total, MAX(reg_date) as latest')->where('parent',$idx)->where('is_delete','FALSE')->getOne();
 		$updated['ment'] = $status->total;
 		$updated['latest_ment'] = ($status->latest ? $status->latest : 0);
+		
+		$updated['good'] = $this->db()->select($this->table->activity)->where('type','POST')->where('parent',$idx)->where('code','GOOD')->count();
+		$updated['bad'] = $this->db()->select($this->table->activity)->where('type','POST')->where('parent',$idx)->where('code','BAD')->count();
+		
 		$this->db()->update($this->table->post,$updated)->where('idx',$idx)->execute();
+	}
+	
+	/**
+	 * 댓글 정보를 업데이트한다.
+	 *
+	 * @param int $idx 댓글고유번호
+	 */
+	function updateMent($idx) {
+		$updated['good'] = $this->db()->select($this->table->activity)->where('type','MENT')->where('parent',$idx)->where('code','GOOD')->count();
+		$updated['bad'] = $this->db()->select($this->table->activity)->where('type','MENT')->where('parent',$idx)->where('code','BAD')->count();
+		
+		$this->db()->update($this->table->ment,$updated)->where('idx',$idx)->execute();
 	}
 	
 	/**

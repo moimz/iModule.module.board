@@ -1,20 +1,20 @@
 <?php
 /**
- * 이 파일은 iModule 게시판모듈의 일부입니다. (https://www.imodule.kr)
+ * 이 파일은 iModule 게시판모듈의 일부입니다. (https://www.imodules.io)
  * 
  * 게시판 템플릿의 환경설정폼을 가져온다.
  *
  * @file /modules/board/process/@getTempletConfigs.php
  * @author Arzz (arzz@arzz.com)
- * @license GPLv3
+ * @license MIT License
  * @version 3.0.0
- * @modified 2018. 3. 11.
+ * @modified 2018. 9. 9.
  */
 if (defined('__IM__') == false) exit;
 
-$bid = Request('bid');
-$name = Request('name');
-$templet = Request('templet');
+$bid = Param('bid');
+$name = Param('name');
+$templet = Param('templet');
 
 if ($name == 'templet') {
 	$Templet = $this->getModule()->getTemplet($templet);

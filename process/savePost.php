@@ -1,6 +1,6 @@
 <?php
 /**
- * 이 파일은 iModule 게시판모듈의 일부입니다. (https://www.imodule.kr)
+ * 이 파일은 iModule 게시판모듈의 일부입니다. (https://www.imodules.io)
  * 
  * 게시물을 저장한다.
  *
@@ -118,8 +118,8 @@ if (empty($errors) == true) {
 		 * 포인트 및 활동내역을 기록한다.
 		 */
 		if ($this->IM->getModule('member')->isLogged() == true) {
-			$this->IM->getModule('member')->sendPoint($this->IM->getModule('member')->getLogged(),$board->post_point,$this->getModule()->getName(),'post',array('idx'=>$idx));
-			$this->IM->getModule('member')->addActivity($this->IM->getModule('member')->getLogged(),$board->post_exp,$this->getModule()->getName(),'post',array('idx'=>$idx));
+			$this->IM->getModule('member')->sendPoint($this->IM->getModule('member')->getLogged(),$board->post_point,$this->getModule()->getName(),'post',array('idx'=>$idx,'title'=>$title));
+			$this->IM->getModule('member')->addActivity($this->IM->getModule('member')->getLogged(),$board->post_exp,$this->getModule()->getName(),'post',array('idx'=>$idx,'title'=>$title));
 		}
 	} else {
 		$post = $this->getPost($idx);
@@ -163,14 +163,14 @@ if (empty($errors) == true) {
 		 * 글작성자와 수정한 사람이 다를 경우 알림메세지를 전송한다.
 		 */
 		if ($post->midx != 0 && $post->midx != $this->IM->getModule('member')->getLogged()) {
-			$this->IM->getModule('push')->sendPush($post->midx,$this->getModule()->getName(),'post',$idx,'post_modify',array('from'=>$this->IM->getModule('member')->getLogged()));
+			$this->IM->getModule('push')->sendPush($post->midx,$this->getModule()->getName(),'post',$idx,'post_modify',array('idx'=>$idx,'from'=>$this->IM->getModule('member')->getLogged(),'title'=>$post->title));
 		}
 		
 		/**
 		 * 회원의 경우
 		 */
 		if ($this->IM->getModule('member')->isLogged() == true) {
-			$this->IM->getModule('member')->addActivity($this->IM->getModule('member')->getLogged(),0,$this->getModule()->getName(),'post_modify',array('idx'=>$idx));
+			$this->IM->getModule('member')->addActivity($this->IM->getModule('member')->getLogged(),0,$this->getModule()->getName(),'post_modify',array('idx'=>$idx,'title'=>$title));
 		}
 	}
 	

@@ -1,6 +1,6 @@
 <?php
 /**
- * 이 파일은 iModule 게시판모듈의 일부입니다. (https://www.imodule.kr)
+ * 이 파일은 iModule 게시판모듈의 일부입니다. (https://www.imodules.io)
  * 
  * 댓글을 가져온다.
  *
@@ -8,12 +8,12 @@
  * @author Arzz (arzz@arzz.com)
  * @license MIT License
  * @version 3.0.0
- * @modified 2018. 2. 24.
+ * @modified 2018. 9. 9.
  */
 if (defined('__IM__') == false) exit;
 
-$parent = Request('parent');
-$page = Request('page');
+$parent = Param('parent');
+$page = Param('page');
 
 $post = $this->getPost($parent);
 if ($post == null) {

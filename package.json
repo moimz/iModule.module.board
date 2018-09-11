@@ -35,7 +35,7 @@
 				"midx":{
 					"type":"int",
 					"length":11,
-					"comment":"관리자정보"
+					"comment":"관리자회원고유값"
 				},
 				"bid":{
 					"type":"text",
@@ -46,7 +46,7 @@
 			"indexes":{
 				"midx":"primary_key"
 			},
-			"comment":"게시판관리자관리"
+			"comment":"게시판 관리자 테이블"
 		},
 		"board_attachment_table":{
 			"columns":{
@@ -58,24 +58,24 @@
 				"bid":{
 					"type":"varchar",
 					"length":20,
-					"comment":"게시판ID"
+					"comment":"첨부된 게시판ID"
 				},
 				"type":{
 					"type":"enum",
 					"length":"'POST','MENT'",
-					"comment":"업로드위치"
+					"comment":"첨부위치"
 				},
 				"parent":{
 					"type":"int",
 					"length":11,
-					"comment":"관리자정보"
+					"comment":"첨부된 게시글/댓글 고유값"
 				}
 			},
 			"indexes":{
 				"idx":"primary_key",
 				"type,parent":"index"
 			},
-			"comment":"게시판관리자관리"
+			"comment":"게시판 첨부파일 테이블"
 		},
 		"board_category_table":{
 			"columns":{
@@ -104,17 +104,17 @@
 					"type":"int",
 					"length":11,
 					"default":0,
-					"comment":"최종등록일"
+					"comment":"최근 게시물 작성시각"
 				},
 				"permission":{
 					"type":"text",
-					"comment":"접근권한"
+					"comment":"카테고리 권한"
 				},
 				"sort":{
 					"type":"int",
 					"length":11,
 					"default":0,
-					"comment":"정렬순서"
+					"comment":"정렬"
 				}
 			},
 			"indexes":{
@@ -122,7 +122,7 @@
 				"bid":"index"
 			},
 			"auto_increment":"idx",
-			"comment":"게시판카테고리관리"
+			"comment":"게시판 카테고리 테이블"
 		},
 		"board_prefix_table":{
 			"columns":{
@@ -156,13 +156,13 @@
 					"type":"int",
 					"length":11,
 					"default":0,
-					"comment":"최종게시물등록일"
+					"comment":"최근 게시물 작성시각"
 				},
 				"sort":{
 					"type":"int",
 					"length":11,
 					"default":0,
-					"comment":"정렬순서"
+					"comment":"정렬"
 				}
 			},
 			"indexes":{
@@ -170,49 +170,50 @@
 				"bid":"index"
 			},
 			"auto_increment":"idx",
-			"comment":"게시판말머리관리"
+			"comment":"게시판 말머리 테이블"
 		},
-		"board_history_table":{
+		"board_activity_table":{
 			"columns":{
-				"idx":{
-					"type":"int",
-					"length":11
-				},
 				"type":{
 					"type":"enum",
 					"length":"'POST','MENT'",
-					"default":"POST"
+					"default":"POST",
+					"comment":"활동대상종류"
 				},
 				"parent":{
 					"type":"int",
-					"length":11
-				},
-				"action":{
-					"type":"enum",
-					"length":"'VOTE','MODIFY'",
-					"default":"VOTE"
+					"length":11,
+					"comment":"활동대상 게시물/댓글 고유값"
 				},
 				"midx":{
 					"type":"int",
 					"length":11,
-					"default":0
+					"default":0,
+					"comment":"회원고유값"
 				},
-				"result":{
-					"type":"varchar",
-					"length":10,
-					"is_null":true
+				"code":{
+					"type":"enum",
+					"length":"'HIT','GOOD','BAD','MODIFY'",
+					"default":"HIT",
+					"comment":"활동코드"
 				},
 				"reg_date":{
-					"type":"int",
-					"length":11
+					"type":"bigint",
+					"length":20,
+					"comment":"활동시각"
+				},
+				"ip":{
+					"type":"varchar",
+					"length":15,
+					"comment":"IP주소"
 				}
 			},
 			"indexes":{
-				"idx":"primary_key",
-				"type,parent,action":"index"
+				"type,parent,midx,code":"primary_key",
+				"midx":"index",
+				"ip":"index"
 			},
-			"auto_increment":"idx",
-			"comment":"미사용"
+			"comment":"게시판 활동내역 테이블"
 		},
 		"board_ment_depth_table":{
 			"columns":{
@@ -224,13 +225,13 @@
 				"parent":{
 					"type":"int",
 					"length":11,
-					"comment":"부모값"
+					"comment":"댓글이 달린 게시물고유값"
 				},
 				"head":{
 					"type":"int",
 					"length":11,
 					"default":0,
-					"comment":"답변댓글 위치순서"
+					"comment":"댓글위치"
 				},
 				"arrange":{
 					"type":"int",
@@ -248,7 +249,7 @@
 					"type":"int",
 					"length":11,
 					"default":0,
-					"comment":"답변댓글이달린댓글고유값"
+					"comment":"답변댓글이 달린 부모댓글고유값"
 				}
 			},
 			"indexes":{
@@ -257,7 +258,7 @@
 				"head":"index",
 				"source":"index"
 			},
-			"comment":"게시물댓글순서관리"
+			"comment":"게시물 댓글정렬 테이블"
 		},
 		"board_ment_table":{
 			"columns":{
@@ -274,13 +275,13 @@
 				"parent":{
 					"type":"int",
 					"length":11,
-					"comment":"부모값"
+					"comment":"댓글이 달린 게시물고유값"
 				},
 				"midx":{
 					"type":"int",
 					"length":11,
 					"default":0,
-					"comment":"작성자"
+					"comment":"작성회원고유값"
 				},
 				"name":{
 					"type":"varchar",
@@ -292,13 +293,13 @@
 					"type":"varchar",
 					"length":200,
 					"is_null":true,
-					"comment":"이메일"
+					"comment":"작성자이메일"
 				},
 				"password":{
 					"type":"varchar",
 					"length":65,
 					"is_null":true,
-					"comment":"비밀번호"
+					"comment":"댓글패스워드"
 				},
 				"content":{
 					"type":"longtext",
@@ -306,24 +307,18 @@
 				},
 				"search":{
 					"type":"longtext",
-					"comment":"내용 (HTML제거)"
+					"comment":"내용검색"
 				},
 				"reg_date":{
 					"type":"int",
 					"length":11,
-					"comment":"등록일"
-				},
-				"modify_date":{
-					"type":"int",
-					"length":11,
-					"default":0,
-					"comment":"수정일"
+					"comment":"등록시각"
 				},
 				"ip":{
 					"type":"varchar",
 					"length":15,
 					"is_null":true,
-					"comment":"작성자IP"
+					"comment":"작성자IP주소"
 				},
 				"good":{
 					"type":"int",
@@ -363,7 +358,7 @@
 				"search":"fulltext"
 			},
 			"auto_increment":"idx",
-			"comment":"게시물댓글관리"
+			"comment":"게시물 댓글 테이블"
 		},
 		"board_post_table":{
 			"columns":{
@@ -381,13 +376,13 @@
 					"type":"int",
 					"length":11,
 					"default":0,
-					"comment":"카테고리코드"
+					"comment":"카테고리고유값"
 				},
 				"midx":{
 					"type":"int",
 					"length":11,
 					"default":0,
-					"comment":"작성자"
+					"comment":"작성회원고유값"
 				},
 				"name":{
 					"type":"varchar",
@@ -399,19 +394,19 @@
 					"type":"varchar",
 					"length":200,
 					"is_null":true,
-					"comment":"이메일"
+					"comment":"작성자이메일"
 				},
 				"password":{
 					"type":"char",
 					"length":65,
 					"is_null":true,
-					"comment":"비밀번호"
+					"comment":"게시물패스워드"
 				},
 				"prefix":{
 					"type":"int",
 					"length":11,
 					"default":0,
-					"comment":"게시판말머리코드"
+					"comment":"게시판말머리고유값"
 				},
 				"title":{
 					"type":"varchar",
@@ -424,7 +419,7 @@
 				},
 				"search":{
 					"type":"text",
-					"comment":"내용 (HTML제거)"
+					"comment":"내용검색"
 				},
 				"field1":{
 					"type":"varchar",
@@ -483,13 +478,13 @@
 				"reg_date":{
 					"type":"int",
 					"length":11,
-					"comment":"작성일"
+					"comment":"등록시각"
 				},
 				"ip":{
 					"type":"varchar",
 					"length":15,
 					"is_null":true,
-					"comment":"작성자IP"
+					"comment":"작성자IP주소"
 				},
 				"hit":{
 					"type":"int",
@@ -547,7 +542,8 @@
 				},
 				"extra":{
 					"type":"text",
-					"is_null":true
+					"is_null":true,
+					"comment":"게시물추가정보"
 				}
 			},
 			"indexes":{
@@ -559,7 +555,7 @@
 				"title,search":"fulltext"
 			},
 			"auto_increment":"idx",
-			"comment":"게시물관리"
+			"comment":"게시판 게시물 테이블"
 		},
 		"board_table":{
 			"columns":{
@@ -629,7 +625,7 @@
 					"type":"enum",
 					"length":"'INCLUDE','EXCLUDE'",
 					"default":"INCLUDE",
-					"comment":"공지사항을게시물등록수인정"
+					"comment":"페이지당게시물수에 공지사항 게시물수 포함여부"
 				},
 				"post_point":{
 					"type":"int",
@@ -646,8 +642,14 @@
 				"vote_point":{
 					"type":"int",
 					"length":11,
-					"default":3,
-					"comment":"게시물열람포인트"
+					"default":5,
+					"comment":"추천하기포인트"
+				},
+				"voted_point":{
+					"type":"int",
+					"length":11,
+					"default":10,
+					"comment":"추천받음포인트"
 				},
 				"post_exp":{
 					"type":"int",
@@ -665,43 +667,55 @@
 					"type":"int",
 					"length":11,
 					"default":1,
-					"comment":"추천경험치"
+					"comment":"추천하기경험치"
+				},
+				"voted_exp":{
+					"type":"int",
+					"length":11,
+					"default":3,
+					"comment":"추천받음경험치"
 				},
 				"post":{
 					"type":"int",
 					"length":11,
 					"default":0,
-					"comment":"등록개시물수"
+					"comment":"게시물수"
 				},
 				"latest_post":{
 					"type":"int",
 					"length":11,
 					"default":0,
-					"comment":"최종등록일"
+					"comment":"최근 게시물 작성시각"
 				},
 				"ment":{
 					"type":"int",
 					"length":11,
 					"default":0,
-					"comment":"등록댓글수"
+					"comment":"댓글수"
 				},
 				"latest_ment":{
 					"type":"int",
 					"length":11,
 					"default":0,
-					"comment":"최종댓글등록일"
+					"comment":"최근 댓글 작성시각"
 				},
 				"allow_secret":{
 					"type":"enum",
 					"length":"'TRUE','FALSE'",
 					"default":"TRUE",
-					"comment":"비밀글사용여부"
+					"comment":"비밀글허용여부"
 				},
 				"allow_anonymity":{
 					"type":"enum",
 					"length":"'TRUE','FALSE'",
 					"default":"TRUE",
-					"comment":"익명사용여부"
+					"comment":"익명허용여부"
+				},
+				"allow_voting":{
+					"type":"enum",
+					"length":"'TRUE','FALSE'",
+					"default":"TRUE",
+					"comment":"추천허용여부"
 				},
 				"attachment":{
 					"type":"text",
@@ -716,7 +730,7 @@
 			"indexes":{
 				"bid":"primary_key"
 			},
-			"comment":"게시판관리"
+			"comment":"게시판 관리 테이블"
 		}
 	}
 }

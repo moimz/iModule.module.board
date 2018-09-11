@@ -5,9 +5,9 @@
  * 
  * @file /modules/board/admin/scripts/script.js
  * @author Arzz (arzz@arzz.com)
- * @license MIT License
+ * @license GPLv3
  * @version 3.0.0
- * @modified 2018. 8. 26.
+ * @modified 2018. 9. 9.
  */
 var Board = {
 	/**
@@ -136,6 +136,17 @@ var Board = {
 										name:"allow_anonymity",
 										boxLabel:Board.getText("admin/list/form/allow_anonymity"),
 										checked:true
+									}),
+									new Ext.form.Checkbox({
+										name:"allow_voting",
+										boxLabel:Board.getText("admin/list/form/allow_voting"),
+										checked:true,
+										listeners:{
+											change:function(form,checked) {
+												form.getForm().findField("vote_point").ownerCt.setHidden(!checked);
+												form.getForm().findField("voted_point").ownerCt.setHidden(!checked);
+											}
+										}
 									})
 								]
 							}),
@@ -382,6 +393,23 @@ var Board = {
 												name:"vote_exp",
 												margin:"0 0 0 5",
 												value:1,
+												flex:1
+											})
+										]
+									}),
+									new Ext.form.FieldContainer({
+										fieldLabel:Board.getText("admin/list/form/voted"),
+										layout:"hbox",
+										items:[
+											new Ext.form.NumberField({
+												name:"voted_point",
+												value:10,
+												flex:1
+											}),
+											new Ext.form.NumberField({
+												name:"voted_exp",
+												margin:"0 0 0 5",
+												value:3,
 												flex:1
 											})
 										]

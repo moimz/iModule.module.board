@@ -65,6 +65,7 @@
 				"option":"게시판 옵션",
 				"allow_secret":"비밀글 기능을 활성화합니다.",
 				"allow_anonymity":"게시물 또는 댓글을 익명으로 등록할 수 있도록 합니다.",
+				"allow_voting":"게시물 또는 댓글의 추천기능을 사용할 수 있도록 합니다.",
 				"notice_setting":"공지사항 설정",
 				"category_setting":"카테고리 사용",
 				"permission_setting":"권한설정",
@@ -88,7 +89,8 @@
 				"exp":"경험치",
 				"post_write":"게시물작성",
 				"ment_write":"댓글작성",
-				"vote":"추천하기"
+				"vote":"추천하기",
+				"voted":"추천받음"
 			},
 			"page_type":{
 				"FIXED":"항상 고정된 범위",

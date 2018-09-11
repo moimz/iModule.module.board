@@ -1,6 +1,6 @@
 <?php
 /**
- * 이 파일은 iModule 게시판모듈의 일부입니다. (https://www.imodule.kr)
+ * 이 파일은 iModule 게시판모듈의 일부입니다. (https://www.imodules.io)
  * 
  * 댓글을 가져온다.
  *
@@ -8,12 +8,12 @@
  * @author Arzz (arzz@arzz.com)
  * @license MIT License
  * @version 3.0.0
- * @modified 2018. 2. 25.
+ * @modified 2018. 9. 9.
  */
 if (defined('__IM__') == false) exit;
 
-$type = Request('type');
-$idx = Request('idx');
+$type = Param('type');
+$idx = Param('idx');
 $ment = $this->db()->select($this->table->ment_depth.' d','d.*,m.*')->join($this->table->ment.' m','d.idx=m.idx','LEFT')->where('m.idx',$idx)->getOne();
 
 if ($ment == null) {

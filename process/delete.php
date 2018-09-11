@@ -8,12 +8,12 @@
  * @author Arzz (arzz@arzz.com)
  * @license MIT License
  * @version 3.0.0
- * @modified 2018. 2. 25.
+ * @modified 2018. 9. 9.
  */
 if (defined('__IM__') == false) exit;
 
-$type = Request('type');
-$idx = Request('idx');
+$type = Param('type');
+$idx = Param('idx');
 
 if ($type == 'post') {
 	$post = $this->getPost($idx);

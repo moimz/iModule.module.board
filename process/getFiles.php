@@ -1,6 +1,6 @@
 <?php
 /**
- * 이 파일은 iModule 게시판모듈의 일부입니다. (https://www.imodule.kr)
+ * 이 파일은 iModule 게시판모듈의 일부입니다. (https://www.imodules.io)
  * 
  * 첨부파일을 가져온다.
  *
@@ -8,11 +8,11 @@
  * @author Arzz (arzz@arzz.com)
  * @license MIT License
  * @version 3.0.0
- * @modified 2018. 2. 22.
+ * @modified 2018. 9. 9.
  */
 if (defined('__IM__') == false) exit;
 
-$idx = Decoder(Request('idx'));
+$idx = Request('idx') ? Decoder(Request('idx')) : false;
 if ($idx == false) {
 	$results->success = false;
 } else {

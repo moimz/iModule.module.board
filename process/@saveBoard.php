@@ -1,14 +1,14 @@
 <?php
 /**
- * 이 파일은 iModule 게시판모듈의 일부입니다. (https://www.imodule.kr)
+ * 이 파일은 iModule 게시판모듈의 일부입니다. (https://www.imodules.io)
  * 
  * 게시판정보를 저장한다.
  *
  * @file /modules/board/process/@saveBoard.php
  * @author Arzz (arzz@arzz.com)
- * @license GPLv3
+ * @license MIT License
  * @version 3.0.0
- * @modified 2018. 2. 17.
+ * @modified 2018. 9. 9.
  */
 if (defined('__IM__') == false) exit;
 
@@ -24,6 +24,7 @@ $insert['page_type'] = Request('page_type') && in_array(Request('page_type'),arr
 
 $insert['allow_secret'] = Request('allow_secret') ? 'TRUE' : 'FALSE';
 $insert['allow_anonymity'] = Request('allow_anonymity') ? 'TRUE' : 'FALSE';
+$insert['allow_voting'] = Request('allow_voting') ? 'TRUE' : 'FALSE';
 
 $insert['view_notice_page'] = Request('view_notice_page') && in_array(Request('view_notice_page'),array('FIRST','ALL')) == true ? Request('view_notice_page') : $errors['view_notice_page'] = $this->getErrorText('REQUIRED');
 $insert['view_notice_count'] = Request('view_notice_count') && in_array(Request('view_notice_count'),array('INCLUDE','EXCLUDE')) == true ? Request('view_notice_count') : $errors['view_notice_count'] = $this->getErrorText('REQUIRED');
@@ -43,6 +44,8 @@ $insert['ment_point'] = Request('ment_point') && is_numeric(Request('ment_point'
 $insert['ment_exp'] = Request('ment_exp') && is_numeric(Request('ment_exp')) == true ? Request('ment_exp') : $errors['ment_exp'] = $this->getErrorText('REQUIRED');
 $insert['vote_point'] = Request('vote_point') && is_numeric(Request('vote_point')) == true ? Request('vote_point') : $errors['vote_point'] = $this->getErrorText('REQUIRED');
 $insert['vote_exp'] = Request('vote_exp') && is_numeric(Request('vote_exp')) == true ? Request('vote_exp') : $errors['vote_exp'] = $this->getErrorText('REQUIRED');
+$insert['voted_point'] = Request('voted_point') && is_numeric(Request('voted_point')) == true ? Request('voted_point') : $errors['voted_point'] = $this->getErrorText('REQUIRED');
+$insert['voted_exp'] = Request('voted_exp') && is_numeric(Request('voted_exp')) == true ? Request('voted_exp') : $errors['voted_exp'] = $this->getErrorText('REQUIRED');
 
 $attachment = new stdClass();
 $attachment->attachment = Request('use_attachment') ? true : false;

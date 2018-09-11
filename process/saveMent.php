@@ -1,6 +1,6 @@
 <?php
 /**
- * 이 파일은 iModule 게시판모듈의 일부입니다. (https://www.imodule.kr)
+ * 이 파일은 iModule 게시판모듈의 일부입니다. (https://www.imodules.io)
  * 
  * 댓글을 저장한다.
  *
@@ -8,7 +8,7 @@
  * @author Arzz (arzz@arzz.com)
  * @license MIT License
  * @version 3.0.0
- * @modified 2018. 9. 6.
+ * @modified 2018. 9. 9.
  */
 if (defined('__IM__') == false) exit;
 
@@ -116,22 +116,22 @@ if (empty($errors) == true) {
 		 * 포인트 및 활동내역을 기록한다.
 		 */
 		if ($this->IM->getModule('member')->isLogged() == true) {
-			$this->IM->getModule('member')->sendPoint($this->IM->getModule('member')->getLogged(),$board->ment_point,$this->getModule()->getName(),'ment',array('idx'=>$idx));
-			$this->IM->getModule('member')->addActivity($this->IM->getModule('member')->getLogged(),$board->ment_exp,$this->getModule()->getName(),'ment',array('idx'=>$idx));
+			$this->IM->getModule('member')->sendPoint($this->IM->getModule('member')->getLogged(),$board->ment_point,$this->getModule()->getName(),'ment',array('idx'=>$idx,'parent'=>$post->idx,'title'=>$post->title));
+			$this->IM->getModule('member')->addActivity($this->IM->getModule('member')->getLogged(),$board->ment_exp,$this->getModule()->getName(),'ment',array('idx'=>$idx,'parent'=>$post->idx,'title'=>$post->title));
 		}
 		
 		/**
 		 * 게시물 작성자에게 알림메세지를 전송한다.
 		 */
 		if ($post->midx != 0 && $post->midx != $this->IM->getModule('member')->getLogged()) {
-			$this->IM->getModule('push')->sendPush($post->midx,$this->getModule()->getName(),'post',$parent,'new_ment',array('idx'=>$idx));
+			$this->IM->getModule('push')->sendPush($post->midx,$this->getModule()->getName(),'post',$post->idx,'new_ment',array('idx'=>$idx,'parent'=>$post->idx,'title'=>$post->title));
 		}
 		
 		/**
 		 * 댓글의 댓글일 경우 원 댓글자에게 알림메세지를 전송한다.
 		 */
 		if ($source != 0 && $sourceData->midx != 0 && $sourceData->midx != $this->IM->getModule('member')->getLogged()) {
-			$this->IM->getModule('push')->sendPush($sourceData->midx,$this->getModule()->getName(),'ment',$sourceData->idx,'new_reply_ment',array('idx'=>$idx));
+			$this->IM->getModule('push')->sendPush($sourceData->midx,$this->getModule()->getName(),'ment',$sourceData->idx,'new_reply_ment',array('idx'=>$idx,'parent'=>$post->idx,'source'=>$sourceData->idx,'title'=>$post->title));
 		}
 		
 		$message = '댓글을 성공적으로 작성하였습니다.';
@@ -165,14 +165,14 @@ if (empty($errors) == true) {
 		 * 댓글작성자와 수정한 사람이 다를 경우 알림메세지를 전송한다.
 		 */
 		if ($ment->midx != 0 && $ment->midx != $this->IM->getModule('member')->getLogged()) {
-			$this->IM->getModule('push')->sendPush($ment->midx,$this->getModule()->getName(),'ment',$idx,'ment_modify',array('from'=>$this->IM->getModule('member')->getLogged()));
+			$this->IM->getModule('push')->sendPush($ment->midx,$this->getModule()->getName(),'ment',$idx,'ment_modify',array('idx'=>$idx,'parent'=>$post->idx,'from'=>$this->IM->getModule('member')->getLogged(),'title'=>$post->title));
 		}
 		
 		/**
 		 * 활동내역을 기록한다.
 		 */
 		if ($this->IM->getModule('member')->isLogged() == true) {
-			$this->IM->getModule('member')->addActivity($this->IM->getModule('member')->getLogged(),0,$this->getModule()->getName(),'ment_modify',array('idx'=>$idx));
+			$this->IM->getModule('member')->addActivity($this->IM->getModule('member')->getLogged(),0,$this->getModule()->getName(),'ment_modify',array('idx'=>$idx,'parent'=>$post->idx,'title'=>$post->title));
 		}
 		
 		$message = '댓글을 성공적으로 수정하였습니다.';
