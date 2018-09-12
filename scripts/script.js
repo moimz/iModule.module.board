@@ -1,5 +1,5 @@
 /**
- * 이 파일은 iModule 게시판모듈의 일부입니다. (https://www.imodule.kr)
+ * 이 파일은 iModule 게시판모듈의 일부입니다. (https://www.imodules.io)
  *
  * 게시판과 관련된 자바스크립트를 정의한다.
  * 

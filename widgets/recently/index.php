@@ -1,6 +1,6 @@
 <?php
 /**
- * 이 파일은 iModule 게시판모듈 일부입니다. (https://www.imodule.kr)
+ * 이 파일은 iModule 게시판모듈 일부입니다. (https://www.imodules.io)
  *
  * 게시판의 최근게시물을 가져온다.
  * 

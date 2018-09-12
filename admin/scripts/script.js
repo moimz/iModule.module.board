@@ -1,5 +1,5 @@
 /**
- * 이 파일은 iModule 게시판모듈의 일부입니다. (https://www.imodule.kr)
+ * 이 파일은 iModule 게시판모듈의 일부입니다. (https://www.imodules.io)
  *
  * 게시판 관리자 UI를 처리한다.
  * 
