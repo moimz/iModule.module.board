@@ -36,6 +36,8 @@ for ($i=0, $loop=count($posts);$i<$loop;$i++) {
 	}
 	
 	$posts[$i] = $this->getPost($posts[$i],true);
+	unset($posts[$i]->email);
+	unset($posts[$i]->name);
 	
 	if (isset($posts[$i]->member) == true) {
 		$member = new stdClass();
@@ -45,7 +47,10 @@ for ($i=0, $loop=count($posts);$i<$loop;$i++) {
 		$member->photo = $posts[$i]->member->photo;
 		
 		$posts[$i]->member = $member;
-		$posts[$i]->name = $posts[$i]->is_anonymity == false ? $member->nickname : $posts[$i]->name;
+		$posts[$i]->nickname = $posts[$i]->is_anonymity == false ? $member->nickname : $posts[$i]->name;
+		$posts[$i]->photo = $member->photo;
+	} else {
+		$posts[$i]->photo = null;
 	}
 	
 	/**
