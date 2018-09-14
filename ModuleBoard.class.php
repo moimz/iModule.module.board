@@ -1239,6 +1239,9 @@ class ModuleBoard {
 			$post->image = $post->image > 0 ? $this->IM->getModule('attachment')->getFileInfo($post->image) : null;
 			$post->content = $this->IM->getModule('wysiwyg')->decodeContent($post->content);
 			
+			$post->category = $post->category == 0 ? null : $this->getCategory($post->category);
+			$post->prefix = $post->prefix == 0 ? null : $this->getPrefix($post->prefix);
+			
 			$post->is_secret = $post->is_secret == 'TRUE';
 			$post->is_anonymity = $post->is_anonymity == 'TRUE';
 			$post->is_notice = $post->is_notice == 'TRUE';
@@ -1251,6 +1254,8 @@ class ModuleBoard {
 			}
 			
 			$post->is_rendered = true;
+			
+			unset($post->password);
 			
 			$this->posts[$post->idx] = $post;
 			return $this->posts[$post->idx];
