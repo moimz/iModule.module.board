@@ -200,7 +200,6 @@ if (empty($errors) == true) {
 	$this->updateCategory($category);
 	$this->updatePrefix($prefix);
 	$this->updateBoard($bid);
-	$this->IM->setArticle('board',$bid,'post',$idx,time());
 	
 	$results->success = true;
 	$results->idx = $idx;
