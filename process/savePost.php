@@ -89,12 +89,12 @@ if (empty($errors) == true) {
 	$insert['is_html_title'] = $is_html_title;
 	$insert['is_secret'] = $is_secret;
 	$insert['is_anonymity'] = $is_anonymity;
-	if ($field1) $insert['field1'] = $field1;
-	if ($field2) $insert['field2'] = $field2;
-	if ($field3) $insert['field3'] = $field3;
-	if ($field4) $insert['field4'] = $field4;
-	if ($field5) $insert['field5'] = $field5;
-	if ($field6) $insert['field6'] = $field6;
+	if ($field1 !== null) $insert['field1'] = $field1;
+	if ($field2 !== null) $insert['field2'] = $field2;
+	if ($field3 !== null) $insert['field3'] = $field3;
+	if ($field4 !== null) $insert['field4'] = $field4;
+	if ($field5 !== null) $insert['field5'] = $field5;
+	if ($field6 !== null) $insert['field6'] = $field6;
 	
 	if ($idx == null) {
 		$insert['midx'] = $midx;
