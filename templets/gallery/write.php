@@ -134,7 +134,7 @@ if ($cover == null || $cover->module != 'board' || $cover->target != 'cover') $c
 			</div>
 		</div>
 	</li>
-	<?php if ($board->allow_secret == true || $board->allow_anonymity == true) { ?>
+	<?php if ($me->checkPermission($board->bid,'notice') == true || $board->allow_secret == true || $board->allow_anonymity == true) { ?>
 	<li>
 		<label><?php echo $me->getText('text/post_option'); ?></label>
 		<div>
