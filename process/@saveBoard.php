@@ -41,7 +41,7 @@ if ($use_category == true) {
 $insert['post_point'] = Request('post_point') && is_numeric(Request('post_point')) == true ? Request('post_point') : 0;
 $insert['post_exp'] = Request('post_exp') && is_numeric(Request('post_exp')) == true ? Request('post_exp') : 0;
 $insert['ment_point'] = Request('ment_point') && is_numeric(Request('ment_point')) == true ? Request('ment_point') : 0;
-$insert['ment_exp'] = Request('ment_exp') && is_numeric(Request('ment_exp')) == true ? Request('ment_exp') : 0
+$insert['ment_exp'] = Request('ment_exp') && is_numeric(Request('ment_exp')) == true ? Request('ment_exp') : 0;
 $insert['vote_point'] = Request('vote_point') && is_numeric(Request('vote_point')) == true ? Request('vote_point') : 0;
 $insert['vote_exp'] = Request('vote_exp') && is_numeric(Request('vote_exp')) == true ? Request('vote_exp') : 0;
 $insert['voted_point'] = Request('voted_point') && is_numeric(Request('voted_point')) == true ? Request('voted_point') : 0;
