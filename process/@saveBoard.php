@@ -38,14 +38,14 @@ if ($use_category == true) {
 	$category = array();
 }
 
-$insert['post_point'] = Request('post_point') && is_numeric(Request('post_point')) == true ? Request('post_point') : $errors['post_point'] = $this->getErrorText('REQUIRED');
-$insert['post_exp'] = Request('post_exp') && is_numeric(Request('post_exp')) == true ? Request('post_exp') : $errors['post_exp'] = $this->getErrorText('REQUIRED');
-$insert['ment_point'] = Request('ment_point') && is_numeric(Request('ment_point')) == true ? Request('ment_point') : $errors['ment_point'] = $this->getErrorText('REQUIRED');
-$insert['ment_exp'] = Request('ment_exp') && is_numeric(Request('ment_exp')) == true ? Request('ment_exp') : $errors['ment_exp'] = $this->getErrorText('REQUIRED');
-$insert['vote_point'] = Request('vote_point') && is_numeric(Request('vote_point')) == true ? Request('vote_point') : $errors['vote_point'] = $this->getErrorText('REQUIRED');
-$insert['vote_exp'] = Request('vote_exp') && is_numeric(Request('vote_exp')) == true ? Request('vote_exp') : $errors['vote_exp'] = $this->getErrorText('REQUIRED');
-$insert['voted_point'] = Request('voted_point') && is_numeric(Request('voted_point')) == true ? Request('voted_point') : $errors['voted_point'] = $this->getErrorText('REQUIRED');
-$insert['voted_exp'] = Request('voted_exp') && is_numeric(Request('voted_exp')) == true ? Request('voted_exp') : $errors['voted_exp'] = $this->getErrorText('REQUIRED');
+$insert['post_point'] = Request('post_point') && is_numeric(Request('post_point')) == true ? Request('post_point') : 0;
+$insert['post_exp'] = Request('post_exp') && is_numeric(Request('post_exp')) == true ? Request('post_exp') : 0;
+$insert['ment_point'] = Request('ment_point') && is_numeric(Request('ment_point')) == true ? Request('ment_point') : 0;
+$insert['ment_exp'] = Request('ment_exp') && is_numeric(Request('ment_exp')) == true ? Request('ment_exp') : 0;
+$insert['vote_point'] = Request('vote_point') && is_numeric(Request('vote_point')) == true ? Request('vote_point') : 0;
+$insert['vote_exp'] = Request('vote_exp') && is_numeric(Request('vote_exp')) == true ? Request('vote_exp') : 0;
+$insert['voted_point'] = Request('voted_point') && is_numeric(Request('voted_point')) == true ? Request('voted_point') : 0;
+$insert['voted_exp'] = Request('voted_exp') && is_numeric(Request('voted_exp')) == true ? Request('voted_exp') : 0;
 
 $attachment = new stdClass();
 $attachment->attachment = Request('use_attachment') ? true : false;

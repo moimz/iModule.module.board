@@ -250,7 +250,7 @@
 				"head":"index",
 				"source":"index"
 			},
-			"comment":"게시물 댓글정렬 테이블"
+			"comment":"게시판 댓글정렬 테이블"
 		},
 		"board_ment_table":{
 			"columns":{
@@ -350,7 +350,7 @@
 				"search":"fulltext"
 			},
 			"auto_increment":"idx",
-			"comment":"게시물 댓글 테이블"
+			"comment":"게시판 댓글 테이블"
 		},
 		"board_post_table":{
 			"columns":{
