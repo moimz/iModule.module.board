@@ -32,6 +32,11 @@
 	"error":{
 		"FORBIDDEN_SECRET":"비밀글을 열람할 수 있는 권한이 없습니다."
 	},
+	"push":{
+		"new_ment":{
+			"message":"{FROM}님이 [{POST}] 게시물에 새로운 댓글을 작성하였습니다."
+		}
+	},
 	"admin":{
 		"list":{
 			"title":"게시판관리",

@@ -1276,6 +1276,7 @@ class ModuleBoard {
 			$ment = $idx;
 			if (isset($ment->is_rendered) === true && $ment->is_rendered === true) return $ment;
 			
+			$ment->o_name = $ment->name;
 			$ment->member = $this->IM->getModule('member')->getMember($ment->midx);
 			$ment->name = $this->IM->getModule('member')->getMemberName($ment->midx,$ment->name,true);
 			$ment->nickname = $this->IM->getModule('member')->getMemberNickname($ment->midx,$ment->name,true);
@@ -1685,6 +1686,62 @@ class ModuleBoard {
 			}
 			
 			return json_encode($data);
+		}
+	}
+	
+	/**
+	 * 알림모듈과 동기화한다.
+	 *
+	 * @param string $action 동기화작업
+	 * @param any[] $data 정보
+	 */
+	function syncPush($action,$data) {
+		if ($action == 'message') {
+			$code = $data->code;
+			$contents = $data->contents;
+			$message = null;
+			
+			switch ($code) {
+				case 'new_ment' :
+					$content = array_shift($contents);
+					$count = count($contents);
+					
+					$message = new stdClass();
+					$message->message = $this->getText('push/'.$code.($count > 0 ? 's' : '').'/'.$action);
+					$message->icon = $this->getModule()->getDir().'/images/push/'.$action.'.png';
+					
+					$ment = $this->getMent($content->idx);
+					
+					if ($ment == null) {
+						$from = 'Unknown';
+						$post = $content->title;
+					} else {
+						$from = $ment->o_name;
+						$post = $this->getPost($ment->parent);
+						$post = $post == null ? $content->title : $post->title;
+						$message->icon = $this->IM->getModule('member')->getMember($ment->midx)->photo;
+					}
+					
+					$message->message = str_replace(array('{FROM}','{COUNT}','{POST}'),array($from,$count,$post),$message->message);
+					break;
+			}
+			
+			return $message;
+		}
+		
+		if ($action == 'view') {
+			$type = $data->type;
+			$idx = $data->idx;
+			
+			if ($type == 'post') {
+				$post = $this->getPost($idx,true);
+				return $post == null ? null : $post->link;
+			} elseif ($type == 'ment') {
+				$ment = $this->getMent($idx,true);
+				return $ment == null ? null : $ment->link;
+			}
+			
+			return null;
 		}
 	}
 	
