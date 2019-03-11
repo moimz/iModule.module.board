@@ -572,6 +572,8 @@ class ModuleBoard {
 			$p = $configs->p;
 		}
 		
+		$p = is_numeric($p) == true && $p > 0 ? $p : 1;
+		
 		$limit = $board->post_limit;
 		$start = ($p - 1) * $limit;
 		
@@ -732,7 +734,7 @@ class ModuleBoard {
 		/**
 		 * 현재 게시물이 속한 페이지를 구한다.
 		 */
-		$p = Request('p');
+		$p = Request('p') && is_numeric(Request('p')) == true && Request('p') > 0 ? Request('p') : null;
 		$keyword = Request('keyword');
 		$category = $board->use_category == 'NONE' ? null : Request('category');
 		if ($configs != null && isset($configs->category) == true && $configs->category != 0) {
