@@ -8,7 +8,7 @@
  * @author Arzz (arzz@arzz.com)
  * @license MIT License
  * @version 3.0.0
- * @modified 2018. 9. 9.
+ * @modified 2019. 3. 11.
  */
 if (defined('__IM__') == false) exit;
 
@@ -24,7 +24,7 @@ if ($type == 'post') {
 	} elseif ($this->checkPermission($post->bid,'post_delete') == true) {
 		$this->deletePost($idx);
 		$results->success = true;
-	} elseif ($post->midx != 0 && $post->midx != $this->IM->getModule('member')->getLogged()) {
+	} elseif ($post->midx != 0 && $post->midx == $this->IM->getModule('member')->getLogged()) {
 		$this->deletePost($idx);
 		$results->success = false;
 	} elseif ($post->midx == 0) {
@@ -54,7 +54,7 @@ if ($type == 'ment') {
 		$this->deleteMent($idx);
 		$results->success = true;
 		$results->parent = $ment->parent;
-	} elseif ($ment->midx != 0 && $ment->midx != $this->IM->getModule('member')->getLogged()) {
+	} elseif ($ment->midx != 0 && $ment->midx == $this->IM->getModule('member')->getLogged()) {
 		$this->deleteMent($idx);
 		$results->success = false;
 		$results->parent = $ment->parent;
