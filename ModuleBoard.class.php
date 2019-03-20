@@ -1652,15 +1652,10 @@ class ModuleBoard {
 		 * 첨부파일 삭제
 		 */
 		if ($action == 'delete') {
-			$files = $this->db()->select($this->table->attachment,'parent')->where('idx',$idx)->where('type','POST')->get('parent');
 			$images = $this->db()->select($this->table->post)->where('image',$idx)->get('idx');
 			$this->db()->delete($this->table->attachment)->where('idx',$idx)->execute();
 			foreach ($images as $image) {
 				$this->db()->update($this->table->post,array('image'=>0))->where('idx',$image)->execute();
-				$this->updatePost($image,true);
-			}
-			foreach ($posts as $post) {
-				$this->db()->update($this->table->post,array('image'=>0))->where('idx',$post->idx);
 				$this->updatePost($image,true);
 			}
 		}
