@@ -8,13 +8,16 @@
  * @author Eunseop Lim (eslim@naddle.net)
  * @license MIT License
  * @version 3.0.0
- * @modified 2019. 3. 4.
+ * @modified 2019. 4. 12.
  */
 if (defined('__IM__') == false) exit;
 
-$bid = Request('bid');
-$midx = Request('midx');
+$midx = explode(',', Request('midx'));
 
-$this->db()->delete($this->table->admin)->where('bid',$bid)->where('midx',$midx)->execute();
+$this->db()->startTransaction();
+foreach ($midx as $item) {
+    $this->db()->delete($this->table->admin)->where('midx',$item)->execute();
+}
+$this->db()->commit();
 $results->success = true;
 ?>

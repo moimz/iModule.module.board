@@ -8,25 +8,30 @@
  * @author Eunseop Lim (eslim@naddle.net)
  * @license MIT License
  * @version 3.0.0
- * @modified 2018. 3. 4.
+ * @modified 2018. 4. 12.
  */
 if (defined('__IM__') == false) exit;
 
-$bid = Request('bid');
-
-$mCoursemos = $this->IM->getModule('coursemos');
-$lists = $this->db()->select($this->table->admin)->where('bid',$bid)->get();
+$lists = $this->db()->select($this->table->admin)->get();
 for ($i=0, $loop=count($lists);$i<$loop;$i++) {
 	$member = $this->IM->getModule('member')->getMember($lists[$i]->midx);
 	
-	
-	$lists[$i]->role = $member->coursemos != null ? $mCoursemos->getText('role/'.$member->coursemos->role) : '';
 	$lists[$i]->name = $member->name;
 	$lists[$i]->institution = $member->coursemos != null && $member->coursemos->institution != null ? $member->coursemos->institution->title : '';
 	$lists[$i]->department = $member->coursemos != null && $member->coursemos->department != null ? $member->coursemos->department->title : '';
-	$lists[$i]->cellphone = $member->cellphone;
-	$lists[$i]->email = $member->email;
-	$lists[$i]->code = $member->code;
+	$lists[$i]->haksa = $member->coursemos != null ? $member->coursemos->haksa : '';
+
+	if ($lists[$i]->bid == '*') {
+		$lists[$i]->bid = '모든 게시판';
+	} else {
+		$bids = explode(',',$lists[$i]->bid);
+		$lists[$i]->bid = '';
+
+		foreach ($bids as $bid) {
+			$lists[$i]->bid.= $lists[$i]->bid ? ', ' : '';
+			$lists[$i]->bid.= $bid == '' ? '' : $this->getBoard($bid)->title;
+		}
+	}
 }
 
 $results->success = true;
