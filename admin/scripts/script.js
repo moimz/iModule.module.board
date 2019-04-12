@@ -652,7 +652,7 @@ var Board = {
 				modal:true,
 				border:false,
 				layout:"fit",
-				selected:{form:[],didx:[]},
+				selected:{bid:[]},
 				items:[
 					new Ext.Panel({
 						layout:{type:"hbox",align:"stretch"},
