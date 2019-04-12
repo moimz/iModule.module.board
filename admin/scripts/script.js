@@ -7,7 +7,7 @@
  * @author Arzz (arzz@arzz.com)
  * @license GPLv3
  * @version 3.0.0
- * @modified 2018. 9. 9.
+ * @modified 2019. 4. 12.
  */
 var Board = {
 	/**
@@ -639,5 +639,192 @@ var Board = {
 				}
 			}});
 		}
+	},
+	admin:{
+		add:function(midx) {
+			var midx = midx ? midx : 0;
+			
+			new Ext.Window({
+				id:"ModuleBoardAdminAddWindow",
+				title:(midx ? "관리자 수정" : "관리자 추가"),
+				width:600,
+				height:500,
+				modal:true,
+				border:false,
+				layout:"fit",
+				selected:{form:[],didx:[]},
+				items:[
+					new Ext.Panel({
+						layout:{type:"hbox",align:"stretch"},
+						border:false,
+						tbar:[
+							new Ext.form.Hidden({
+								id:"ModuleBoardAdminAddMidx",
+								name:"midx",
+								value:midx,
+								disabled:midx
+							}),
+							new Ext.form.TextField({
+								id:"ModuleBoardAdminAddText",
+								name:"text",
+								emptyText:"검색버튼을 클릭하여 관리자로 지정할 회원을 검색하세요.",
+								readOnly:true,
+								flex:1,
+								listeners:{
+									focus:function() {
+										Coursemos.member(function(member) {
+											Ext.getCmp("ModuleBoardAdminAddMidx").setValue(member.idx);
+											
+											var text = member.name;
+											if (member.institution) text+= " / "+member.institution;
+											if (member.department) text+= " / "+member.department;
+											if (member.haksa) text+= " / "+member.haksa;
+											Ext.getCmp("ModuleBoardAdminAddText").setValue(text);
+										});
+									}
+								}
+							}),
+							new Ext.Button({
+								iconCls:"mi mi-search",
+								text:"검색",
+								disabled:midx,
+								handler:function() {
+									Coursemos.member(function(member) {
+										Ext.getCmp("ModuleBoardAdminAddMidx").setValue(member.idx);
+										
+										var text = member.name;
+										if (member.institution) text+= " / "+member.institution;
+										if (member.department) text+= " / "+member.department;
+										if (member.haksa) text+= " / "+member.haksa;
+										Ext.getCmp("ModuleBoardAdminAddText").setValue(text);
+									});
+								}
+							})
+						],
+						items:[
+							new Ext.grid.Panel({
+								id:"ModuleBoardAdminAddBoardList",
+								border:true,
+								margin:"5 5 5 0",
+								flex:1,
+								store:new Ext.data.JsonStore({
+									proxy:{
+										type:"ajax",
+										simpleSortMode:true,
+										url:ENV.getProcessUrl("board","@getBoards"),
+										extraParams:{depth:"group",parent:"NONE"},
+										reader:{type:"json"}
+									},
+									remoteSort:false,
+									sorters:[{property:"title",direction:"ASC"}],
+									autoLoad:false,
+									pageSize:0,
+									fields:["idx","title"],
+									listeners:{
+										load:function(store,records,success,e) {
+											if (success == true) {
+												Ext.getCmp("ModuleBoardAdminAddBoardList").getSelectionModel().deselectAll(true);
+												var selected = Ext.getCmp("ModuleBoardAdminAddWindow").selected.bid;
+												for (var i=0, loop=selected.length;i<loop;i++) {
+													var position = store.findExact("bid",selected[i]);
+													if (position > -1) {
+														Ext.getCmp("ModuleBoardAdminAddBoardList").getSelectionModel().select(position,true,true);
+													}
+												}
+											} else {
+												if (e.getError()) {
+													Ext.Msg.show({title:Admin.getText("alert/error"),msg:e.getError(),buttons:Ext.Msg.OK,icon:Ext.Msg.ERROR});
+												} else {
+													Ext.Msg.show({title:Admin.getText("alert/error"),msg:Admin.getErrorText("LOAD_DATA_FAILED"),buttons:Ext.Msg.OK,icon:Ext.Msg.ERROR});
+												}
+											}
+										}
+									}
+								}),
+								columns:[{
+									text:"게시판 ID",
+									width:180,
+									dataIndex:"bid",
+								},{
+									text:"게시판명",
+									flex:1,
+									dataIndex:"title"
+								}],
+								selModel:new Ext.selection.CheckboxModel({mode:"SIMPLE"})
+							})
+						]
+					})
+				],
+				buttons:[
+					new Ext.Button({
+						text:(midx ? "권한수정하기" : "관리자 추가하기"),
+						handler:function() {
+							var midx = Ext.getCmp("ModuleBoardAdminAddMidx").getValue();
+							
+							var bid = Ext.getCmp("ModuleBoardAdminAddBoardList").getSelectionModel().getSelection();
+							for (var i=0, loop=bid.length;i<loop;i++) {
+								bid[i] = bid[i].get("bid");
+							}
+							
+							if (midx == "0") {
+								Ext.Msg.show({title:Admin.getText("alert/error"),msg:"관리자로 추가할 회원을 검색하여 주십시오.",buttons:Ext.Msg.OK,icon:Ext.Msg.ERROR});
+							} else {
+								Ext.Msg.wait(Admin.getText("action/working"),Admin.getText("action/saving"));
+								$.send(ENV.getProcessUrl("board","@saveAdmin"),{midx:midx,bid:bid.join(",")},function(result) {
+									if (result.success == true) {
+										Ext.Msg.show({title:Admin.getText("alert/info"),msg:Admin.getText("action/saved"),buttons:Ext.Msg.OK,icon:Ext.Msg.INFO,fn:function() {
+											Ext.getCmp("ModuleBoardAdminList").getStore().reload();
+											Ext.getCmp("ModuleBoardAdminAddWindow").close();
+										}});
+									}
+								});
+							}
+						}
+					}),
+					new Ext.Button({
+						text:"닫기",
+						handler:function() {
+							Ext.getCmp("ModuleBoardAdminAddWindow").close();
+						}
+					})
+				],
+				listeners:{
+					show:function() {
+						if (midx == 0) {
+							Ext.getCmp("ModuleBoardAdminAddBoardList").getStore().load();
+						} else {
+							Ext.Msg.wait(Admin.getText("action/working"),Admin.getText("action/loading"));
+							$.send(ENV.getProcessUrl("board","@getAdmin"),{midx:midx},function(result) {
+								if (result.success == true) {
+									Ext.Msg.hide();
+									
+									Ext.getCmp("ModuleBoardAdminAddText").setValue(result.text);
+									
+									Ext.getCmp("ModuleBoardAdminAddWindow").selected.bid = result.bid;
+									
+									Ext.getCmp("ModuleBoardAdminAddBoardList").getStore().load();
+								}
+							});
+						}
+					}
+				}
+			}).show();
+		},
+		/**
+		 * 관리자 삭제
+		 */
+		delete:function(midx) {
+			Ext.Msg.show({title:Admin.getText("alert/info"),msg:"관리자를 삭제하시겠습니까?",buttons:Ext.Msg.OKCANCEL,icon:Ext.Msg.QUESTION,fn:function(button) {
+				if (button == "ok") {
+					$.send(ENV.getProcessUrl("board","@deleteAdmin"),{midx:midx},function(result) {
+						if (result.success == true) {
+							Ext.Msg.show({title:Admin.getText("alert/info"),msg:Admin.getText("action/worked"),buttons:Ext.Msg.OK,icon:Ext.Msg.INFO,fn:function() {
+								Ext.getCmp("ModuleBoardAdminList").getStore().reload();
+							}});
+						}
+					});
+				}
+			}});
+		},
 	}
 };
