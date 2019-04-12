@@ -31,7 +31,7 @@
 				},
 				"bid":{
 					"type":"varchar",
-					"length":500,
+					"length":20,
 					"comment":"관리게시판ID"
 				}
 			},
