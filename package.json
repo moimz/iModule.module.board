@@ -4,7 +4,7 @@
 	"title":{
 		"ko":"게시판"
 	},
-	"version":"3.0.0",
+	"version":"3.1.0",
 	"description":{
 		"ko":"일반적인 게시판을 생성하고, 관리할 수 있습니다."
 	},
@@ -30,13 +30,13 @@
 					"comment":"관리자회원고유값"
 				},
 				"bid":{
-					"type":"text",
-					"is_null":true,
+					"type":"varchar",
+					"length":500,
 					"comment":"관리게시판ID"
 				}
 			},
 			"indexes":{
-				"midx":"primary_key"
+				"midx,bid":"primary_key"
 			},
 			"comment":"게시판 관리자 테이블"
 		},
