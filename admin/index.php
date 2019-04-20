@@ -8,7 +8,7 @@
  * @author Arzz (arzz@arzz.com)
  * @license GPLv3
  * @version 3.0.0
- * @modified 2019. 4. 12.
+ * @modified 2019. 4. 20.
  */
 if (defined('__IM__') == false) exit;
 ?>
@@ -21,18 +21,19 @@ Ext.onReady(function () { Ext.getCmp("iModuleAdminPanel").add(
 		items:[
 			new Ext.grid.Panel({
 				id:"ModuleBoardList",
+				iconCls:"fa fa-file-text-o",
 				title:Board.getText("admin/list/title"),
 				border:false,
 				tbar:[
 					new Ext.Button({
-						text:Board.getText("admin/list/addBoard"),
-						iconCls:"fa fa-plus",
+						text:Board.getText("admin/list/add_board"),
+						iconCls:"mi mi-plus",
 						handler:function() {
 							Board.list.add();
 						}
 					}),
 					new Ext.Button({
-						text:"선택 게시판 삭제",
+						text:Board.getText("admin/list/delete_board"),
 						iconCls:"mi mi-trash",
 						handler:function() {
 							Board.list.delete();
@@ -253,40 +254,20 @@ Ext.onReady(function () { Ext.getCmp("iModuleAdminPanel").add(
 					}
 				}),
 				columns:[{
-					text:"단과대학",
-					dataIndex:"institution",
+					text:Board.getText("admin/admin/columns/name"),
+					dataIndex:"name",
 					sortable:true,
 					width:100
 				},{
-					text:"학과",
-					dataIndex:"department",
+					text:Board.getText("admin/admin/columns/email"),
+					dataIndex:"email",
 					sortable:true,
-					width:120
+					width:180
 				},{
-					text:"이름",
-					dataIndex:"name",
-					sortable:true,
-					width:80,
-					renderer:function(value,p,record) {
-						var sHTML = "";
-						if (record.data.team && record.data.role == "OWNER") sHTML+= '<i class="xi xi-crown"></i> ';
-						sHTML+= value;
-						
-						return sHTML;
-					}
-				},{
-					text:"사번/교번",
-					dataIndex:"haksa",
-					sortable:true,
-					width:95,
-					renderer:function(value) {
-						if (value) return value;
-					}
-				},{
-					text:"접근가능 게시판",
+					text:Board.getText("admin/admin/columns/bid"),
 					dataIndex:"bid",
 					sortable:true,
-					minWidth:140,
+					minWidth:200,
 					flex:1
 				}],
 				selModel:new Ext.selection.CheckboxModel(),
@@ -311,7 +292,7 @@ Ext.onReady(function () { Ext.getCmp("iModuleAdminPanel").add(
 						
 						menu.add({
 							iconCls:"xi xi-key",
-							text:"접근권한수정",
+							text:Board.getText("admin/admin/modify_admin"),
 							handler:function() {
 								Board.admin.add(record.data.midx);
 							}
@@ -319,7 +300,7 @@ Ext.onReady(function () { Ext.getCmp("iModuleAdminPanel").add(
 
 						menu.add({
 							iconCls:"xi xi-trash",
-							text:"삭제",
+							text:Board.getText("admin/admin/delete_admin"),
 							handler:function() {
 								Board.admin.delete(record.data.midx);
 							}

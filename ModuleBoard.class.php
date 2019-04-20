@@ -208,6 +208,8 @@ class ModuleBoard {
 		$IM = $this->IM;
 		$Module = $this;
 		
+		$this->IM->getModule('admin')->loadModule('member');
+		
 		ob_start();
 		INCLUDE $this->getModule()->getPath().'/admin/index.php';
 		$panel = ob_get_contents();

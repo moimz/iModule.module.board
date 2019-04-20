@@ -69,7 +69,8 @@
 	"admin":{
 		"list":{
 			"title":"게시판관리",
-			"addBoard":"게시판추가",
+			"add_board":"게시판추가",
+			"delete_board":"선택 게시판 삭제",
 			"columns":{
 				"bid":"게시판 ID",
 				"title":"게시판명",
@@ -141,6 +142,18 @@
 			"window":{
 				"add":"게시판추가",
 				"modify":"게시판수정"
+			}
+		},
+		"admin":{
+			"title":"관리자관리",
+			"add_admin":"관리자추가",
+			"modify_admin":"관리게시판 수정",
+			"delete_admin":"선택 관리자 삭제",
+			"admin_all":"전체 게시판 관리",
+			"columns":{
+				"name":"이름",
+				"email":"이메일주소",
+				"bid":"관리게시판"
 			}
 		},
 		"configs":{

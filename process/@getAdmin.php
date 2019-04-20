@@ -1,6 +1,6 @@
 <?php
 /**
- * 이 파일은 게시판모듈의 일부입니다. (http://www.coursemos.kr)
+ * 이 파일은 iModule 게시판모듈의 일부입니다. (https://www.imodules.io)
  *
  * 관리자 정보를 가져온다.
  * 
@@ -8,6 +8,7 @@
  * @author Eunseop Lim (eslim@naddle.net)
  * @license MIT License
  * @version 3.0.0
+ * @modified 2019. 4. 21.
  */
 if (defined('__IM__') == false) exit;
 
@@ -16,19 +17,12 @@ $admin = $this->db()->select($this->table->admin)->where('midx',$midx)->getOne()
 if ($admin == null) {
 	$results->success = false;
 	$results->message = $this->getErrorText('NOT_FOUND');
-} else {
-	$results->success = true;
-	
-	$member = $this->IM->getModule('member')->getMember($admin->midx);
-	$results->text = $member->name;
-	$results->text.= $member->coursemos != null && $member->coursemos->institution != null ? ' / '.$member->coursemos->institution->title : '';
-	$results->text.= $member->coursemos != null && $member->coursemos->department != null ? ' / '.$member->coursemos->department->title : '';
-	$results->text.= $member->coursemos != null ? ' / '.$member->coursemos->haksa : '';
-    
-    if ($admin->bid == '*') {
-        $results->bid = $this->db()->select($this->table->board)->get('bid');
-    } else {
-        $results->bid = explode(',',$admin->bid);
-    }
+	return;
 }
+
+$member = $this->IM->getModule('member')->getMember($midx);
+
+$results->success = true;
+$results->member = $member;
+$results->bid = $admin->bid == '*' ? '*' : explode(',',$admin->bid);
 ?>

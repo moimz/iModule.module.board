@@ -1,14 +1,14 @@
 <?php
 /**
- * 이 파일은 iModule 게시판모듈의 일부입니다. (http://www.coursemos.kr)
+ * 이 파일은 iModule 게시판모듈의 일부입니다. (https://www.imodules.io)
  *
  * 운영자 리스트를 가져옵니다.
  *
- * @file /modules/board/process/@deletePoll.php
+ * @file /modules/board/process/@getAdmins.php
  * @author Eunseop Lim (eslim@naddle.net)
  * @license MIT License
  * @version 3.0.0
- * @modified 2018. 4. 12.
+ * @modified 2019. 4. 20.
  */
 if (defined('__IM__') == false) exit;
 
@@ -17,20 +17,16 @@ for ($i=0, $loop=count($lists);$i<$loop;$i++) {
 	$member = $this->IM->getModule('member')->getMember($lists[$i]->midx);
 	
 	$lists[$i]->name = $member->name;
-	$lists[$i]->institution = $member->coursemos != null && $member->coursemos->institution != null ? $member->coursemos->institution->title : '';
-	$lists[$i]->department = $member->coursemos != null && $member->coursemos->department != null ? $member->coursemos->department->title : '';
-	$lists[$i]->haksa = $member->coursemos != null ? $member->coursemos->haksa : '';
+	$lists[$i]->email = $member->email;
 
 	if ($lists[$i]->bid == '*') {
-		$lists[$i]->bid = '모든 게시판';
+		$lists[$i]->bid = $this->getText('admin/admin/admin_all');
 	} else {
 		$bids = explode(',',$lists[$i]->bid);
-		$lists[$i]->bid = '';
-
-		foreach ($bids as $bid) {
-			$lists[$i]->bid.= $lists[$i]->bid ? ', ' : '';
-			$lists[$i]->bid.= $bid == '' ? '' : $this->getBoard($bid)->title;
+		foreach ($bids as &$bid) {
+			$bid = $this->getBoard($bid)->title.'('.$bid.')';
 		}
+		$lists[$i]->bid = implode(', ',$bids);
 	}
 }
 
