@@ -8,7 +8,7 @@
  * @author Arzz (arzz@arzz.com)
  * @license MIT License
  * @version 3.0.0
- * @modified 2018. 9. 9.
+ * @modified 2019. 4. 20.
  */
 class ModuleBoard {
 	/**
@@ -1704,11 +1704,10 @@ class ModuleBoard {
 					$count = count($contents);
 					
 					$message = new stdClass();
-					$message->message = $this->getText('push/'.$code.($count > 0 ? 's' : '').'/'.$action);
-					$message->icon = $this->getModule()->getDir().'/images/push/'.$action.'.png';
+					$message->message = $this->getText('push/'.$code.'/message'.($count > 0 ? 's' : ''));
+					$message->icon = $this->getModule()->getDir().'/images/push/'.$code.'.png';
 					
 					$ment = $this->getMent($content->idx);
-					
 					if ($ment == null) {
 						$from = 'Unknown';
 						$post = $content->title;
@@ -1719,11 +1718,73 @@ class ModuleBoard {
 						$message->icon = $this->IM->getModule('member')->getMember($ment->midx)->photo;
 					}
 					
-					$message->message = str_replace(array('{FROM}','{COUNT}','{POST}'),array($from,$count,$post),$message->message);
+					$message->message = str_replace(array('{FROM}','{COUNT}','{TITLE}'),array($from,$count,$post),$message->message);
+					break;
+					
+				case 'post_modify' :
+					$content = array_shift($contents);
+					
+					$message = new stdClass();
+					$message->message = $this->getText('push/'.$code.'/message');
+					$message->icon = $this->getModule()->getDir().'/images/push/'.$code.'.png';
+					
+					$title = $content->title;
+					$message->message = str_replace(array('{TITLE}'),array($title),$message->message);
+					break;
+				
+				case 'post_delete' :
+					$content = array_shift($contents);
+					
+					$message = new stdClass();
+					$message->message = $this->getText('push/'.$code.'/message');
+					$message->icon = $this->getModule()->getDir().'/images/push/'.$code.'.png';
+					
+					$title = $content->title;
+					$message->message = str_replace(array('{TITLE}'),array($title),$message->message);
+					break;
+					
+				case 'new_reply_ment' :
+					$content = array_shift($contents);
+					$count = count($contents);
+					
+					$content = array_shift($contents);
+					$count = count($contents);
+					
+					$message = new stdClass();
+					$message->message = $this->getText('push/'.$code.'/message'.($count > 0 ? 's' : ''));
+					$message->icon = $this->getModule()->getDir().'/images/push/'.$code.'.png';
+					
+					$ment = $this->getMent($content->idx);
+					if ($ment == null) {
+						$from = 'Unknown';
+						$post = $content->title;
+					} else {
+						$from = $ment->o_name;
+						$post = $this->getPost($ment->parent);
+						$post = $post == null ? $content->title : $post->title;
+						$message->icon = $this->IM->getModule('member')->getMember($ment->midx)->photo;
+					}
+					
+					$message->message = str_replace(array('{FROM}','{COUNT}','{TITLE}'),array($from,$count,$post),$message->message);
 					break;
 			}
 			
 			return $message;
+		}
+		
+		if ($action == 'title') {
+			return $this->getText('push/'.$data.'/title') != 'push/'.$data.'/title' ? $this->getText('push/'.$data.'/title') : null;
+		}
+		
+		if ($action == 'list') {
+			$pushes = array();
+			foreach ($this->getText('push') as $key=>$value) {
+				$pushes[$key] = new stdClass();
+				$pushes[$key]->group = $this->getText('push/'.$key.'/group');
+				$pushes[$key]->title = $this->getText('push/'.$key.'/title');
+			}
+			
+			return $pushes;
 		}
 		
 		if ($action == 'view') {
@@ -1740,6 +1801,17 @@ class ModuleBoard {
 			
 			return null;
 		}
+		
+		if ($action == 'setting') {
+			$settings = new stdClass();
+			$settings->web = true;
+			$settings->sms = null;
+			$settings->email = null;
+			
+			return $settings;
+		}
+		
+		return null;
 	}
 	
 	/**
