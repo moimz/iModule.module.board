@@ -23,7 +23,7 @@
 			},
 			"type":"string",
 			"default":"",
-			"is_required":true,
+			"is_required":false,
 			"help":{
 				"ko":"최근게시물을 가져올 게시판 ID를 콤마(,)로 구분하여 입력하여 주십시오."
 			}
@@ -34,7 +34,7 @@
 			},
 			"type":"string",
 			"default":"",
-			"is_required":true
+			"is_required":false
 		},
 		"type":{
 			"title":{
