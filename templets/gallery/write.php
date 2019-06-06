@@ -8,7 +8,7 @@
  * @author Arzz (arzz@arzz.com)
  * @license MIT License
  * @version 3.0.0
- * @modified 2018. 3. 11.
+ * @modified 2019. 6. 7.
  */
 if (defined('__IM__') == false) exit;
 
@@ -32,14 +32,6 @@ if ($cover == null || $cover->module != 'board' || $cover->target != 'cover') $c
 		<div>
 			<div data-role="input" data-default="<?php echo $me->getText('text/password_help'); ?>">
 				<input type="password" name="password">
-			</div>
-		</div>
-	</li>
-	<li>
-		<label><?php echo $me->getText('text/email'); ?></label>
-		<div>
-			<div data-role="input" data-default="<?php echo $me->getText('text/email_help'); ?>">
-				<input type="email" name="email">
 			</div>
 		</div>
 	</li>

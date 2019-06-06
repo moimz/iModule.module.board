@@ -8,7 +8,7 @@
  * @author Arzz (arzz@arzz.com)
  * @license MIT License
  * @version 3.0.0
- * @modified 2018. 9. 9.
+ * @modified 2019. 6. 7.
  */
 if (defined('__IM__') == false) exit;
 
@@ -34,12 +34,10 @@ $content = Request('content') ? Request('content') : $errors['content'] = $this-
 if ($this->IM->getModule('member')->isLogged() == false) {
 	$name = Request('name') ? Request('name') : $errors['name'] = $this->getErrorText('REQUIRED');
 	$password = Request('password') ? Request('password') : $errors['password'] = $this->getErrorText('REQUIRED');
-	$email = Request('email');
 	$midx = 0;
 } else {
 	$name = $this->IM->getModule('member')->getMember()->nickname;
 	$password = '';
-	$email = $this->IM->getModule('member')->getMember()->email;
 	$midx = $this->IM->getModule('member')->getLogged();
 }
 
@@ -74,7 +72,6 @@ if (empty($errors) == true) {
 		$insert['password'] = $password;
 		$insert['name'] = $name;
 		$insert['password'] = $password ? $mHash->password_hash($password) : '';
-		$insert['email'] = $email;
 		$insert['reg_date'] = time();
 		$insert['ip'] = $_SERVER['REMOTE_ADDR'];
 		
@@ -153,7 +150,6 @@ if (empty($errors) == true) {
 		if ($ment->midx == 0) {
 			$insert['name'] = $name;
 			$insert['password'] = $password ? $mHash->password_hash($password) : '';
-			$insert['email'] = $email;
 			$insert['ip'] = $_SERVER['REMOTE_ADDR'];
 		}
 		

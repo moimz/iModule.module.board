@@ -281,12 +281,6 @@
 					"is_null":true,
 					"comment":"작성자명"
 				},
-				"email":{
-					"type":"varchar",
-					"length":200,
-					"is_null":true,
-					"comment":"작성자이메일"
-				},
 				"password":{
 					"type":"varchar",
 					"length":65,
@@ -381,12 +375,6 @@
 					"length":20,
 					"is_null":true,
 					"comment":"작성자명"
-				},
-				"email":{
-					"type":"varchar",
-					"length":200,
-					"is_null":true,
-					"comment":"작성자이메일"
 				},
 				"password":{
 					"type":"char",
