@@ -703,6 +703,7 @@ class ModuleBoard {
 		
 		$this->IM->setRobots('index, nofollow');
 		$this->IM->setCanonical($this->getUrl('view',$idx));
+		$this->IM->setSiteTitle($post->title);
 		$this->IM->setViewTitle($post->title);
 		$this->IM->setViewDescription($post->content);
 		if ($post->image != null) $this->IM->setViewImage($post->image);
