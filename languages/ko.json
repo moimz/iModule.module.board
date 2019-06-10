@@ -7,7 +7,9 @@
 		"category":"카테고리",
 		"category_all":"전체",
 		"post_option":"게시물옵션",
-		"ment_option":"댓글옵션"
+		"ment_option":"댓글옵션",
+		"deleted_post":"삭제된 게시물",
+		"deleted_ment":"삭제된 댓글"
 	},
 	"ment":{
 		"empty":"등록된 댓글이 없습니다.",
@@ -29,6 +31,10 @@
 	},
 	"error":{
 		"FORBIDDEN_SECRET":"비밀글을 열람할 수 있는 권한이 없습니다."
+	},
+	"point_history":{
+		"post":"{TITLE} 게시물 작성",
+		"ment":"{TITLE} 게시물의 댓글작성"
 	},
 	"push":{
 		"new_ment":{

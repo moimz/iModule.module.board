@@ -1672,6 +1672,7 @@ class ModuleBoard {
 	 *
 	 * @param string $action 동기화작업
 	 * @param any[] $data 정보
+	 * @todo 언어팩 적용
 	 */
 	function syncMember($action,$data) {
 		if ($action == 'point_history') {
@@ -1681,11 +1682,25 @@ class ModuleBoard {
 					$post = $this->getPost($idx,true);
 					
 					if ($post == null) {
-						return '[삭제된 게시물] 게시물 작성';
+						$title = $this->getText('text/deleted_post');
 					} else {
-						return '<a href="'.$post->link.'" target="_blank">['.$post->title.']</a> 게시물 작성';
+						$title = '<a href="'.$post->link.'" target="_blank">'.$post->title.'</a>';
 					}
-					break;
+					
+					return str_replace('{TITLE}',$title,$this->getText('point_history/post'));
+					
+				case 'ment' :
+					$idx = $data->content->idx;
+					$ment = $this->getMent($idx,true);
+					
+					if ($ment == null) {
+						$title = $this->getText('text/deleted_ment');
+					} else {
+						$post = $this->getPost($ment->parent,true);
+						$title = '<a href="'.$post->link.'" target="_blank">'.$post->title.'</a>';
+					}
+					
+					return str_replace('{TITLE}',$title,$this->getText('point_history/ment'));
 			}
 			
 			return json_encode($data);
