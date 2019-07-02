@@ -24,7 +24,8 @@ for ($i=0, $loop=count($lists);$i<$loop;$i++) {
 	} else {
 		$bids = explode(',',$lists[$i]->bid);
 		foreach ($bids as &$bid) {
-			$bid = $this->getBoard($bid)->title.'('.$bid.')';
+			$board = $this->getBoard($bid);
+			$bid = $board == null ? 'Unknown('.$bid.')' : $board->title.'('.$bid.')';
 		}
 		$lists[$i]->bid = implode(', ',$bids);
 	}
