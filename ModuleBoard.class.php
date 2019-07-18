@@ -1852,7 +1852,7 @@ class ModuleBoard {
 		$bids = explode(',',$check->bid);
 		if ($bid != null && in_array($bid,$bids) === false) return false;
 		
-		return true;
+		return $bids;
 	}
 }
 ?>
