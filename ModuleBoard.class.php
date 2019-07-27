@@ -8,7 +8,7 @@
  * @author Arzz (arzz@arzz.com)
  * @license MIT License
  * @version 3.0.0
- * @modified 2019. 4. 20.
+ * @modified 2019. 7. 27.
  */
 class ModuleBoard {
 	/**
@@ -617,10 +617,12 @@ class ModuleBoard {
 		
 		$keyword = Request('keyword');
 		if ($keyword) {
+			$lists->where('(');
 			$lists = $this->IM->getModule('keyword')->getWhere($lists,array('title','search'),$keyword);
 			$midxes = $this->IM->getModule('member')->getSearchResults($keyword);
 			if (count($midxes) > 0) $lists->orWhere('midx',$midxes,'IN');
 			$lists->orWhere('name',$keyword);
+			$lists->where(')');
 			$this->IM->getModule('keyword')->mark($keyword,'div[data-module=board] span[data-role=title]');
 		}
 		$total = $lists->copy()->count();
@@ -633,6 +635,7 @@ class ModuleBoard {
 		$lists = $lists->orderBy('idx','desc')->limit($start,$limit)->get();
 		
 		for ($i=0, $loop=count($notices);$i<$loop;$i++) {
+			if ($board->use_content_list !== true) unset($notices[$i]->content);
 			$notices[$i] = $this->getPost($notices[$i]);
 			$notices[$i]->category = $notices[$i]->category == 0 ? null : $this->getCategory($notices[$i]->category);
 			$notices[$i]->prefix = $notices[$i]->prefix == 0 ? null : $this->getPrefix($notices[$i]->prefix);
@@ -641,6 +644,7 @@ class ModuleBoard {
 		
 		$loopnum = $total - $start;
 		for ($i=0, $loop=count($lists);$i<$loop;$i++) {
+			if ($board->use_content_list !== true) unset($lists[$i]->content);
 			$lists[$i] = $this->getPost($lists[$i]);
 			$lists[$i]->loopnum = $loopnum - $i;
 			$lists[$i]->category = $lists[$i]->category == 0 ? null : $this->getCategory($lists[$i]->category);
@@ -1208,6 +1212,7 @@ class ModuleBoard {
 			$board->allow_secret = $board->allow_secret == 'TRUE';
 			$board->allow_anonymity = $board->allow_anonymity == 'TRUE';
 			$board->allow_voting = $board->allow_voting == 'TRUE';
+			$board->use_content_list = $board->use_content_list == 'TRUE';
 			
 			$this->boards[$bid] = $board;
 		}
@@ -1245,7 +1250,9 @@ class ModuleBoard {
 			}
 			
 			$post->image = $post->image > 0 ? $this->IM->getModule('attachment')->getFileInfo($post->image) : null;
-			$post->content = $this->IM->getModule('wysiwyg')->decodeContent($post->content);
+			if (isset($post->content) == true) {
+				$post->content = $this->IM->getModule('wysiwyg')->decodeContent($post->content);
+			}
 			
 			$post->is_secret = $post->is_secret == 'TRUE';
 			$post->is_anonymity = $post->is_anonymity == 'TRUE';

@@ -7,7 +7,7 @@
  * @author Arzz (arzz@arzz.com)
  * @license GPLv3
  * @version 3.0.0
- * @modified 2019. 4. 20.
+ * @modified 2019. 7. 27.
  */
 var Board = {
 	/**
@@ -147,6 +147,11 @@ var Board = {
 												form.getForm().findField("voted_point").ownerCt.setHidden(!checked);
 											}
 										}
+									}),
+									new Ext.form.Checkbox({
+										name:"use_content_list",
+										boxLabel:Board.getText("admin/list/form/use_content_list"),
+										checked:false
 									})
 								]
 							}),

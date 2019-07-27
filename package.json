@@ -571,6 +571,12 @@
 					"default":"FALSE",
 					"comment":"말머리사용여부"
 				},
+				"use_content_list":{
+					"type":"enum",
+					"length":"'TRUE','FALSE'",
+					"default":"FALSE",
+					"comment":"목록본문사용여부"
+				},
 				"post_limit":{
 					"type":"int",
 					"length":2,

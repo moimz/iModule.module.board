@@ -38,6 +38,7 @@ if ($data == null) {
 	$data->allow_secret = $data->allow_secret == 'TRUE';
 	$data->allow_anonymity = $data->allow_anonymity == 'TRUE';
 	$data->allow_voting = $data->allow_voting == 'TRUE';
+	$data->use_content_list = $data->use_content_list == 'TRUE';
 	
 	$data->use_category = $data->use_category != 'NONE';
 	if ($data->use_category == true) {

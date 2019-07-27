@@ -105,6 +105,7 @@
 				"allow_secret":"비밀글 기능을 활성화합니다.",
 				"allow_anonymity":"게시물 또는 댓글을 익명으로 등록할 수 있도록 합니다.",
 				"allow_voting":"게시물 또는 댓글의 추천기능을 사용할 수 있도록 합니다.",
+				"use_content_list":"게시판 목록에서 본문내용을 사용합니다.",
 				"notice_setting":"공지사항 설정",
 				"category_setting":"카테고리 사용",
 				"permission_setting":"권한설정",
