@@ -552,7 +552,7 @@ class ModuleBoard {
 	 * @return string $html 컨텍스트 HTML
 	 */
 	function getListContext($bid,$configs=null) {
-		if ($this->checkPermission($bid,'list') == false) return $this->getError('FORBIDDEN');
+		if ($this->checkPermission($bid,'list') == false) return $this->IM->getModule('member')->isLogged() == true ? $this->getError('FORBIDDEN') : $this->getError('REQUIRED_LOGIN');
 		$this->IM->setRobots('noindex, follow');
 		
 		$board = $this->getBoard($bid);
@@ -678,7 +678,7 @@ class ModuleBoard {
 	 * @return string $html 컨텍스트 HTML
 	 */
 	function getViewContext($bid,$configs=null) {
-		if ($this->checkPermission($bid,'view') == false) return $this->getError('FORBIDDEN');
+		if ($this->checkPermission($bid,'view') == false) return $this->IM->getModule('member')->isLogged() == true ? $this->getError('FORBIDDEN') : $this->getError('REQUIRED_LOGIN');
 		
 		$board = $this->getBoard($bid);
 		$idx = $this->getIdx();
@@ -809,7 +809,7 @@ class ModuleBoard {
 	 * @return string $html 컨텍스트 HTML
 	 */
 	function getWriteContext($bid,$configs=null) {
-		if ($this->checkPermission($bid,'post_write') == false) return $this->getError('FORBIDDEN');
+		if ($this->checkPermission($bid,'post_write') == false) return $this->IM->getModule('member')->isLogged() == true ? $this->getError('FORBIDDEN') : $this->getError('REQUIRED_LOGIN');
 		
 		$this->IM->addHeadResource('meta',array('name'=>'robots','content'=>'noidex,nofollow'));
 		
