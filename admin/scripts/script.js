@@ -448,10 +448,10 @@ var Board = {
 										if (action.result.message) {
 											Ext.Msg.show({title:Admin.getText("alert/error"),msg:action.result.message,buttons:Ext.Msg.OK,icon:Ext.Msg.ERROR});
 										} else {
-											Ext.Msg.show({title:Admin.getText("alert/error"),msg:Admin.getText("error/save"),buttons:Ext.Msg.OK,icon:Ext.Msg.ERROR});
+											Ext.Msg.show({title:Admin.getText("alert/error"),msg:Admin.getErrorText("DATA_SAVE_FAILED"),buttons:Ext.Msg.OK,icon:Ext.Msg.ERROR});
 										}
 									} else {
-										Ext.Msg.show({title:Admin.getText("alert/error"),msg:Admin.getText("error/form"),buttons:Ext.Msg.OK,icon:Ext.Msg.ERROR});
+										Ext.Msg.show({title:Admin.getText("alert/error"),msg:Admin.getErrorText("INVALID_FORM_DATA"),buttons:Ext.Msg.OK,icon:Ext.Msg.ERROR});
 									}
 								}
 							});
