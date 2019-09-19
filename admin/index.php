@@ -173,7 +173,7 @@ Ext.onReady(function () { Ext.getCmp("iModuleAdminPanel").add(
 					itemcontextmenu:function(grid,record,item,index,e) {
 						var menu = new Ext.menu.Menu();
 						
-						menu.addTitle(record.data.title);
+						menu.add('<div class="x-menu-title">'+record.data.title+'</div>');
 						
 						menu.add({
 							iconCls:"xi xi-form",
@@ -288,7 +288,7 @@ Ext.onReady(function () { Ext.getCmp("iModuleAdminPanel").add(
 					itemcontextmenu:function(grid,record,item,index,e) {
 						var menu = new Ext.menu.Menu();
 						
-						menu.addTitle(record.data.name);
+						menu.add('<div class="x-menu-title">'+record.data.name+'</div>');
 						
 						menu.add({
 							iconCls:"xi xi-key",

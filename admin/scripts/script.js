@@ -277,12 +277,12 @@ var Board = {
 										selModel:new Ext.selection.CheckboxModel(),
 										listeners:{
 											itemdblclick:function(grid,record,td,index) {
-												menu.addTitle(record.data.title);
+												Board.category.add(index);
 											},
 											itemcontextmenu:function(grid,record,item,index,e) {
 												var menu = new Ext.menu.Menu();
 												
-												menu.addTitle(record.data.title);
+												menu.add('<div class="x-menu-title">'+record.data.title+'</div>');
 												
 												menu.add({
 													iconCls:"xi xi-form",
