@@ -7,7 +7,7 @@
  * @author Arzz (arzz@arzz.com)
  * @license GPLv3
  * @version 3.0.0
- * @modified 2019. 7. 27.
+ * @modified 2019. 11. 26.
  */
 var Board = {
 	/**
@@ -59,7 +59,7 @@ var Board = {
 							new Ext.form.FieldSet({
 								collapsible:true,
 								collapsed:false,
-								title:Board.getText("admin/list/form/designSetting"),
+								title:Board.getText("admin/list/form/design_setting"),
 								items:[
 									Admin.templetField(Board.getText("admin/list/form/templet"),"templet","module","board",false,ENV.getProcessUrl("board","@getTempletConfigs"),{},["bid"]),
 									new Ext.form.FieldContainer({

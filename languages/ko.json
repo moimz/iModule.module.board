@@ -30,7 +30,9 @@
 		"post_write":"게시물 등록하기"
 	},
 	"error":{
-		"FORBIDDEN_SECRET":"비밀글을 열람할 수 있는 권한이 없습니다."
+		"FORBIDDEN_SECRET":"비밀글을 열람할 수 있는 권한이 없습니다.",
+		"ALREADY_VOTED":"이미 추천하였습니다.",
+		"DISABLED_VOTE_MYSELF":"자신의 글은 추천할 수 없습니다."
 	},
 	"point_history":{
 		"post":"{TITLE} 게시물 작성",
@@ -68,6 +70,12 @@
 			"group":"게시판 댓글",
 			"title":"운영자에 의한 댓글 삭제",
 			"message":"{TITLE} 게시물에 작성한 댓글이 운영자에 의해 삭제되었습니다."
+		},
+		"post_voted":{
+			"group":"추천",
+			"title":"게시물 추천",
+			"message":"{FROM}님이 {TITLE} 게시물을 추천하였습니다.",
+			"messages":"{FROM}님 외 {COUNT}명이 {TITLE} 게시물을 추천하였습니다."
 		}
 	},
 	"admin":{
@@ -92,7 +100,7 @@
 				"default_setting":"기본설정",
 				"bid":"게시판 ID",
 				"title":"게시판명",
-				"designSetting":"디자인설정",
+				"design_setting":"디자인설정",
 				"templet":"템플릿",
 				"post_limit":"페이지당 게시물",
 				"ment_limit":"페이지당 댓글",

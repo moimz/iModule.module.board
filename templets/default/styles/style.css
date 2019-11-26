@@ -7,7 +7,7 @@
  * @author Arzz (arzz@arzz.com)
  * @license MIT License
  * @version 3.0.0
- * @modified 2018. 3. 10.
+ * @modified 2019. 11. 27.
  */
 div[data-module=board] div[data-role=toolbar] {margin-bottom:10px; text-align:right; font-size:0;}
 div[data-module=board] div[data-role=toolbar] > div[data-role=input] {width:160px; font-size:14px; float:left;}
@@ -34,6 +34,8 @@ div[data-module=board] ul[data-role=table] > li > span.title > a > span.category
 div[data-module=board] ul[data-role=table] > li > span.title > a > i.xi {margin-right:3px;}
 div[data-module=board] ul[data-role=table] > li > span.title > a > i.xi-lock {color:#F44336;}
 div[data-module=board] ul[data-role=table] > li > span.title > a > span.ment {display:inline-block; float:right; margin:2px 0px 0px 5px; color:#FF9800; font-size:12px; vertical-align:middle;}
+div[data-module=board] ul[data-role=table] > li > span.title > a > span.vote {background:#e91b23; display:inline-block; margin:0px 5px 0px 0px; height:18px; line-height:18px; padding:0px 5px; border-radius:3px; color:#fff; font-size:11px; vertical-align:middle;}
+div[data-module=board] ul[data-role=table] > li > span.title > a > span.vote > i {font-size:10px; vertical-align:middle; width:14px; height:18px; line-height:16px; float:left;}
 div[data-module=board] ul[data-role=table] > li > span.title > a > span.ment:before {content:"[";}
 div[data-module=board] ul[data-role=table] > li > span.title > a > span.ment:after {content:"]";}
 div[data-module=board] ul[data-role=table] > li > span.title > a > i.fa-floppy-o {float:right; margin-left:5px; color:#F44336;}
@@ -78,6 +80,16 @@ div[data-module=board] article[data-role=post] > div.header > ul > li.hit {displ
 div[data-module=board] article[data-role=post] > div.header > ul > li.hit > b {margin-right:10px;}
 
 div[data-module=board] article[data-role=post] > div.content {padding:0px 15px; margin-bottom:20px; font-size:14px;}
+
+div[data-module=board] article[data-role=post] > div[data-role=vote] {text-align:center; padding-right:0; position:relative; margin-bottom:20px;}
+div[data-module=board] article[data-role=post] > div[data-role=vote] button {border:1px solid #e4e4e4; border-right:1px solid #ccc; border-bottom:1px solid #ccc; padding:0px 15px; background:#fff; cursor:pointer; font-size:0px; text-align:left; height:40px;}
+div[data-module=board] article[data-role=post] > div[data-role=vote] button > i {display:inline-block; width:25px; height:38px; line-height:38px; font-size:14px; vertical-align:middle; text-align:left;}
+div[data-module=board] article[data-role=post] > div[data-role=vote] button > b {display:inline-block; height:38px; line-height:38px; font-size:14px; vertical-align:middle;}
+div[data-module=board] article[data-role=post] > div[data-role=vote] button[data-action=good] > b {color:#3b9ad8;}
+div[data-module=board] article[data-role=post] > div[data-role=vote] button[data-action=bad] > b {color:#fbb65c;}
+div[data-module=board] article[data-role=post] > div[data-role=vote] button:hover, div[data-module=board] article[data-role=post] > div[data-role=vote] button.selected {background:#e91b23; color:#fff !important;}
+div[data-module=board] article[data-role=post] > div[data-role=vote] button:hover b, div[data-module=board] article[data-role=post] > div[data-role=vote] button.selected b {color:#fff !important;}
+div[data-module=board] article[data-role=post] > div[data-role=vote] button[disabled] {opacity:0.5;}
 
 div[data-module=board] article[data-role=post] > div[data-role=button] {text-align:right; padding-right:0; position:relative; margin-bottom:20px;}
 div[data-module=board] article[data-role=post] > div[data-role=button] > div.author {display:inline-block; width:160px; height:30px; padding:4px; background:#E3F2FD; vertical-align:middle; border:1px solid #BBDEFB; text-align:left;}

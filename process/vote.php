@@ -8,7 +8,7 @@
  * @author Arzz (arzz@arzz.com)
  * @license MIT License
  * @version 3.0.0
- * @modified 2018. 9. 9.
+ * @modified 2019. 11. 27.
  */
 if (defined('__IM__') == false) exit;
 
@@ -22,31 +22,47 @@ if ($this->IM->getModule('member')->isLogged() == false) {
 	return;
 }
 
-if ($this->db()->select($this->table->activity)->where('type',$type)->where('parent',$idx)->where('code',$vote == 'GOOD' ? 'BAD' : 'GOOD')->has() == true) {
+$midx = $this->IM->getModule('member')->getLogged();
+
+if ($this->db()->select($this->table->activity)->where('type',$type)->where('parent',$idx)->where('midx',$midx)->has() == true) {
 	$results->success = false;
-	$results->message = $this->getErrorText('NOT_FOUND');
+	$results->error = $this->getErrorText('ALREADY_VOTED');
 	return;
 }
 
 if ($type == 'post') {
 	$post = $this->getPost($idx);
+	$board = $this->getBoard($post->bid);
+	
 	if ($post == null) {
 		$results->success = false;
 		$results->message = $this->getErrorText('NOT_FOUND');
 		return;
 	}
 	
-	if ($post->midx == $this->IM->getModule('member')->getLogged()) {
+	if ($post->midx == $midx) {
 		$results->success = false;
-		$results->message = $this->getErrorText('NOT_FOUND');
+		$results->error = $this->getErrorText('DISABLED_VOTE_MYSELF');
 		return;
 	}
 	
-	if ($this->db()->select($this->table->activity)->where('type',$type)->where('parent',$idx)->where('code',$vote)->has() == true) {
-		$results->success = false;
-		$results->message = $this->getErrorText('NOT_FOUND');
-		return;
+	$this->db()->insert($this->table->activity,array('type'=>$type,'parent'=>$idx,'midx'=>$midx,'code'=>$vote,'reg_date'=>time()))->execute();
+	$updated = $this->updatePost($idx);
+	
+	$this->IM->getModule('member')->sendPoint($midx,$board->vote_point,$this->getModule()->getName(),'post_vote',array('idx'=>$idx,'title'=>$post->title));
+	$this->IM->getModule('member')->addActivity($midx,$board->vote_exp,$this->getModule()->getName(),'post_vote',array('idx'=>$idx,'title'=>$post->title));
+	
+	if ($post->midx > 0) {
+		$this->IM->getModule('member')->sendPoint($midx,$board->voted_point,$this->getModule()->getName(),'post_voted',array('idx'=>$idx,'title'=>$post->title));
+		$this->IM->getModule('member')->addActivity($midx,$board->voted_exp,$this->getModule()->getName(),'post_voted',array('idx'=>$idx,'title'=>$post->title));
+		
+		$this->IM->getModule('push')->sendPush($post->midx,$this->getModule()->getName(),'post',$post->idx,'post_voted',array('idx'=>$idx,'from'=>$midx,'title'=>$post->title));
 	}
+	
+	$results->success = true;
+	$results->vote = $vote;
+	$results->good = $updated->good;
+	$results->bad = $updated->bad;
 } else {
 	$ment = $this->getMent($idx);
 	if ($ment == null) {
@@ -55,9 +71,9 @@ if ($type == 'post') {
 		return;
 	}
 	
-	if ($ment->midx == $this->IM->getModule('member')->getLogged()) {
+	if ($ment->midx == $midx) {
 		$results->success = false;
-		$results->message = $this->getErrorText('NOT_FOUND');
+		$results->error = $this->getErrorText('DISABLED_VOTE_MYSELF');
 		return;
 	}
 	

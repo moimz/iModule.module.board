@@ -8,9 +8,11 @@
  * @author Arzz (arzz@arzz.com)
  * @license MIT License
  * @version 3.0.0
- * @modified 2018. 9. 9.
+ * @modified 2019. 11. 26.
  */
 if (defined('__IM__') == false) exit;
+
+$IM->getModule('member')->login(15);
 ?>
 <article data-role="post">
 	<div class="header">
@@ -41,6 +43,13 @@ if (defined('__IM__') == false) exit;
 			</li>
 			<?php } ?>
 		</ul>
+	</div>
+	<?php } ?>
+	
+	<?php if ($board->allow_voting == true) { ?>
+	<div data-role="vote">
+		<button type="button" data-action="good" data-idx="<?php echo $post->idx; ?>" data-type="post"<?php echo $post->voted == 'GOOD' ? ' class="selected"' : ''; ?>><i class="fa fa-thumbs-o-up"></i><b data-role="count" data-type="post" data-idx="<?php echo $post->idx; ?>" data-count="good"><?php echo number_format($post->good); ?></b></button>
+		<button type="button" data-action="bad" data-idx="<?php echo $post->idx; ?>" data-type="post"<?php echo $post->voted == 'BAD' ? ' class="selected"' : ''; ?>><i class="fa fa-thumbs-o-down"></i><b data-role="count" data-type="post" data-idx="<?php echo $post->idx; ?>" data-count="bad"><?php echo number_format($post->bad); ?></b></button>
 	</div>
 	<?php } ?>
 	

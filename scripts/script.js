@@ -7,7 +7,7 @@
  * @author Arzz (arzz@arzz.com)
  * @license MIT License
  * @version 3.0.0
- * @modified 2018. 8. 22.
+ * @modified 2019. 11. 27.
  */
 var Board = {
 	getUrl:function(view,idx) {
@@ -90,6 +90,10 @@ var Board = {
 				
 				if (action == "delete") {
 					Board.view.delete(idx);
+				}
+				
+				if (action == "good" || action == "bad") {
+					Board.post.vote(idx,action);
 				}
 			});
 		},
@@ -189,6 +193,20 @@ var Board = {
 			$form.send(ENV.getProcessUrl("board","savePost"),function(result) {
 				if (result.success == true) {
 					location.replace(Board.getUrl("view",result.idx));
+				}
+			});
+		}
+	},
+	/**
+	 * 게시물
+	 */
+	post:{
+		vote:function(idx,vote) {
+			$.send(ENV.getProcessUrl("board","vote"),{type:"post",idx:idx,vote:vote},function(result) {
+				if (result.success == true) {
+					$("button[data-type=post][data-idx="+idx+"][data-action="+vote+"]",$("div[data-module=board]")).addClass("selected");
+					$("*[data-role=count][data-type=post][data-idx="+idx+"][data-count=good]",$("div[data-module=board]")).html(result.good);
+					$("*[data-role=count][data-type=post][data-idx="+idx+"][data-count=bad]",$("div[data-module=board]")).html(result.bad);
 				}
 			});
 		}

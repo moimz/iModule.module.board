@@ -8,7 +8,7 @@
  * @author Arzz (arzz@arzz.com)
  * @license MIT License
  * @version 3.0.0
- * @modified 2019. 7. 27.
+ * @modified 2019. 11. 27.
  */
 class ModuleBoard {
 	/**
@@ -725,6 +725,13 @@ class ModuleBoard {
 			$_SESSION['IM_BOARD_READED'] = $readed;
 		}
 		
+		if ($this->IM->getModule('member')->isLogged() == true) {
+			$voted = $this->db()->select($this->table->activity)->where('type','post')->where('parent',$idx)->where('midx',$this->IM->getModule('member')->getLogged())->where('code',array('GOOD','BAD'),'IN')->getOne();
+			$post->voted = $voted == null ? null : $voted->code;
+		} else {
+			$post->voted = null;
+		}
+		
 		$post->category = $post->category == 0 ? null : $this->getCategory($post->category);
 		$post->prefix = $post->prefix == 0 ? null : $this->getPrefix($post->prefix);
 		
@@ -1425,6 +1432,7 @@ class ModuleBoard {
 	 * 게시물 정보를 업데이트한다.
 	 *
 	 * @param int $idx 게시물고유번호
+	 * @return object $updated
 	 */
 	function updatePost($idx,$is_file=false) {
 		$updated = array();
@@ -1453,18 +1461,24 @@ class ModuleBoard {
 		$updated['bad'] = $this->db()->select($this->table->activity)->where('type','POST')->where('parent',$idx)->where('code','BAD')->count();
 		
 		$this->db()->update($this->table->post,$updated)->where('idx',$idx)->execute();
+		
+		return (object)$updated;
 	}
 	
 	/**
 	 * 댓글 정보를 업데이트한다.
 	 *
 	 * @param int $idx 댓글고유번호
+	 * @return object $updated
 	 */
 	function updateMent($idx) {
+		$updated = array();
 		$updated['good'] = $this->db()->select($this->table->activity)->where('type','MENT')->where('parent',$idx)->where('code','GOOD')->count();
 		$updated['bad'] = $this->db()->select($this->table->activity)->where('type','MENT')->where('parent',$idx)->where('code','BAD')->count();
 		
 		$this->db()->update($this->table->ment,$updated)->where('idx',$idx)->execute();
+		
+		return (object)$updated;
 	}
 	
 	/**
@@ -1775,9 +1789,6 @@ class ModuleBoard {
 					$content = array_shift($contents);
 					$count = count($contents);
 					
-					$content = array_shift($contents);
-					$count = count($contents);
-					
 					$message = new stdClass();
 					$message->message = $this->getText('push/'.$code.'/message'.($count > 0 ? 's' : ''));
 					$message->icon = $this->getModule()->getDir().'/images/push/'.$code.'.png';
@@ -1794,6 +1805,22 @@ class ModuleBoard {
 					}
 					
 					$message->message = str_replace(array('{FROM}','{COUNT}','{TITLE}'),array($from,$count,$post),$message->message);
+					break;
+					
+				case 'post_voted' :
+					$content = array_shift($contents);
+					$count = count($contents);
+					
+					$post = $this->getPost($content->idx);
+					$post = $post == null ? $content->title : $post->title;
+					
+					$message = new stdClass();
+					$message->message = $this->getText('push/'.$code.'/message'.($count > 0 ? 's' : ''));
+					
+					$from = $this->IM->getModule('member')->getMember($content->from);
+					$message->icon = $from->photo;
+					
+					$message->message = str_replace(array('{FROM}','{COUNT}','{TITLE}'),array($from->nickname,$count,$post),$message->message);
 					break;
 			}
 			

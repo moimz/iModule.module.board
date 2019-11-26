@@ -8,7 +8,7 @@
  * @author Arzz (arzz@arzz.com)
  * @license MIT License
  * @version 3.0.0
- * @modified 2018. 3. 10.
+ * @modified 2019. 11. 27.
  */
 if (defined('__IM__') == false) exit;
 ?>
@@ -58,7 +58,7 @@ if (defined('__IM__') == false) exit;
 	<li class="tbody">
 		<span class="loopnum"><?php echo $idx == $data->idx ? '<i class="fa fa-caret-right"></i>' : $data->loopnum; ?></span>
 		<span class="title">
-			<a href="<?php echo $data->link; ?>"><?php echo $data->ment > 0 ? ('<span class="ment">'.number_format($data->ment).($data->latest_ment > time() - 60 * 60 * 24 ? '+' : '').'</span>') : ''; ?><?php echo $data->is_file == true ? '<i class="fa fa-floppy-o"></i>' : ''; ?><?php echo $data->is_image == true ? '<i class="fa fa-picture-o"></i>' : ''; ?><?php echo $data->is_secret == true ? '<i class="xi xi-lock"></i>' : ''; ?><?php echo count($categories) > 0 && $data->category != null ? '<span class="category">['.$data->category->title.']</span> ' : ''; ?><?php echo $data->prefix != null ? '<span class="prefix" style="color:'.$data->prefix->color.';">['.$data->prefix->title.']</span> ' : ''; ?><?php echo $data->title; ?></a>
+			<a href="<?php echo $data->link; ?>"><?php echo $data->good - $data->bad > 0 ? '<span class="vote"><i class="fa fa-heart"></i>'.number_format($data->good - $data->bad).'</span>' : ''; ?><?php echo $data->ment > 0 ? ('<span class="ment">'.number_format($data->ment).($data->latest_ment > time() - 60 * 60 * 24 ? '+' : '').'</span>') : ''; ?><?php echo $data->is_file == true ? '<i class="fa fa-floppy-o"></i>' : ''; ?><?php echo $data->is_image == true ? '<i class="fa fa-picture-o"></i>' : ''; ?><?php echo $data->is_secret == true ? '<i class="xi xi-lock"></i>' : ''; ?><?php echo count($categories) > 0 && $data->category != null ? '<span class="category">['.$data->category->title.']</span> ' : ''; ?><?php echo $data->prefix != null ? '<span class="prefix" style="color:'.$data->prefix->color.';">['.$data->prefix->title.']</span> ' : ''; ?><?php echo $data->title; ?></a>
 		</span>
 		<span class="name"><?php echo $data->photo; ?><?php echo $data->nickname; ?></span>
 		<span class="reg_date"><i class="xi xi-time"></i><?php echo GetTime('Y-m-d',$data->reg_date); ?></span>

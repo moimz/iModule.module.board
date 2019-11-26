@@ -1,1 +1,12 @@
+/**
+ * 이 파일은 iModule 게시판모듈의 일부입니다. (https://www.imodules.io)
+ *
+ * 게시판이 컨테이너로 열렸을때 스타일을 정의한다.
+ * 
+ * @file /modules/board/styles/style.css
+ * @author Arzz (arzz@arzz.com)
+ * @license MIT License
+ * @version 3.0.0
+ * @modified 2019. 11. 19.
+ */
 body {padding:10px; width:auto; height:auto;}

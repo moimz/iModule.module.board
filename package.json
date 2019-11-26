@@ -190,20 +190,14 @@
 					"comment":"활동코드"
 				},
 				"reg_date":{
-					"type":"bigint",
-					"length":20,
+					"type":"int",
+					"length":11,
 					"comment":"활동시각"
-				},
-				"ip":{
-					"type":"varchar",
-					"length":15,
-					"comment":"IP주소"
 				}
 			},
 			"indexes":{
 				"type,parent,midx,code":"primary_key",
-				"midx":"index",
-				"ip":"index"
+				"midx":"index"
 			},
 			"comment":"게시판 활동내역 테이블"
 		},
