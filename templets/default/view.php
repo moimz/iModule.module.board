@@ -8,11 +8,9 @@
  * @author Arzz (arzz@arzz.com)
  * @license MIT License
  * @version 3.0.0
- * @modified 2019. 11. 26.
+ * @modified 2019. 12. 8.
  */
 if (defined('__IM__') == false) exit;
-
-$IM->getModule('member')->login(15);
 ?>
 <article data-role="post">
 	<div class="header">
