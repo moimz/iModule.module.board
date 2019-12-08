@@ -7,7 +7,7 @@
  * @author Arzz (arzz@arzz.com)
  * @license GPLv3
  * @version 3.0.0
- * @modified 2019. 11. 26.
+ * @modified 2019. 12. 8.
  */
 var Board = {
 	/**
@@ -357,13 +357,13 @@ var Board = {
 										items:[
 											new Ext.form.NumberField({
 												name:"post_point",
-												value:30,
+												value:0,
 												flex:1
 											}),
 											new Ext.form.NumberField({
 												name:"post_exp",
 												margin:"0 0 0 5",
-												value:10,
+												value:0,
 												flex:1
 											})
 										]
@@ -374,13 +374,13 @@ var Board = {
 										items:[
 											new Ext.form.NumberField({
 												name:"ment_point",
-												value:10,
+												value:0,
 												flex:1
 											}),
 											new Ext.form.NumberField({
 												name:"ment_exp",
 												margin:"0 0 0 5",
-												value:5,
+												value:0,
 												flex:1
 											})
 										]
@@ -414,7 +414,7 @@ var Board = {
 											new Ext.form.NumberField({
 												name:"voted_exp",
 												margin:"0 0 0 5",
-												value:3,
+												value:0,
 												flex:1
 											})
 										]
