@@ -153,8 +153,6 @@ if (empty($errors) == true) {
 			$insert['ip'] = $_SERVER['REMOTE_ADDR'];
 		}
 		
-		$insert['modify_date'] = time();
-		
 		$this->db()->update($this->table->ment,$insert)->where('idx',$ment->idx)->execute();
 		
 		/**
