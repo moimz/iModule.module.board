@@ -53,8 +53,8 @@ if ($type == 'post') {
 	$this->IM->getModule('member')->addActivity($midx,$board->vote_exp,$this->getModule()->getName(),'post_vote',array('idx'=>$idx,'title'=>$post->title));
 	
 	if ($post->midx > 0) {
-		$this->IM->getModule('member')->sendPoint($midx,$board->voted_point,$this->getModule()->getName(),'post_voted',array('idx'=>$idx,'title'=>$post->title));
-		$this->IM->getModule('member')->addActivity($midx,$board->voted_exp,$this->getModule()->getName(),'post_voted',array('idx'=>$idx,'title'=>$post->title));
+		$this->IM->getModule('member')->sendPoint($post->midx,$board->voted_point,$this->getModule()->getName(),'post_voted',array('idx'=>$idx,'title'=>$post->title));
+		$this->IM->getModule('member')->addActivity($post->midx,$board->voted_exp,$this->getModule()->getName(),'post_voted',array('idx'=>$idx,'title'=>$post->title));
 		
 		$this->IM->getModule('push')->sendPush($post->midx,$this->getModule()->getName(),'post',$post->idx,'post_voted',array('idx'=>$idx,'from'=>$midx,'title'=>$post->title));
 	}
