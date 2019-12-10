@@ -7,7 +7,7 @@
  * @author Arzz (arzz@arzz.com)
  * @license GPLv3
  * @version 3.0.0
- * @modified 2019. 12. 8.
+ * @modified 2019. 12. 11.
  */
 var Board = {
 	/**
@@ -828,11 +828,22 @@ var Board = {
 		/**
 		 * 관리자 삭제
 		 */
-		delete:function(midx) {
-			Ext.Msg.show({title:Admin.getText("alert/info"),msg:"관리자를 삭제하시겠습니까?",buttons:Ext.Msg.OKCANCEL,icon:Ext.Msg.QUESTION,fn:function(button) {
+		delete:function() {
+			var selected = Ext.getCmp("ModuleBoardAdminList").getSelectionModel().getSelection();
+			if (selected.length == 0) {
+				Ext.Msg.show({title:Admin.getText("alert/error"),msg:"삭제할 관리자를 선택하여 주십시오.",buttons:Ext.Msg.OK,icon:Ext.Msg.ERROR});
+				return;
+			}
+			
+			var midxes = [];
+			for (var i=0, loop=selected.length;i<loop;i++) {
+				midxes[i] = selected[i].data.midx;
+			}
+			
+			Ext.Msg.show({title:Admin.getText("alert/info"),msg:"선택된 관리자를 삭제하시겠습니까?",buttons:Ext.Msg.OKCANCEL,icon:Ext.Msg.QUESTION,fn:function(button) {
 				if (button == "ok") {
 					Ext.Msg.wait(Admin.getText("action/working"),Admin.getText("action/loading"));
-					$.send(ENV.getProcessUrl("board","@deleteAdmin"),{midx:midx},function(result) {
+					$.send(ENV.getProcessUrl("board","@deleteAdmin"),{midx:midxes.join(",")},function(result) {
 						if (result.success == true) {
 							Ext.Msg.show({title:Admin.getText("alert/info"),msg:Admin.getText("action/worked"),buttons:Ext.Msg.OK,icon:Ext.Msg.INFO,fn:function() {
 								Ext.getCmp("ModuleBoardAdminList").getStore().reload();
@@ -841,6 +852,6 @@ var Board = {
 					});
 				}
 			}});
-		},
+		}
 	}
 };

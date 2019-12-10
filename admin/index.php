@@ -8,7 +8,7 @@
  * @author Arzz (arzz@arzz.com)
  * @license GPLv3
  * @version 3.0.0
- * @modified 2019. 4. 20.
+ * @modified 2019. 12. 11.
  */
 if (defined('__IM__') == false) exit;
 ?>
@@ -196,7 +196,7 @@ Ext.onReady(function () { Ext.getCmp("iModuleAdminPanel").add(
 					}
 				}
 			}),
-			<?php if ($this->IM->getModule('member')->isAdmin() == true) { ?>
+			<?php if ($this->isAdmin() == true) { ?>
 			new Ext.grid.Panel({
 				id:"ModuleBoardAdminList",
 				iconCls:"xi xi-crown",
@@ -291,7 +291,7 @@ Ext.onReady(function () { Ext.getCmp("iModuleAdminPanel").add(
 						menu.addTitle(record.data.name);
 						
 						menu.add({
-							iconCls:"xi xi-key",
+							iconCls:"xi xi-form",
 							text:Board.getText("admin/admin/modify_admin"),
 							handler:function() {
 								Board.admin.add(record.data.midx);
@@ -302,7 +302,7 @@ Ext.onReady(function () { Ext.getCmp("iModuleAdminPanel").add(
 							iconCls:"xi xi-trash",
 							text:Board.getText("admin/admin/delete_admin"),
 							handler:function() {
-								Board.admin.delete(record.data.midx);
+								Board.admin.delete();
 							}
 						});
 						

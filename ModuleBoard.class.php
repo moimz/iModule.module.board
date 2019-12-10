@@ -8,7 +8,7 @@
  * @author Arzz (arzz@arzz.com)
  * @license MIT License
  * @version 3.0.0
- * @modified 2019. 11. 27.
+ * @modified 2019. 12. 11.
  */
 class ModuleBoard {
 	/**
@@ -38,12 +38,14 @@ class ModuleBoard {
 	/**
 	 * DB접근을 줄이기 위해 DB에서 불러온 데이터를 저장할 변수를 정의한다.
 	 *
+	 * @private $admins 관리자정보
 	 * @private $boards 게시판설정정보
 	 * @private $categories 카테고리정보
 	 * @private $prefixes 말머리정보
 	 * @private $posts 게시물정보
 	 * @private $ments 댓글정보
 	 */
+	private $admins = array();
 	private $boards = array();
 	private $categories = array();
 	private $prefixes = array();
@@ -1377,7 +1379,7 @@ class ModuleBoard {
 	 * @return boolean $hasPermssion
 	 */
 	function checkPermission($bid,$type) {
-		if ($this->IM->getModule('member')->isAdmin() == true || $this->isAdmin(null,$bid) == true) return true;
+		if ($this->isAdmin(null,$bid) == true) return true;
 		
 		$board = $this->getBoard($bid);
 		$permission = json_decode($board->permission);
@@ -1878,15 +1880,14 @@ class ModuleBoard {
 	function isAdmin($midx=null,$bid=null) {
 		$midx = $midx == null ? $this->IM->getModule('member')->getLogged() : $midx;
 		if ($this->IM->getModule('member')->isAdmin($midx) == true) return true;
+		if (isset($this->admins[$midx]) == false) {
+			$check = $this->db()->select($this->table->admin)->where('midx',$midx)->getOne();
+			if ($check == null) $this->admins[$midx] = false;
+			elseif ($check->bid == '*') $this->admins[$midx] = true;
+			else $this->admins[$midx] = explode(',',$check->bid);
+		}
 		
-		$check = $this->db()->select($this->table->admin)->where('midx',$midx)->getOne();
-		if ($check == null) return false;
-		if ($check->bid == '*') return true;
-		
-		$bids = explode(',',$check->bid);
-		if ($bid != null && in_array($bid,$bids) === false) return false;
-		
-		return $bids;
+		return $bid == null ? $this->admins[$midx] : $this->admins[$midx] === true || in_array($bid,$this->admins) == true;
 	}
 }
 ?>

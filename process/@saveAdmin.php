@@ -5,12 +5,18 @@
  * 게시판 관리자를 저장한다.
  *
  * @file /modules/board/process/@saveAdmin.php
- * @author Eunseop Lim (eslim@naddle.net)1
+ * @author Arzz (arzz@arzz.com)
  * @license MIT License
  * @version 3.0.0
- * @modified 2019. 4. 12.
+ * @modified 2019. 12. 11.
  */
 if (defined('__IM__') == false) exit;
+
+if ($this->isAdmin() !== true) {
+	$results->success = false;
+	$results->message = $this->getErrorText('FORBIDDEN');
+	return;
+}
 
 $midx = Param('midx');
 $bid = Param('bid');

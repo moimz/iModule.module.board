@@ -2,13 +2,13 @@
 /**
  * 이 파일은 iModule 게시판모듈의 일부입니다. (https://www.imodules.io)
  *
- * 운영자 리스트를 가져옵니다.
+ * 관리자목록을 가져온다.
  *
  * @file /modules/board/process/@getAdmins.php
- * @author Eunseop Lim (eslim@naddle.net)
+ * @author Arzz (arzz@arzz.com)
  * @license MIT License
  * @version 3.0.0
- * @modified 2019. 4. 20.
+ * @modified 2019. 12. 11.
  */
 if (defined('__IM__') == false) exit;
 
