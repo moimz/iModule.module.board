@@ -1887,7 +1887,10 @@ class ModuleBoard {
 			else $this->admins[$midx] = explode(',',$check->bid);
 		}
 		
-		return $bid == null ? $this->admins[$midx] : $this->admins[$midx] === true || in_array($bid,$this->admins[$midx]) == true;
+		if ($this->admins[$midx] === true) return true;
+		if ($this->admins[$midx] === false) return false;
+		
+		return $bid == null ? $this->admins[$midx] : in_array($bid,$this->admins[$midx]) == true;
 	}
 }
 ?>
