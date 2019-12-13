@@ -871,7 +871,7 @@ class ModuleBoard {
 			$post = null;
 		}
 		
-		$header = PHP_EOL.'<form id="ModuleBoardWriteForm" data-autosave="true" data-autosave-value="'.$bid.'">'.PHP_EOL;
+		$header = PHP_EOL.'<form id="ModuleBoardWriteForm" data-autosave="'.$bid.'-new">'.PHP_EOL;
 		$header.= '<input type="hidden" name="templet" value="'.$this->getTemplet($configs)->getName().'">'.PHP_EOL;
 		$header.= '<input type="hidden" name="bid" value="'.$bid.'">'.PHP_EOL;
 		if ($post !== null) $header.= '<input type="hidden" name="idx" value="'.$post->idx.'">'.PHP_EOL;
