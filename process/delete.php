@@ -8,7 +8,7 @@
  * @author Arzz (arzz@arzz.com)
  * @license MIT License
  * @version 3.0.0
- * @modified 2019. 3. 11.
+ * @modified 2020. 2. 11.
  */
 if (defined('__IM__') == false) exit;
 
@@ -26,7 +26,7 @@ if ($type == 'post') {
 		$results->success = true;
 	} elseif ($post->midx != 0 && $post->midx == $this->IM->getModule('member')->getLogged()) {
 		$this->deletePost($idx);
-		$results->success = false;
+		$results->success = true;
 	} elseif ($post->midx == 0) {
 		$password = Request('password');
 		
