@@ -8,7 +8,7 @@
  * @author Arzz (arzz@arzz.com)
  * @license MIT License
  * @version 3.0.0
- * @modified 2019. 7. 27.
+ * @modified 2020. 6. 4.
  */
 if (defined('__IM__') == false) exit;
 
@@ -34,6 +34,11 @@ $use_category = Request('use_category') == 'on';
 if ($use_category == true) {
 	$insert['use_category'] = 'USED';
 	$category = json_decode(Request('category'));
+	if ($category == null || count($category) == 0) {
+		$results->success = false;
+		$results->message = $this->getErrorText('NOT_FOUND_CATEGORY');
+		return;
+	}
 } else {
 	$insert['use_category'] = 'NONE';
 	$category = array();
@@ -110,7 +115,6 @@ if (count($errors) == 0) {
 		$this->db()->delete($this->table->category)->where('bid',$bid)->execute();
 		$this->db()->update($this->table->post,array('category'=>0))->where('bid',$bid)->execute();
 	}
-	
 	
 	$results->success = true;
 } else {
