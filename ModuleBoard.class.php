@@ -621,11 +621,11 @@ class ModuleBoard {
 		if ($keyword) {
 			$lists->where('(');
 			$lists = $this->IM->getModule('keyword')->getWhere($lists,array('title','search'),$keyword);
-			$midxes = $this->IM->getModule('member')->getSearchResults($keyword);
+			$midxes = $this->IM->getModule('member')->getSearchResults($keyword,'BOTH');
 			if (count($midxes) > 0) $lists->orWhere('midx',$midxes,'IN');
 			$lists->orWhere('name',$keyword);
 			$lists->where(')');
-			$this->IM->getModule('keyword')->mark($keyword,'div[data-module=board] span[data-role=title]');
+			$this->IM->getModule('keyword')->mark($keyword,'div[data-module=board] span[data-role=title], div[data-module=board] *[data-role=name]');
 		}
 		$total = $lists->copy()->count();
 		
