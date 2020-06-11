@@ -1,7 +1,7 @@
 <?php
 /**
  * 이 파일은 iModule 게시판모듈의 일부입니다. (https://www.imodules.io)
- * 
+ *
  * 게시판정보를 저장한다.
  *
  * @file /modules/board/process/@saveBoard.php
@@ -29,6 +29,7 @@ $insert['use_content_list'] = Request('use_content_list') ? 'TRUE' : 'FALSE';
 
 $insert['view_notice_page'] = Request('view_notice_page') && in_array(Request('view_notice_page'),array('FIRST','ALL')) == true ? Request('view_notice_page') : $errors['view_notice_page'] = $this->getErrorText('REQUIRED');
 $insert['view_notice_count'] = Request('view_notice_count') && in_array(Request('view_notice_count'),array('INCLUDE','EXCLUDE')) == true ? Request('view_notice_count') : $errors['view_notice_count'] = $this->getErrorText('REQUIRED');
+$insert['use_notice_category'] = Request('use_notice_category')?Request('use_notice_category'):'NO';
 
 $use_category = Request('use_category') == 'on';
 if ($use_category == true) {
@@ -70,11 +71,11 @@ foreach ($_POST as $key=>$value) {
 			$permission->{str_replace('permission_','',$key)} = $value;
 		}
 	}
-	
+
 	if (preg_match('/^templet_configs_/',$key) == true) {
 		$templetConfigs->{str_replace('templet_configs_','',$key)} = $value;
 	}
-	
+
 	if (preg_match('/^attachment_configs_/',$key) == true) {
 		$attachment->templet_configs->{str_replace('attachment_configs_','',$key)} = $value;
 	}
@@ -97,7 +98,7 @@ if (count($errors) == 0) {
 		$bid = Request('bid');
 		$this->db()->update($this->table->board,$insert)->where('bid',$bid)->execute();
 	}
-	
+
 	if ($use_category == true) {
 		$categories = array();
 		for ($i=0, $loop=count($category);$i<$loop;$i++) {
@@ -108,14 +109,14 @@ if (count($errors) == 0) {
 				$this->db()->update($this->table->category,array('title'=>$category[$i]->title,'permission'=>json_encode($category[$i]->permission,JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK),'sort'=>$category[$i]->sort))->where('idx',$category[$i]->idx)->execute();
 			}
 		}
-		
+
 		$this->db()->delete($this->table->category)->where('bid',$bid)->where('idx',$categories,'NOT IN')->execute();
 		$this->db()->update($this->table->post,array('category'=>0))->where('bid',$bid)->where('category',$categories,'NOT IN')->execute();
 	} else {
 		$this->db()->delete($this->table->category)->where('bid',$bid)->execute();
 		$this->db()->update($this->table->post,array('category'=>0))->where('bid',$bid)->execute();
 	}
-	
+
 	$results->success = true;
 } else {
 	$results->success = false;

@@ -607,6 +607,12 @@
 					"default":"INCLUDE",
 					"comment":"페이지당게시물수에 공지사항 게시물수 포함여부"
 				},
+				"use_notice_category":{
+					"type":"enum",
+					"length":"'YES','NO'",
+					"default":"NO",
+					"comment":"공지사항에 카테고리 필터 적용여부"
+				},
 				"post_point":{
 					"type":"int",
 					"length":11,
