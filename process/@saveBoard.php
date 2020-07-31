@@ -26,6 +26,7 @@ $insert['allow_secret'] = Request('allow_secret') ? 'TRUE' : 'FALSE';
 $insert['allow_anonymity'] = Request('allow_anonymity') ? 'TRUE' : 'FALSE';
 $insert['allow_voting'] = Request('allow_voting') ? 'TRUE' : 'FALSE';
 $insert['use_content_list'] = Request('use_content_list') ? 'TRUE' : 'FALSE';
+$insert['allow_search_detail'] = Request('allow_search_detail') ? 'TRUE' : 'FALSE';
 
 $insert['view_notice_page'] = Request('view_notice_page') && in_array(Request('view_notice_page'),array('FIRST','ALL')) == true ? Request('view_notice_page') : $errors['view_notice_page'] = $this->getErrorText('REQUIRED');
 $insert['view_notice_count'] = Request('view_notice_count') && in_array(Request('view_notice_count'),array('INCLUDE','EXCLUDE')) == true ? Request('view_notice_count') : $errors['view_notice_count'] = $this->getErrorText('REQUIRED');

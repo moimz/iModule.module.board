@@ -3,7 +3,7 @@
  * 이 파일은 iModule 게시판모듈의 일부입니다. (https://www.imodules.io)
  *
  * 게시판 기본템플릿 - 목록
- * 
+ *
  * @file /modules/board/templets/default/list.php
  * @author Arzz (arzz@arzz.com)
  * @license MIT License
@@ -23,14 +23,23 @@ if (defined('__IM__') == false) exit;
 		</select>
 	</div>
 	<?php } ?>
-	
+
 	<div data-role="search">
+		<?php if ($board->allow_search_detail) { ?>
+		<div data-role="input">
+			<select name="search_type">
+				<?php foreach ($me->getText('search') as $key => $value) { ?>
+					<option value="<?php echo $key; ?>"<?php echo $key == $search_type ? ' selected="selected"' : ''; ?>><?php echo $value; ?></option>
+				<?php } ?>
+			</select>
+		</div>
+		<?php } ?>
 		<div data-role="input">
 			<input type="search" name="keyword" value="<?php echo GetString($keyword,'input'); ?>">
 		</div>
 		<button type="submit"><i class="mi mi-search"></i></button>
 	</div>
-	
+
 	<a href="<?php echo $link->write; ?>"><i class="xi xi-pen"></i><span>게시물등록</span></a>
 </div>
 
@@ -53,7 +62,7 @@ if (defined('__IM__') == false) exit;
 		<span class="hit"><i class="xi xi-eye"></i><?php echo number_format($data->hit); ?></span>
 	</li>
 	<?php } ?>
-	
+
 	<?php foreach ($lists as $data) { ?>
 	<li class="tbody">
 		<span class="loopnum"><?php echo $idx == $data->idx ? '<i class="fa fa-caret-right"></i>' : $data->loopnum; ?></span>
@@ -65,7 +74,7 @@ if (defined('__IM__') == false) exit;
 		<span class="hit"><i class="xi xi-eye"></i><?php echo number_format($data->hit); ?></span>
 	</li>
 	<?php } ?>
-	
+
 	<?php if (count($notices) + count($lists) == 0) { ?>
 	<li class="empty">
 		게시물이 없습니다.
@@ -80,7 +89,7 @@ if (defined('__IM__') == false) exit;
 		</div>
 		<button type="submit"><i class="mi mi-search"></i></button>
 	</div>
-	
+
 	<a href="<?php echo $link->write; ?>"><i class="xi xi-pen"></i><span>게시물등록</span></a>
 </div>
 

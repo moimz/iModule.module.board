@@ -627,13 +627,25 @@ class ModuleBoard {
 		if ($category != null && $category != 0) $lists->where('category',$category);
 
 		$keyword = Request('keyword');
+		$search_type = Request('search_type');
 		if ($keyword) {
-			$lists->where('(');
-			$lists = $this->IM->getModule('keyword')->getWhere($lists,array('title','search'),$keyword);
-			$midxes = $this->IM->getModule('member')->getSearchResults($keyword,'BOTH');
-			if (count($midxes) > 0) $lists->orWhere('midx',$midxes,'IN');
-			$lists->orWhere('name',$keyword);
-			$lists->where(')');
+			if( $search_type) {
+				if ($search_type == 'title') {
+					$lists->where('title','%'.$keyword.'%','like');
+				} else if ($search_type == 'content') {
+					$lists->where('content','%'.$keyword.'%','like');
+				} else if ($search_type == 'auth') {
+					$midxes = $this->IM->getModule('member')->getSearchResults($keyword,'BOTH');
+					$lists->where('midx',$midxes,'IN');
+				}
+			} else {
+				$lists->where('(');
+				$lists = $this->IM->getModule('keyword')->getWhere($lists,array('title','search'),$keyword);
+				$midxes = $this->IM->getModule('member')->getSearchResults($keyword,'BOTH');
+				if (count($midxes) > 0) $lists->orWhere('midx',$midxes,'IN');
+				$lists->orWhere('name',$keyword);
+				$lists->where(')');
+			}
 			$this->IM->getModule('keyword')->mark($keyword,'div[data-module=board] span[data-role=title], div[data-module=board] *[data-role=name]');
 		}
 		$total = $lists->copy()->count();
@@ -1231,6 +1243,7 @@ class ModuleBoard {
 			$board->allow_anonymity = $board->allow_anonymity == 'TRUE';
 			$board->allow_voting = $board->allow_voting == 'TRUE';
 			$board->use_content_list = $board->use_content_list == 'TRUE';
+			$board->allow_search_detail = $board->allow_search_detail == 'TRUE';
 
 			$this->boards[$bid] = $board;
 		}

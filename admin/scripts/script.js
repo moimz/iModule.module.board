@@ -2,7 +2,7 @@
  * 이 파일은 iModule 게시판모듈의 일부입니다. (https://www.imodules.io)
  *
  * 게시판 관리자 UI를 처리한다.
- * 
+ *
  * @file /modules/board/admin/scripts/script.js
  * @author Arzz (arzz@arzz.com)
  * @license GPLv3
@@ -99,7 +99,7 @@ var Board = {
 														var form = Ext.getCmp("ModuleBoardAddBoardForm").getForm();
 														if (value == "CENTER" && form.findField("page_limit").getValue() % 2 == 0) {
 															form.findField("page_limit").setValue(form.findField("page_limit").getValue() + 1);
-															
+
 															Ext.Msg.show({title:Admin.getText("alert/info"),msg:Board.getText("admin/list/page_type/help"),buttons:Ext.Msg.OK,icon:Ext.Msg.INFO});
 														}
 													}
@@ -152,6 +152,11 @@ var Board = {
 										name:"use_content_list",
 										boxLabel:Board.getText("admin/list/form/use_content_list"),
 										checked:false
+									}),
+									new Ext.form.Checkbox({
+										name:"allow_search_detail",
+										boxLabel:Board.getText("admin/list/form/allow_search_detail"),
+										checked:false
 									})
 								]
 							}),
@@ -198,6 +203,21 @@ var Board = {
 													Ext.Msg.show({title:Admin.getText("alert/info"),msg:Board.getText("admin/list/notice_type/help"),buttons:Ext.Msg.OK,icon:Ext.Msg.INFO});
 												}
 											}
+										}
+									}),
+									new Ext.form.ComboBox({
+										name:"use_notice_category",
+										store:new Ext.data.ArrayStore({
+											fields:["display","value"],
+											data:[[Board.getText("admin/list/notice_category/NO"),"NO"],[Board.getText("admin/list/notice_category/YES"),"YES"]]
+										}),
+										editable:false,
+										displayField:"display",
+										valueField:"value",
+										value:"NO",
+										flex:1,
+										listeners:{
+
 										}
 									})
 								]
@@ -281,9 +301,9 @@ var Board = {
 											},
 											itemcontextmenu:function(grid,record,item,index,e) {
 												var menu = new Ext.menu.Menu();
-												
+
 												menu.addTitle(record.data.title);
-												
+
 												menu.add({
 													iconCls:"xi xi-form",
 													text:"카테고리 수정",
@@ -291,7 +311,7 @@ var Board = {
 														Board.category.add(index);
 													}
 												});
-												
+
 												menu.add({
 													iconCls:"mi mi-trash",
 													text:"카테고리 삭제",
@@ -299,7 +319,7 @@ var Board = {
 														Board.category.delete();
 													}
 												});
-												
+
 												e.stopEvent();
 												menu.showAt(e.getXY());
 											}
@@ -431,7 +451,7 @@ var Board = {
 							if (Ext.getCmp("ModuleBoardAddBoardForm").getForm().findField("use_category").checked == true) {
 								Ext.getCmp("ModuleBoardAddBoardForm").getForm().findField("category").setValue(JSON.stringify(Admin.grid(Ext.getCmp("ModuleBoardCategoryList"))));
 							}
-							
+
 							Ext.getCmp("ModuleBoardAddBoardForm").getForm().submit({
 								url:ENV.getProcessUrl("board","@saveBoard"),
 								submitEmptyText:false,
@@ -520,12 +540,12 @@ var Board = {
 				Ext.Msg.show({title:Admin.getText("alert/error"),msg:"삭제할 게시판을 선택하여 주십시오.",buttons:Ext.Msg.OK,icon:Ext.Msg.ERROR});
 				return;
 			}
-			
+
 			var bids = [];
 			for (var i=0, loop=selected.length;i<loop;i++) {
 				bids.push(selected[i].get("bid"));
 			}
-			
+
 			Ext.Msg.show({title:Admin.getText("alert/info"),msg:"선택하신 게시판을 정말 삭제하시겠습니까?<br>게시판에 포함된 모든 게시물/댓글/첨부파일이 함께 삭제됩니다.",buttons:Ext.Msg.OKCANCEL,icon:Ext.Msg.QUESTION,fn:function(button) {
 				if (button == "ok") {
 					Ext.Msg.wait(Admin.getText("action/working"),Admin.getText("action/wait"));
@@ -548,7 +568,7 @@ var Board = {
 	category:{
 		add:function(index) {
 			var data = index !== undefined ? Ext.getCmp("ModuleBoardCategoryList").getStore().getAt(index).data : null;
-			
+
 			new Ext.Window({
 				id:"ModuleBoardAddCategoryWindow",
 				title:(data == null ? "카테고리추가" : "카테고리수정"),
@@ -598,10 +618,10 @@ var Board = {
 						handler:function() {
 							var form = Ext.getCmp("ModuleBoardAddCategoryForm").getForm();
 							var list = Ext.getCmp("ModuleBoardCategoryList");
-							
+
 							if (form.isValid() == true) {
 								var title = form.findField("title").getValue();
-								
+
 								if (form.findField("use_permission").checked == true) {
 									var permission = {};
 									permission.view = form.findField("permission_view").getValue();
@@ -610,7 +630,7 @@ var Board = {
 								} else {
 									var permission = null;
 								}
-								
+
 								if (index === undefined) {
 									var idx = 0;
 									var post = 0;
@@ -619,7 +639,7 @@ var Board = {
 								} else {
 									list.getStore().getAt(index).set({title:title,permission:permission});
 								}
-								
+
 								Ext.getCmp("ModuleBoardAddCategoryWindow").close();
 							}
 						}
@@ -633,7 +653,7 @@ var Board = {
 				Ext.Msg.show({title:Admin.getText("alert/error"),msg:"삭제할 카테고리를 선택하여 주십시오.",buttons:Ext.Msg.OK,icon:Ext.Msg.ERROR});
 				return;
 			}
-			
+
 			Ext.Msg.show({title:Admin.getText("alert/info"),msg:"선택하신 카테고리를 삭제하시겠습니까?<br>삭제되는 카테고리의 게시물이 기본 카테고리로 이동됩니다.",buttons:Ext.Msg.OKCANCEL,icon:Ext.Msg.QUESTION,fn:function(button) {
 				if (button == "ok") {
 					var store = Ext.getCmp("ModuleBoardCategoryList").getStore();
@@ -651,7 +671,7 @@ var Board = {
 	admin:{
 		add:function(midx) {
 			var midx = midx ? midx : 0;
-			
+
 			new Ext.Window({
 				id:"ModuleBoardAdminAddWindow",
 				title:(midx ? Board.getText("admin/admin/modify_admin") : Board.getText("admin/admin/add_admin")),
@@ -778,7 +798,7 @@ var Board = {
 								}
 								var bid = bids.join(",");
 							}
-							
+
 							if (!midx) {
 								Ext.Msg.show({title:Admin.getText("alert/error"),msg:"관리자로 추가할 회원을 검색하여 주십시오.",buttons:Ext.Msg.OK,icon:Ext.Msg.ERROR});
 							} else {
@@ -834,12 +854,12 @@ var Board = {
 				Ext.Msg.show({title:Admin.getText("alert/error"),msg:"삭제할 관리자를 선택하여 주십시오.",buttons:Ext.Msg.OK,icon:Ext.Msg.ERROR});
 				return;
 			}
-			
+
 			var midxes = [];
 			for (var i=0, loop=selected.length;i<loop;i++) {
 				midxes[i] = selected[i].data.midx;
 			}
-			
+
 			Ext.Msg.show({title:Admin.getText("alert/info"),msg:"선택된 관리자를 삭제하시겠습니까?",buttons:Ext.Msg.OKCANCEL,icon:Ext.Msg.QUESTION,fn:function(button) {
 				if (button == "ok") {
 					Ext.Msg.wait(Admin.getText("action/working"),Admin.getText("action/loading"));

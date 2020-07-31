@@ -38,6 +38,11 @@
 		"post":"{TITLE} 게시물 작성",
 		"ment":"{TITLE} 게시물의 댓글작성"
 	},
+	"search":{
+		"title":"제목",
+		"content":"본문",
+		"auth":"작성자"
+	},
 	"push":{
 		"new_ment":{
 			"group":"게시판 게시물",
@@ -114,6 +119,7 @@
 				"allow_anonymity":"게시물 또는 댓글을 익명으로 등록할 수 있도록 합니다.",
 				"allow_voting":"게시물 또는 댓글의 추천기능을 사용할 수 있도록 합니다.",
 				"use_content_list":"게시판 목록에서 본문내용을 사용합니다.",
+				"allow_search_detail":"게시물 검색(제목/본문/사용자)을 구분하여 검색하도록 합니다.",
 				"notice_setting":"공지사항 설정",
 				"category_setting":"카테고리 사용",
 				"permission_setting":"권한설정",

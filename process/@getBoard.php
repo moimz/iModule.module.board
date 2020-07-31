@@ -1,7 +1,7 @@
 <?php
 /**
  * 이 파일은 iModule 게시판모듈의 일부입니다. (https://www.imodules.io)
- * 
+ *
  * 게시판 정보를 불러온다.
  *
  * @file /modules/board/process/@getBoard.php
@@ -21,25 +21,26 @@ if ($data == null) {
 } else {
 	$permission = json_decode($data->permission);
 	unset($data->permission);
-	
+
 	if ($permission != null) {
 		foreach ($permission as $key=>$value) {
 			$data->{'permission_'.$key} = $value;
 		}
 	}
-	
+
 	unset($data->templet_configs);
-	
+
 	$attachment = json_decode($data->attachment);
 	unset($data->attachment);
 	$data->use_attachment = $attachment->attachment;
 	$data->attachment = $data->use_attachment == true ? $attachment->templet : '#';
-	
+
 	$data->allow_secret = $data->allow_secret == 'TRUE';
 	$data->allow_anonymity = $data->allow_anonymity == 'TRUE';
 	$data->allow_voting = $data->allow_voting == 'TRUE';
 	$data->use_content_list = $data->use_content_list == 'TRUE';
-	
+	$data->allow_search_detail = $data->allow_search_detail == 'TRUE';
+
 	$data->use_category = $data->use_category != 'NONE';
 	if ($data->use_category == true) {
 		$category = $this->db()->select($this->table->category,'idx,title,post,permission,sort')->where('bid',$bid)->orderBy('sort','asc')->get();

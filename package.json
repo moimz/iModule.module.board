@@ -4,7 +4,7 @@
 	"title":{
 		"ko":"게시판"
 	},
-	"version":"3.0.0",
+	"version":"3.0.1",
 	"description":{
 		"ko":"일반적인 게시판을 생성하고, 관리할 수 있습니다."
 	},
@@ -702,6 +702,12 @@
 					"length":"'TRUE','FALSE'",
 					"default":"TRUE",
 					"comment":"추천허용여부"
+				},
+				"allow_search_detail":{
+					"type":"enum",
+					"length":"'TRUE','FALSE'",
+					"default":"FALSE",
+					"comment":"검색을 제목/글쓴이/본문등으로 구분여부"
 				},
 				"attachment":{
 					"type":"text",

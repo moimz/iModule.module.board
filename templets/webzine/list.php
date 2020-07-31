@@ -3,7 +3,7 @@
  * 이 파일은 iModule 게시판모듈의 일부입니다. (https://www.imodules.io)
  *
  * 게시판 웹진템플릿 - 목록보기
- * 
+ *
  * @file /modules/board/templets/webzine/list.php
  * @author Arzz (arzz@arzz.com)
  * @license MIT License
@@ -23,14 +23,23 @@ if (defined('__IM__') == false) exit;
 		</select>
 	</div>
 	<?php } ?>
-	
+
 	<div data-role="search">
+		<?php if ($board->allow_search_detail) { ?>
+		<div data-role="input">
+			<select name="search_type">
+				<?php foreach ($me->getText('search') as $key => $value) { ?>
+					<option value="<?php echo $key; ?>"<?php echo $key == $search_type ? ' selected="selected"' : ''; ?>><?php echo $value; ?></option>
+				<?php } ?>
+			</select>
+		</div>
+		<?php } ?>
 		<div data-role="input">
 			<input type="search" name="keyword" value="<?php echo GetString($keyword,'input'); ?>">
 		</div>
 		<button type="submit"><i class="mi mi-search"></i></button>
 	</div>
-	
+
 	<a href="<?php echo $link->write; ?>"><i class="xi xi-pen"></i><span>게시물등록</span></a>
 </div>
 
@@ -70,7 +79,7 @@ if (defined('__IM__') == false) exit;
 				<div class="item" style="background-image:url(<?php echo $data->image != null ? $data->image->path : $Templet->getDir().'/images/pattern'.($data->idx % 4 + 1).'.png'; ?>);">
 					<a href="<?php echo $data->link; ?>" class="box">
 						<?php if ($data->category != null) { ?><label><?php echo $data->category->title; ?></label><?php } ?>
-						
+
 						<div class="title">
 							<h4><?php echo $data->title; ?></h4>
 							<time data-moment="YYYY-MM-DD" data-time="<?php echo $data->reg_date; ?>"></time>
@@ -91,7 +100,7 @@ if (defined('__IM__') == false) exit;
 		</div>
 		<button type="submit"><i class="mi mi-search"></i></button>
 	</div>
-	
+
 	<a href="<?php echo $link->write; ?>"><i class="xi xi-pen"></i><span>게시물등록</span></a>
 </div>
 
