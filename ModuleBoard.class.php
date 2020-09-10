@@ -1901,6 +1901,7 @@ class ModuleBoard {
 	 */
 	function isAdmin($midx=null,$bid=null) {
 		$midx = $midx == null ? $this->IM->getModule('member')->getLogged() : $midx;
+		if (!$midx) return false;
 		if ($this->IM->getModule('member')->isAdmin($midx) == true) return true;
 		if (isset($this->admins[$midx]) == false) {
 			$check = $this->db()->select($this->table->admin)->where('midx',$midx)->getOne();
