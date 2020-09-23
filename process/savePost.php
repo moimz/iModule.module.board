@@ -1,7 +1,7 @@
 <?php
 /**
  * 이 파일은 iModule 게시판모듈의 일부입니다. (https://www.imodules.io)
- * 
+ *
  * 게시물을 저장한다.
  *
  * @file /modules/board/process/savePost.php
@@ -76,11 +76,11 @@ $extra = Request('extra') ? Request('extra') : null;
 
 if (empty($errors) == true) {
 	$mHash = new Hash();
-	
+
 	$insert = array();
 	$insert['bid'] = $bid;
 	$insert['category'] = $category;
-	$insert['prefix'] = $prefix;
+	$insert['prefix'] = $prefix?$prefix:0;
 	$insert['title'] = $title;
 	$insert['content'] = $content;
 	$insert['search'] = GetString($content,'index');
@@ -95,7 +95,7 @@ if (empty($errors) == true) {
 	if ($field5 !== null) $insert['field5'] = $field5;
 	if ($field6 !== null) $insert['field6'] = $field6;
 	if ($extra) $insert['extra'] = $extra;
-	
+
 	if ($idx == null) {
 		$insert['midx'] = $midx;
 		$insert['password'] = $password;
@@ -103,14 +103,14 @@ if (empty($errors) == true) {
 		$insert['password'] = $password ? $mHash->password_hash($password) : '';
 		$insert['reg_date'] = time();
 		$insert['ip'] = $_SERVER['REMOTE_ADDR'];
-		
+
 		$idx = $this->db()->insert($this->table->post,$insert)->execute();
 		if ($idx === false) {
 			$results->success = false;
 			$results->message = $this->getErrorText('DATABASE_INSERT_ERROR');
 			return;
 		}
-		
+
 		/**
 		 * 포인트 및 활동내역을 기록한다.
 		 */
@@ -120,7 +120,7 @@ if (empty($errors) == true) {
 		}
 	} else {
 		$post = $this->getPost($idx);
-		
+
 		if ($this->checkPermission($post->bid,'post_modify') == false) {
 			if ($post->midx != 0 && $post->midx != $this->IM->getModule('member')->getLogged()) {
 				$results->success = false;
@@ -135,33 +135,33 @@ if (empty($errors) == true) {
 				}
 			}
 		}
-		
-		
+
+
 		$idx = $post->idx;
-		
+
 		if ($post->midx == 0 && $this->IM->getModule('member')->isLogged() == false) {
 			$insert['name'] = $name;
 			$insert['password'] = $password ? $mHash->password_hash($password) : '';
 			$insert['ip'] = $_SERVER['REMOTE_ADDR'];
 		}
-		
+
 		$this->db()->update($this->table->post,$insert)->where('idx',$idx)->execute();
-		
+
 		if ($post->category != $category) {
 			$this->updateCategory($post->category);
 		}
-		
+
 		if ($post->prefix != $prefix) {
 			$this->updatePrefix($post->prefix);
 		}
-		
+
 		/**
 		 * 글작성자와 수정한 사람이 다를 경우 알림메세지를 전송한다.
 		 */
 		if ($post->midx != 0 && $post->midx != $this->IM->getModule('member')->getLogged()) {
 			$this->IM->getModule('push')->sendPush($post->midx,$this->getModule()->getName(),'post',$idx,'post_modify',array('idx'=>$idx,'from'=>$this->IM->getModule('member')->getLogged(),'title'=>$post->title));
 		}
-		
+
 		/**
 		 * 회원의 경우
 		 */
@@ -169,34 +169,34 @@ if (empty($errors) == true) {
 			$this->IM->getModule('member')->addActivity($this->IM->getModule('member')->getLogged(),0,$this->getModule()->getName(),'post_modify',array('idx'=>$idx,'title'=>$title));
 		}
 	}
-	
+
 	$mAttachment = $this->IM->getModule('attachment');
 	for ($i=0, $loop=count($attachments);$i<$loop;$i++) {
 		$file = $mAttachment->getFileInfo($attachments[$i]);
-		
+
 		if ($file != null) {
 			$this->db()->replace($this->table->attachment,array('idx'=>$file->idx,'bid'=>$bid,'type'=>'POST','parent'=>$idx))->execute();
 		}
 		$mAttachment->filePublish($attachments[$i]);
 	}
-	
+
 	$deleteds = $this->db()->select($this->table->attachment)->where('bid',$bid)->where('type','POST')->where('parent',$idx);
 	if (count($attachments) > 0) $deleteds->where('idx',$attachments,'NOT IN');
 	$deleteds = $deleteds->get('idx');
 	foreach ($deleteds as $deleted) {
 		$mAttachment->fileDelete($deleted);
 	}
-	
+
 	$templet = Request('templet');
 	if (is_file($this->getTemplet($templet)->getPath().'/process/savePost.php') == true) {
 		INCLUDE $this->getTemplet($templet)->getPath().'/process/savePost.php';
 	}
-	
+
 	$this->updatePost($idx,true);
 	$this->updateCategory($category);
 	$this->updatePrefix($prefix);
 	$this->updateBoard($bid);
-	
+
 	$results->success = true;
 	$results->idx = $idx;
 } else {
