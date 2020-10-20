@@ -25,7 +25,6 @@ if ($this->checkPermission($bid,'post_write') == false) {
 }
 
 $category = Request('category');
-$prefix = Request('prefix');
 $title = Request('title') ? Request('title') : $errors['title'] = $this->getErrorText('REQUIRED');
 $content = Request('content') ? Request('content') : $errors['content'] = $this->getErrorText('REQUIRED');;
 $is_notice = Request('is_notice') && $this->checkPermission($bid,'notice') == true ? 'TRUE' : 'FALSE';
@@ -59,6 +58,7 @@ if ($board->use_category != 'NONE') {
 }
 
 if ($board->use_prefix == 'TRUE') {
+	$prefix = Request('prefix') ? Request('prefix') : 0;
 	if ($prefix != 0 && $this->db()->select($this->table->prefix)->where('idx',$prefix)->has() == false) {
 		$errors['prefix'] = $this->getErrorText('NOT_FOUND');
 	}
@@ -80,7 +80,7 @@ if (empty($errors) == true) {
 	$insert = array();
 	$insert['bid'] = $bid;
 	$insert['category'] = $category;
-	$insert['prefix'] = $prefix?$prefix:0;
+	$insert['prefix'] = $prefix;
 	$insert['title'] = $title;
 	$insert['content'] = $content;
 	$insert['search'] = GetString($content,'index');
@@ -88,6 +88,7 @@ if (empty($errors) == true) {
 	$insert['is_html_title'] = $is_html_title;
 	$insert['is_secret'] = $is_secret;
 	$insert['is_anonymity'] = $is_anonymity;
+	
 	if ($field1 !== null) $insert['field1'] = $field1;
 	if ($field2 !== null) $insert['field2'] = $field2;
 	if ($field3 !== null) $insert['field3'] = $field3;
