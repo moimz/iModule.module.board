@@ -377,13 +377,13 @@ var Board = {
 										items:[
 											new Ext.form.NumberField({
 												name:"post_point",
-												value:0,
+												value:Ext.getCmp("ModuleBoard").basePoints.post_point,
 												flex:1
 											}),
 											new Ext.form.NumberField({
 												name:"post_exp",
 												margin:"0 0 0 5",
-												value:0,
+												value:Ext.getCmp("ModuleBoard").baseExps.post_exp,
 												flex:1
 											})
 										]
@@ -394,13 +394,13 @@ var Board = {
 										items:[
 											new Ext.form.NumberField({
 												name:"ment_point",
-												value:0,
+												value:Ext.getCmp("ModuleBoard").basePoints.ment_point,
 												flex:1
 											}),
 											new Ext.form.NumberField({
 												name:"ment_exp",
 												margin:"0 0 0 5",
-												value:0,
+												value:Ext.getCmp("ModuleBoard").baseExps.ment_exp,
 												flex:1
 											})
 										]
@@ -411,13 +411,13 @@ var Board = {
 										items:[
 											new Ext.form.NumberField({
 												name:"vote_point",
-												value:5,
+												value:Ext.getCmp("ModuleBoard").basePoints.vote_point,
 												flex:1
 											}),
 											new Ext.form.NumberField({
 												name:"vote_exp",
 												margin:"0 0 0 5",
-												value:1,
+												value:Ext.getCmp("ModuleBoard").baseExps.vote_exp,
 												flex:1
 											})
 										]
@@ -428,13 +428,13 @@ var Board = {
 										items:[
 											new Ext.form.NumberField({
 												name:"voted_point",
-												value:10,
+												value:Ext.getCmp("ModuleBoard").basePoints.voted_point,
 												flex:1
 											}),
 											new Ext.form.NumberField({
 												name:"voted_exp",
 												margin:"0 0 0 5",
-												value:0,
+												value:Ext.getCmp("ModuleBoard").baseExps.voted_exp,
 												flex:1
 											})
 										]

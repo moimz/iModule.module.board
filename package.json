@@ -21,6 +21,40 @@
 	"admin":true,
 	"context":true,
 	"widget":true,
+	"configs":{
+		"post_point":{
+			"type":"int",
+			"default":30
+		},
+		"post_exp":{
+			"type":"int",
+			"default":10
+		},
+		"ment_point":{
+			"type":"int",
+			"default":10
+		},
+		"ment_exp":{
+			"type":"int",
+			"default":5
+		},
+		"vote_point":{
+			"type":"int",
+			"default":5
+		},
+		"vote_exp":{
+			"type":"int",
+			"default":1
+		},
+		"voted_point":{
+			"type":"int",
+			"default":5
+		},
+		"voted_exp":{
+			"type":"int",
+			"default":3
+		}
+	},
 	"databases":{
 		"board_admin_table":{
 			"columns":{

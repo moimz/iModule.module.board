@@ -182,7 +182,14 @@
 		},
 		"configs":{
 			"form":{
-				"default_setting":"게시판 기본설정"
+				"default_setting":"게시판 기본설정",
+				"point_setting":"기본 포인트/경험치 설정",
+				"point":"포인트",
+				"exp":"경험치",
+				"post_write":"게시물작성",
+				"ment_write":"댓글작성",
+				"vote":"추천하기",
+				"voted":"추천받음"
 			}
 		},
 		"error":{
