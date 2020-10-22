@@ -120,6 +120,7 @@
 				"allow_voting":"게시물 또는 댓글의 추천기능을 사용할 수 있도록 합니다.",
 				"use_content_list":"게시판 목록에서 본문내용을 사용합니다.",
 				"allow_search_detail":"게시물 검색(제목/본문/사용자)을 구분하여 검색하도록 합니다.",
+				"allow_notice_comment":"공지사항에 댓글 등록을 허용을 합니다.",
 				"notice_setting":"공지사항 설정",
 				"category_setting":"카테고리 사용",
 				"permission_setting":"권한설정",

@@ -40,6 +40,7 @@ if ($data == null) {
 	$data->allow_voting = $data->allow_voting == 'TRUE';
 	$data->use_content_list = $data->use_content_list == 'TRUE';
 	$data->allow_search_detail = $data->allow_search_detail == 'TRUE';
+	$data->allow_notice_comment = $data->allow_notice_comment == 'TRUE';
 
 	$data->use_category = $data->use_category != 'NONE';
 	if ($data->use_category == true) {

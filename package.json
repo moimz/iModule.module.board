@@ -743,6 +743,12 @@
 					"default":"FALSE",
 					"comment":"검색을 제목/글쓴이/본문등으로 구분여부"
 				},
+				"allow_notice_comment":{
+					"type":"enum",
+					"length":"'TRUE','FALSE'",
+					"default":"TRUE",
+					"comment":"공지사항에 댓글 등록을 허용여부"
+				},
 				"attachment":{
 					"type":"text",
 					"value":"{\"attachment\":false}",

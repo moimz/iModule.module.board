@@ -197,7 +197,7 @@ class ModuleBoard {
 
 		return $data;
 	}
-	
+
 	/**
 	 * [사이트관리자] 모듈 설정패널을 구성한다.
 	 *
@@ -209,12 +209,12 @@ class ModuleBoard {
 		 */
 		$IM = $this->IM;
 		$Module = $this->getModule();
-		
+
 		ob_start();
 		INCLUDE $this->getModule()->getPath().'/admin/configs.php';
 		$panel = ob_get_contents();
 		ob_end_clean();
-		
+
 		return $panel;
 	}
 
@@ -790,6 +790,9 @@ class ModuleBoard {
 		 * 댓글 컴포넌트를 불러온다.
 		 */
 		$ment = $this->getMentComponent($idx,null,$configs);
+		if (isset($board->allow_notice_comment) && $board->allow_notice_comment == 'FALSE') {
+			if ($post->is_notice) $ment = '';
+		}
 
 		/**
 		 * 현재 게시물이 속한 페이지를 구한다.

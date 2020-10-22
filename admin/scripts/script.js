@@ -157,6 +157,11 @@ var Board = {
 										name:"allow_search_detail",
 										boxLabel:Board.getText("admin/list/form/allow_search_detail"),
 										checked:false
+									}),
+									new Ext.form.Checkbox({
+										name:"allow_notice_comment",
+										boxLabel:Board.getText("admin/list/form/allow_notice_comment"),
+										checked:true
 									})
 								]
 							}),
