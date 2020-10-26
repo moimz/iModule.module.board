@@ -86,6 +86,7 @@
 	"admin":{
 		"list":{
 			"title":"게시판관리",
+			"keyword":"게시판 ID / 게시판명",
 			"add_board":"게시판추가",
 			"delete_board":"선택 게시판 삭제",
 			"columns":{

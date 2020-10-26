@@ -37,6 +37,10 @@ Ext.onReady(function () { Ext.getCmp("iModuleAdminPanel").add(
 				title:Board.getText("admin/list/title"),
 				border:false,
 				tbar:[
+					Admin.searchField("ModuleBoardListKeyword",250,Board.getText("admin/list/keyword"),function(keyword) {
+						Ext.getCmp("ModuleBoardList").getStore().getProxy().setExtraParam("keyword",keyword);
+						Ext.getCmp("ModuleBoardList").getStore().loadPage(1);
+					}),
 					new Ext.Button({
 						text:Board.getText("admin/list/add_board"),
 						iconCls:"mi mi-plus",
@@ -78,7 +82,7 @@ Ext.onReady(function () { Ext.getCmp("iModuleAdminPanel").add(
 				}),
 				columns:[{
 					text:Board.getText("admin/list/columns/bid"),
-					width:120,
+					width:180,
 					sortable:true,
 					dataIndex:"bid"
 				},{

@@ -14,8 +14,10 @@ if (defined('__IM__') == false) exit;
 
 $start = Request('start');
 $limit = Request('limit');
+$keyword = Request('keyword');
 $lists = $this->db()->select($this->table->board);
 if ($this->isAdmin() !== true) $lists->where('bid',$this->isAdmin(),'IN');
+if ($keyword) $lists->where('(bid like ? or title like ?)',array('%'.$keyword.'%','%'.$keyword.'%'));
 $total = $lists->copy()->count();
 $sort = Request('sort') ? Request('sort') : 'title';
 $dir = Request('dir') ? Request('dir') : 'asc';
