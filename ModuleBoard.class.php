@@ -789,9 +789,8 @@ class ModuleBoard {
 		/**
 		 * 댓글 컴포넌트를 불러온다.
 		 */
-		$ment = $this->getMentComponent($idx,null,$configs);
-		if (isset($board->allow_notice_comment) && $board->allow_notice_comment == 'FALSE') {
-			if ($post->is_notice) $ment = '';
+		if ($post->is_notice == false || $board->allow_notice_comment == true) {
+			$ment = $this->getMentComponent($idx,null,$configs);
 		}
 
 		/**
@@ -1267,6 +1266,7 @@ class ModuleBoard {
 			$board->allow_voting = $board->allow_voting == 'TRUE';
 			$board->use_content_list = $board->use_content_list == 'TRUE';
 			$board->allow_search_detail = $board->allow_search_detail == 'TRUE';
+			$board->allow_notice_comment = $board->allow_notice_comment == 'TRUE';
 
 			$this->boards[$bid] = $board;
 		}
