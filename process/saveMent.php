@@ -56,6 +56,14 @@ if ($source) {
 }
 $content = $this->IM->getModule('wysiwyg')->encodeContent($content,$attachments);
 
+$field1 = Request('field1');
+$field2 = Request('field2');
+$field3 = Request('field3');
+$field4 = Request('field4') == null || is_numeric(Request('field4')) == false ? null : Request('field4');
+$field5 = Request('field5') == null || is_numeric(Request('field5')) == false ? null : Request('field5');
+$field6 = Request('field6') == null || is_numeric(Request('field6')) == false ? null : Request('field6');
+$extra = Request('extra') ? Request('extra') : null;
+
 if (empty($errors) == true) {
 	$mHash = new Hash();
 	
@@ -66,6 +74,14 @@ if (empty($errors) == true) {
 	$insert['search'] = GetString($content,'index');
 	$insert['is_secret'] = $is_secret;
 	$insert['is_anonymity'] = $is_anonymity;
+	
+	if ($field1 !== null) $insert['field1'] = $field1;
+	if ($field2 !== null) $insert['field2'] = $field2;
+	if ($field3 !== null) $insert['field3'] = $field3;
+	if ($field4 !== null) $insert['field4'] = $field4;
+	if ($field5 !== null) $insert['field5'] = $field5;
+	if ($field6 !== null) $insert['field6'] = $field6;
+	if ($extra) $insert['extra'] = $extra;
 	
 	if ($idx == null) {
 		$insert['midx'] = $midx;
