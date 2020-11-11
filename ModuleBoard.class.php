@@ -1321,8 +1321,6 @@ class ModuleBoard {
 
 			$post->is_rendered = true;
 
-			unset($post->password);
-
 			$this->posts[$post->idx] = $post;
 			return $this->posts[$post->idx];
 		}
