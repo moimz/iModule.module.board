@@ -8,7 +8,7 @@
  * @author Arzz (arzz@arzz.com)
  * @license MIT License
  * @version 3.0.0
- * @modified 2019. 12. 11.
+ * @modified 2021. 5. 18.
  */
 class ModuleBoard {
 	/**
@@ -1285,11 +1285,15 @@ class ModuleBoard {
 		if (empty($idx) == true || (is_numeric($idx) == false && is_object($idx) == false)) return null;
 
 		if (is_numeric($idx) == true) {
-			if (isset($this->posts[$idx]) == true) return $this->posts[$idx];
-			else return $this->getPost($this->db()->select($this->table->post)->where('idx',$idx)->getOne(),$is_link);
+			if (isset($this->posts[$idx]) == true) {
+				if ($is_link == true && isset($this->posts[$idx]->link) == false) return $this->getPost($this->posts[$idx],true);
+				else return $this->posts[$idx];
+			} else {
+				return $this->getPost($this->db()->select($this->table->post)->where('idx',$idx)->getOne(),$is_link);
+			}
 		} else {
 			$post = $idx;
-			if (isset($post->is_rendered) === true && $post->is_rendered === true) return $post;
+			if (isset($post->is_rendered) == true && $post->is_rendered == true && ($is_link == false || isset($post->link) == true)) return $post;
 
 			if ($post->is_html_title == 'FALSE') $post->title = GetString($post->title,'replace');
 
@@ -1337,11 +1341,15 @@ class ModuleBoard {
 		if (empty($idx) == true || (is_numeric($idx) == false && is_object($idx) == false)) return null;
 
 		if (is_numeric($idx) == true) {
-			if (isset($this->ments[$idx]) == true) return $this->ments[$idx];
-			else return $this->getMent($this->db()->select($this->table->ment_depth.' d','d.*,m.*')->join($this->table->ment.' m','d.idx=m.idx','LEFT')->where('d.idx',$idx)->getOne());
+			if (isset($this->ments[$idx]) == true) {
+				if ($is_link == true && isset($this->ments[$idx]->link) == false) return $this->getMent($this->ments[$idx],true);
+				else return $this->ments[$idx];
+			} else {
+				return $this->getMent($this->db()->select($this->table->ment_depth.' d','d.*,m.*')->join($this->table->ment.' m','d.idx=m.idx','LEFT')->where('d.idx',$idx)->getOne(),$is_link);
+			}
 		} else {
 			$ment = $idx;
-			if (isset($ment->is_rendered) === true && $ment->is_rendered === true) return $ment;
+			if (isset($ment->is_rendered) == true && $ment->is_rendered == true && ($is_link == false || isset($ment->link) == true)) return $ment;
 
 			$ment->o_name = $ment->name;
 			$ment->member = $this->IM->getModule('member')->getMember($ment->midx);
@@ -1351,7 +1359,7 @@ class ModuleBoard {
 
 			if ($is_link == true) {
 				$page = $this->IM->getContextUrl('board',$ment->bid,array(),array(),true);
-				$ment->link = $page == null ? '#' : $page.'/view/'.$post->idx;
+				$ment->link = $page == null ? '#' : $page.'/view/'.$ment->parent;
 			}
 
 //			$post->image = $post->image > 0 ? $this->IM->getModule('attachment')->getFileInfo($post->image) : null;
@@ -1890,7 +1898,7 @@ class ModuleBoard {
 		if ($action == 'view') {
 			$type = $data->type;
 			$idx = $data->idx;
-
+			
 			if ($type == 'post') {
 				$post = $this->getPost($idx,true);
 				return $post == null ? null : $post->link;
