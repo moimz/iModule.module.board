@@ -1775,6 +1775,11 @@ class ModuleBoard {
 					}
 
 					return str_replace('{TITLE}',$title,$this->getText('point_history/ment'));
+
+				case 'ment_delete' :
+					$title = $data->content->parent_title;
+
+					return str_replace('{TITLE}',$title,$this->getText('point_history/ment_deleted'));
 			}
 
 			return json_encode($data);
