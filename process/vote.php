@@ -77,6 +77,25 @@ if ($type == 'post') {
 		return;
 	}
 	
+	$post = $this->getPost($ment->parent);
+	$board = $this->getBoard($post->bid);
 	
+	$this->db()->insert($this->table->activity,array('type'=>$type,'parent'=>$idx,'midx'=>$midx,'code'=>$vote,'reg_date'=>time()))->execute();
+	$updated = $this->updateMent($idx);
+	
+	$this->IM->getModule('member')->sendPoint($midx,$board->vote_point,$this->getModule()->getName(),'ment_vote',array('idx'=>$idx,'title'=>$post->title));
+	$this->IM->getModule('member')->addActivity($midx,$board->vote_exp,$this->getModule()->getName(),'ment_vote',array('idx'=>$idx,'title'=>$post->title));
+	
+	if ($ment->midx > 0) {
+		$this->IM->getModule('member')->sendPoint($ment->midx,$board->voted_point,$this->getModule()->getName(),'ment_voted',array('idx'=>$idx,'title'=>$post->title));
+		$this->IM->getModule('member')->addActivity($ment->midx,$board->voted_exp,$this->getModule()->getName(),'ment_voted',array('idx'=>$idx,'title'=>$post->title));
+		
+		$this->IM->getModule('push')->sendPush($ment->midx,$this->getModule()->getName(),'ment',$ment->idx,'ment_voted',array('idx'=>$idx,'from'=>$midx,'title'=>$post->title));
+	}
+	
+	$results->success = true;
+	$results->vote = $vote;
+	$results->good = $updated->good;
+	$results->bad = $updated->bad;
 }
 ?>

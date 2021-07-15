@@ -1048,15 +1048,13 @@ class ModuleBoard {
 		$board = $this->getBoard($ment->bid);
 
 		$ment = $this->getMent($ment);
-
-		/*
+		
 		if ($this->IM->getModule('member')->isLogged() == true) {
-			$vote = $this->db()->select($this->table->history)->where('type','MENT')->where('parent',$ment->idx)->where('action','VOTE')->where('midx',$this->IM->getModule('member')->getLogged())->getOne();
-			$voted = $vote == null ? null : $vote->result;
+			$voted = $this->db()->select($this->table->activity)->where('type','ment')->where('parent',$ment->idx)->where('midx',$this->IM->getModule('member')->getLogged())->where('code',array('GOOD','BAD'),'IN')->getOne();
+			$ment->voted = $voted == null ? null : $voted->code;
 		} else {
-			$voted = null;
+			$ment->voted = $voted == null ? null : $voted->code;
 		}
-		*/
 
 		$ment->is_visible = true;
 		if ($ment->is_secret == true) {

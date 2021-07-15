@@ -287,6 +287,10 @@ var Board = {
 							});
 						}
 						
+						if (action == "good" || action == "bad") {
+							Board.ment.vote(idx,action);
+						}
+						
 						if (action == "delete") {
 							var idx = $parent.attr("data-idx");
 							Board.ment.delete(idx);
@@ -473,6 +477,15 @@ var Board = {
 						});
 						return false;
 					});
+				}
+			});
+		},
+		vote:function(idx,vote) {
+			$.send(ENV.getProcessUrl("board","vote"),{type:"ment",idx:idx,vote:vote},function(result) {
+				if (result.success == true) {
+					$("button[data-type=ment][data-idx="+idx+"][data-action="+vote+"]",$("div[data-module=board]")).addClass("selected");
+					$("*[data-role=count][data-type=ment][data-idx="+idx+"][data-count=good]",$("div[data-module=board]")).html(result.good);
+					$("*[data-role=count][data-type=ment][data-idx="+idx+"][data-count=bad]",$("div[data-module=board]")).html(result.bad);
 				}
 			});
 		}

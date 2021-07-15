@@ -36,6 +36,13 @@ if (defined('__IM__') == false) exit;
 	<?php echo $ment->is_secret == true ? '<i class="mi mi-lock"></i>' : ''; ?>
 	<?php echo $ment->content; ?>
 	
+	<?php if ($board->allow_voting == true) { ?>
+	<div data-role="vote">
+		<button type="button" data-action="good" data-idx="<?php echo $ment->idx; ?>" data-type="ment"<?php echo $ment->voted == 'GOOD' ? ' class="selected"' : ''; ?>><i class="fa fa-thumbs-o-up"></i><b data-role="count" data-type="ment" data-idx="<?php echo $ment->idx; ?>" data-count="good"><?php echo number_format($ment->good); ?></b></button>
+		<button type="button" data-action="bad" data-idx="<?php echo $ment->idx; ?>" data-type="ment"<?php echo $ment->voted == 'BAD' ? ' class="selected"' : ''; ?>><i class="fa fa-thumbs-o-down"></i><b data-role="count" data-type="ment" data-idx="<?php echo $post->idx; ?>" data-count="bad"><?php echo number_format($ment->bad); ?></b></button>
+	</div>
+	<?php } ?>
+	
 	<?php if (count($attachments) > 0) { ?>
 	<div data-module="attachment">
 		<h5><i class="xi xi-clip"></i>첨부파일</h5>

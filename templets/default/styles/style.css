@@ -82,16 +82,6 @@ div[data-module=board] article[data-role=post] > div.header > ul > li.hit > b {m
 
 div[data-module=board] article[data-role=post] > div.content {padding:0px 15px; margin-bottom:20px; font-size:14px;}
 
-div[data-module=board] article[data-role=post] > div[data-role=vote] {text-align:center; padding-right:0; position:relative; margin-bottom:20px;}
-div[data-module=board] article[data-role=post] > div[data-role=vote] button {border:1px solid #e4e4e4; border-right:1px solid #ccc; border-bottom:1px solid #ccc; padding:0px 15px; background:#fff; cursor:pointer; font-size:0px; text-align:left; height:40px;}
-div[data-module=board] article[data-role=post] > div[data-role=vote] button > i {display:inline-block; width:25px; height:38px; line-height:38px; font-size:14px; vertical-align:middle; text-align:left;}
-div[data-module=board] article[data-role=post] > div[data-role=vote] button > b {display:inline-block; height:38px; line-height:38px; font-size:14px; vertical-align:middle;}
-div[data-module=board] article[data-role=post] > div[data-role=vote] button[data-action=good] > b {color:#3b9ad8;}
-div[data-module=board] article[data-role=post] > div[data-role=vote] button[data-action=bad] > b {color:#fbb65c;}
-div[data-module=board] article[data-role=post] > div[data-role=vote] button:hover, div[data-module=board] article[data-role=post] > div[data-role=vote] button.selected {background:#e91b23; color:#fff !important;}
-div[data-module=board] article[data-role=post] > div[data-role=vote] button:hover b, div[data-module=board] article[data-role=post] > div[data-role=vote] button.selected b {color:#fff !important;}
-div[data-module=board] article[data-role=post] > div[data-role=vote] button[disabled] {opacity:0.5;}
-
 div[data-module=board] article[data-role=post] > div[data-role=button] {text-align:right; padding-right:0; position:relative; margin-bottom:20px;}
 div[data-module=board] article[data-role=post] > div[data-role=button] > div.author {display:inline-block; width:160px; height:30px; padding:4px; background:#E3F2FD; vertical-align:middle; border:1px solid #BBDEFB; text-align:left;}
 div[data-module=board] article[data-role=post] > div[data-role=button] > div.author > i[data-role=photo] {width:30px; height:30px; border:1px solid #ccc; background-size:cover; background-position:50% 50%; background-repeat:no-repeat; float:left; margin-right:8px;}
@@ -183,6 +173,21 @@ div[data-module=board] div[data-role=ment] form {background:#fff; padding-bottom
 div[data-module=board] div[data-role=ment] div[data-role=item] form {padding:10px; border:1px solid #e5e5e5;}
 div[data-module=board] div[data-role=ment] div[data-role=pagination] {padding:10px 0px; display:block; text-align:center;}
 div[data-module=board] div[data-role=ment] div[data-role=pagination]:empty {display:none;}
+
+div[data-module=board] div[data-role=vote] {text-align:center; padding-right:0; position:relative; margin-bottom:20px;}
+div[data-module=board] div[data-role=vote] button {border:1px solid #e4e4e4; border-right:1px solid #ccc; border-bottom:1px solid #ccc; padding:0px 15px; background:#fff; cursor:pointer; font-size:0px; text-align:left; height:40px;}
+div[data-module=board] div[data-role=vote] button > i {display:inline-block; width:25px; height:38px; line-height:38px; font-size:14px; vertical-align:middle; text-align:left;}
+div[data-module=board] div[data-role=vote] button > b {display:inline-block; height:38px; line-height:38px; font-size:14px; vertical-align:middle;}
+div[data-module=board] div[data-role=vote] button[data-action=good] > b {color:#3b9ad8;}
+div[data-module=board] div[data-role=vote] button[data-action=bad] > b {color:#fbb65c;}
+div[data-module=board] div[data-role=vote] button:hover, div[data-module=board] div[data-role=vote] button.selected {background:#e91b23; color:#fff !important;}
+div[data-module=board] div[data-role=vote] button:hover b, div[data-module=board] div[data-role=vote] button.selected b {color:#fff !important;}
+div[data-module=board] div[data-role=vote] button[disabled] {opacity:0.5;}
+
+div[data-module=board] div[data-role=ment] div[data-role=vote] {text-align:left; margin-top:20px;}
+div[data-module=board] div[data-role=ment] div[data-role=vote] > button {height:30px; padding:0px 8px;}
+div[data-module=board] div[data-role=ment] div[data-role=vote] > button > i {height:30px; line-height:30px;}
+div[data-module=board] div[data-role=ment] div[data-role=vote] > button > b {height:30px; line-height:30px;}
 
 div[data-module=board] ul[data-role=form] div[data-role=input][data-name=prefix] {width:180px;}
 
