@@ -39,6 +39,8 @@
 		"post_vote":"{TITLE} 게시물 추천하기",
 		"post_voted":"{TITLE} 게시물 추천받음",
 		"ment":"{TITLE} 게시물의 댓글작성",
+		"ment_vote":"{TITLE} 게시물의 댓글 추천하기",
+		"ment_voted":"{TITLE} 게시물의 댓글 추천받음",
 		"ment_deleted":"{TITLE} 게시물의 댓글삭제"
 	},
 	"search":{

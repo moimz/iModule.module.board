@@ -1764,6 +1764,8 @@ class ModuleBoard {
 					return str_replace('{TITLE}',$title,$this->getText('point_history/'.$data->code));
 
 				case 'ment' :
+				case 'ment_vote' :
+				case 'ment_voted' :
 					$idx = $data->content->idx;
 					$ment = $this->getMent($idx,true);
 
@@ -1774,7 +1776,7 @@ class ModuleBoard {
 						$title = '<a href="'.$post->link.'" target="_blank">'.$post->title.'</a>';
 					}
 
-					return str_replace('{TITLE}',$title,$this->getText('point_history/ment'));
+					return str_replace('{TITLE}',$title,$this->getText('point_history/'.$data->code));
 
 				case 'ment_delete' :
 					$title = $data->content->parent_title;
