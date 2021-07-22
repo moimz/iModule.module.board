@@ -1750,6 +1750,8 @@ class ModuleBoard {
 		if ($action == 'point_history') {
 			switch ($data->code) {
 				case 'post' :
+				case 'post_vote' :
+				case 'post_voted' :
 					$idx = $data->content->idx;
 					$post = $this->getPost($idx,true);
 
@@ -1759,7 +1761,7 @@ class ModuleBoard {
 						$title = '<a href="'.$post->link.'" target="_blank">'.$post->title.'</a>';
 					}
 
-					return str_replace('{TITLE}',$title,$this->getText('point_history/post'));
+					return str_replace('{TITLE}',$title,$this->getText('point_history/'.$data->code));
 
 				case 'ment' :
 					$idx = $data->content->idx;

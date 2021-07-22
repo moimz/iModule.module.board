@@ -36,6 +36,8 @@
 	},
 	"point_history":{
 		"post":"{TITLE} 게시물 작성",
+		"post_vote":"{TITLE} 게시물 추천하기",
+		"post_voted":"{TITLE} 게시물 추천받음",
 		"ment":"{TITLE} 게시물의 댓글작성",
 		"ment_deleted":"{TITLE} 게시물의 댓글삭제"
 	},
